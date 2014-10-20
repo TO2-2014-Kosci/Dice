@@ -23,7 +23,7 @@ public class WebGUI extends UI {
 
         // Add the main view of the application
         getNavigator().addView(LoginMainView.NAME, LoginMainView.class);
-
+        getNavigator().addView(LobbyView.NAME, LobbyView.class);
         getNavigator().addViewChangeListener(new ViewChangeListener() {
             @Override
             public boolean beforeViewChange(ViewChangeEvent viewChangeEvent) {

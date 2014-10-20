@@ -10,6 +10,7 @@ import com.vaadin.ui.MenuBar.*;
 
 /**
  * Created by Maciej on 2014-10-18.
+ * Edited by lukasz on 2014-10-20.
  */
 public class LoginMainView extends CustomComponent implements View {
 
@@ -24,8 +25,15 @@ public class LoginMainView extends CustomComponent implements View {
     Button join = new Button("Join Now!");
     Label selected = new Label("Selected: ");
     Table servers = new Table("List of servers");
+
     public LoginMainView() {
        setSizeFull();
+       join.addClickListener(new Button.ClickListener() {
+           @Override
+           public void buttonClick(Button.ClickEvent event) {
+               getUI().getNavigator().navigateTo(LobbyView.NAME);
+           }
+       });
        servers.setSelectable(true);
        servers.setImmediate(true);
        servers.addContainerProperty("Address", String.class, null);
@@ -38,6 +46,8 @@ public class LoginMainView extends CustomComponent implements View {
                Object rowID = servers.getValue();
                String gameType = (String)servers.getContainerProperty(rowID,"Game type").getValue();
                String address = (String)servers.getContainerProperty(rowID,"Address").getValue();
+               getSession().setAttribute("gt",gameType);
+               getSession().setAttribute("ad",address);
                selected.setValue("Selected: " + gameType + " @ " + address);
            }
        });
