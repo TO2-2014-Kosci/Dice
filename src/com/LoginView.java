@@ -44,7 +44,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
         setCompositionRoot(viewLayout);
     }
 
-    @Override
+
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         // focus the username field when user arrives to the login view
         user.focus();
