@@ -38,7 +38,7 @@ public class LobbyView extends CustomComponent implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
        info.setValue(String.valueOf(getSession().getAttribute("gt")) + " @ " +
-               String.valueOf(getSession().getAttribute("ad")) + " - Lobby");
+               String.valueOf(getSession().getAttribute("ad")) + " - Lobby"); // get server info
         users.addItem(new Object[]{String.valueOf(getSession().getAttribute("user"))},users.size()+1);
     }
 }
