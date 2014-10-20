@@ -58,6 +58,15 @@ public class LoginMainView extends CustomComponent implements View {
 
        menu.setWidth("100%");
        createGame = menu.addItem("Create Game", null, null);
+
+       createGame.setCommand(new Command() {
+
+           @Override
+           public void menuSelected(MenuItem menuItem) {
+                getUI().getNavigator().navigateTo(CreateGameView.NAME);
+           }
+       });
+
        refresh = menu.addItem("Refresh", null, null);
        panelLayout.setWidth("100%");
        panelLayout.addComponent(join, 0, 3);

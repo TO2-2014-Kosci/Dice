@@ -21,6 +21,7 @@ public class WebGUI extends UI {
         // The initial log view where the user can login to the application
         getNavigator().addView(LoginView.NAME, LoginView.class);
 
+        getNavigator().addView(CreateGameView.NAME, CreateGameView.class);
         // Add the main view of the application
         getNavigator().addView(LoginMainView.NAME, LoginMainView.class);
         getNavigator().addView(LobbyView.NAME, LobbyView.class);
