@@ -31,7 +31,8 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
         // Add to a panel
         VerticalLayout fields = new VerticalLayout(user, loginButton);
         fields.setCaption("Please enter username to access the application.");
-        fields.setSpacing(true);;
+        fields.setStyleName(Reindeer.LABEL_H1);
+        fields.setSpacing(true);
         fields.setMargin(new MarginInfo(true, true, true, false));
         fields.setSizeUndefined();
 
