@@ -8,7 +8,7 @@
         <servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
         <init-param>
             <param-name>UI</param-name>
-            <param-value>com.WebGUI</param-value>
+            <param-value>pl.edu.agh.to2.webgui.WebGUI</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
