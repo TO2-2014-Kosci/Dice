@@ -5,7 +5,7 @@ package pl.edu.agh.to2.webgui.view;
  */
 public interface ILobbyView {
     interface LobbyViewListener {
-        void buttonClick(char operation);
+        void buttonClick(String operation);
     }
 
     public void addListener(LobbyViewListener listener);

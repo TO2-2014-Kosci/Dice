@@ -14,7 +14,7 @@ import com.vaadin.ui.themes.ValoTheme;
 public class LoginView extends VerticalLayout
     implements ILoginView, View {
 
-    public static final String NAME = "login";
+    public static final String NAME = "";
 
     public LoginView() {
         setSizeFull();
