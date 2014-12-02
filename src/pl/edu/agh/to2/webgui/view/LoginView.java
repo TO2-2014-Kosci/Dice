@@ -4,17 +4,23 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Maciej on 2014-11-28.
  */
 public class LoginView extends VerticalLayout
-    implements ILoginView, View {
+    implements ILoginView, View, Button.ClickListener {
 
     public static final String NAME = "login";
+    private final TextField username = new TextField("username");
 
     public LoginView() {
         setSizeFull();
@@ -49,14 +55,13 @@ public class LoginView extends VerticalLayout
         HorizontalLayout fields =  new HorizontalLayout();
         fields.setSpacing(true);
 
-        final TextField username = new TextField("username");
         username.setIcon(FontAwesome.USER);
         username.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+        username.focus();
 
-        final Button signin = new Button("Sign In");
+        final Button signin = new Button("Sign In", this);
         signin.addStyleName(ValoTheme.BUTTON_PRIMARY);
         signin.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        signin.focus();
 
         fields.addComponents(username, signin);
         fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
@@ -64,13 +69,28 @@ public class LoginView extends VerticalLayout
         return fields;
     }
 
+    public void showNotification(String message) {
+        Notification notification = new Notification(message);
+        notification.setPosition(Position.BOTTOM_CENTER);
+        notification.show(Page.getCurrent());
+    }
+
+    List<LoginViewListener> listeners = new ArrayList<LoginViewListener>();
+
     @Override
     public void addListener(LoginViewListener listener) {
-
+        listeners.add(listener);
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
 
+    }
+
+    @Override
+    public void buttonClick(Button.ClickEvent clickEvent) {
+        for (LoginViewListener listener : listeners) {
+            listener.buttonClick(username.getValue());
+        }
     }
 }

@@ -5,7 +5,7 @@ package pl.edu.agh.to2.webgui.view;
  */
 public interface ILoginView {
     interface LoginViewListener {
-        void buttonClick(char operation);
+        void buttonClick(String username);
     }
 
     public void addListener(LoginViewListener listener);
