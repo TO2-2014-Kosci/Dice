@@ -55,21 +55,16 @@ public class LoginView extends VerticalLayout
 
         username.setIcon(FontAwesome.USER);
         username.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+        username.focus();
 
         final Button signin = new Button("Sign In", this);
         signin.addStyleName(ValoTheme.BUTTON_PRIMARY);
         signin.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        signin.focus();
 
         fields.addComponents(username, signin);
         fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
 
         return fields;
-    }
-
-    public void navigateToMainView(String username) {
-        getSession().setAttribute("user", username);
-        getUI().getNavigator().navigateTo(MainView.NAME);
     }
 
     List<LoginViewListener> listeners = new ArrayList<LoginViewListener>();
@@ -88,7 +83,6 @@ public class LoginView extends VerticalLayout
     public void buttonClick(Button.ClickEvent clickEvent) {
         for (LoginViewListener listener : listeners) {
             listener.buttonClick(username.getValue());
-            System.out.println("click");
         }
     }
 }

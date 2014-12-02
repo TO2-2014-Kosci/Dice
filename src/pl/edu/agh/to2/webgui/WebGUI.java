@@ -4,6 +4,7 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import com.vaadin.server.VaadinRequest;
+import pl.edu.agh.to2.webgui.presenter.MainPresenter;
 import pl.edu.agh.to2.webgui.view.LoginView;
 import pl.edu.agh.to2.webgui.view.MainView;
 import pl.edu.agh.to2.webgui.presenter.LoginPresenter;
@@ -22,6 +23,10 @@ public class WebGUI extends UI {
         LoginView loginView = new LoginView();
         LoginPresenter loginPresenter = new LoginPresenter(loginView);
 
+//        MainView mainView = new MainView();
+//        MainPresenter mainPresenter = new MainPresenter(mainView);
+
+//        getNavigator().addView(MainView.NAME, mainView);
         getNavigator().addView(MainView.NAME, MainView.class);
         getNavigator().addView(LoginView.NAME, loginView);
 
