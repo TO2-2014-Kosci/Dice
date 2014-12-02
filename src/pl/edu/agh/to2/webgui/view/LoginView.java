@@ -4,7 +4,9 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -65,6 +67,12 @@ public class LoginView extends VerticalLayout
         fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
 
         return fields;
+    }
+
+    public void showNotification(String message) {
+        Notification notification = new Notification(message);
+        notification.setPosition(Position.BOTTOM_CENTER);
+        notification.show(Page.getCurrent());
     }
 
     List<LoginViewListener> listeners = new ArrayList<LoginViewListener>();
