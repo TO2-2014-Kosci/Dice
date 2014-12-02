@@ -3,6 +3,7 @@ package pl.edu.agh.to2.webgui.presenter;
 import com.vaadin.ui.Notification;
 import pl.edu.agh.to2.webgui.view.GameView;
 import pl.edu.agh.to2.webgui.view.IGameView;
+import pl.edu.agh.to2.webgui.view.MainView;
 
 /**
  * Created by lukasz on 01.12.14.

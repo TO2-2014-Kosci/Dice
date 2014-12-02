@@ -2,10 +2,7 @@ package pl.edu.agh.to2.webgui.presenter;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.MenuBar;
-import pl.edu.agh.to2.webgui.view.CreateGameView;
-import pl.edu.agh.to2.webgui.view.IMainView;
-import pl.edu.agh.to2.webgui.view.LoginView;
-import pl.edu.agh.to2.webgui.view.MainView;
+import pl.edu.agh.to2.webgui.view.*;
 
 /**
  * Created by Maciej on 2014-12-02.
@@ -20,7 +17,7 @@ public class MainPresenter implements IMainView.MainViewListener {
     }
     @Override
     public void buttonClick(String username) {
-//        view.getUI().getNavigator().navigateTo(LobbyView.NAME);
+        view.getUI().getNavigator().navigateTo(LobbyView.NAME);
     }
 
     @Override

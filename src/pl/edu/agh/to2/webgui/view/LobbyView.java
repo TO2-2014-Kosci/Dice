@@ -20,7 +20,8 @@ public class LobbyView extends CustomComponent
     Label info = new Label();
     Button leave = new Button ("Leave lobby",this);
     Button sitdown = new Button("Sit down", this);
-    GridLayout panelLayout = new GridLayout(1,4);
+    Button start = new Button("Start game", this); //temporary button
+    GridLayout panelLayout = new GridLayout(1,5);
     public LobbyView() {
         setSizeFull();
         users.addContainerProperty("User", String.class, null);
@@ -33,6 +34,7 @@ public class LobbyView extends CustomComponent
         panelLayout.addComponent(users,0,1);
         panelLayout.addComponent(leave,0,2);
         panelLayout.addComponent(sitdown,0,3);
+        panelLayout.addComponent(start, 0, 4); //temporary button
         panel.setContent(panelLayout);
         setCompositionRoot(panel);
     }
