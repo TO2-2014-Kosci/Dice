@@ -16,7 +16,7 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
     }
     public void buttonClick(String operation) {
         if(operation.equalsIgnoreCase("leave lobby")) {
-            lobbyView.getUI().getNavigator().navigateTo(MainView.NAME);
+            //lobbyView.getUI().getNavigator().navigateTo(MainView.NAME);
         }
         else if(operation.equalsIgnoreCase("sit down")){
             Notification.show("You've sat down");
