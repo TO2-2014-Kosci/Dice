@@ -33,4 +33,9 @@ public class MainPresenter implements IMainView.MainViewListener {
             }
         }
     }
+
+    @Override
+    public void valueChange(String gameName) {
+        view.join.setEnabled(true);
+    }
 }

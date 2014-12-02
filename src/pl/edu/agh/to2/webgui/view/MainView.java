@@ -1,5 +1,6 @@
 package pl.edu.agh.to2.webgui.view;
 
+import com.vaadin.data.Property;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
@@ -11,7 +12,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import pl.edu.agh.to2.webgui.presenter.MainPresenter;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +20,14 @@ import java.util.List;
  * Created by Maciej on 2014-12-01.
  */
 public class MainView extends CustomComponent
-        implements IMainView, View, Button.ClickListener, MenuBar.Command {
+        implements IMainView, View, Button.ClickListener, MenuBar.Command, Property.ValueChangeListener {
     public static final String NAME = "";
     public static final String LOGOUT_TEXT = "Logout";
     public static final String CREATE_TEXT = "Create game";
 
+    public Button join = new Button("Join now!", this);
     private MenuBar menu = new MenuBar();
+    private Table servers = new Table("List of servers");
 
     public MainView() {
         MainPresenter mainPresenter = new MainPresenter(this);
@@ -33,7 +35,7 @@ public class MainView extends CustomComponent
         Label selected = new Label("Selected: ");
 
         setSizeFull();
-        Button join = new Button("Join now!", this);
+        join.setEnabled(false);
 
         panelLayout.setWidth("100%");
         panelLayout.addComponent(join, 0, 3);
@@ -44,19 +46,19 @@ public class MainView extends CustomComponent
     }
 
     private Component buildGamesList() {
-        Table servers = new Table("List of servers");
+        servers.addValueChangeListener(this);
 
         servers.setSelectable(true);
         servers.setImmediate(true);
-        servers.addContainerProperty("Address", String.class, null);
+        servers.addContainerProperty("Game name", String.class, null);
         servers.addContainerProperty("Game type", String.class, null);
         servers.addContainerProperty("Players", Integer.class, null);
         servers.setPageLength(servers.size());
 
         //mockup items
-        servers.addItem(new Object[] {"193.193.80.0", "N+", 10}, null);
-        servers.addItem(new Object[] {"193.193.80.1", "N*", 5}, null);
-        servers.addItem(new Object[] {"193.193.80.2", "Poker", 20}, null);
+        servers.addItem(new Object[] {"Gra 1", "N+", 10}, null);
+        servers.addItem(new Object[] {"Gra 2", "N*", 5}, null);
+        servers.addItem(new Object[] {"Gra 3", "Poker", 20}, null);
 
         return servers;
     }
@@ -86,6 +88,16 @@ public class MainView extends CustomComponent
         }
     }
 
+
+    @Override
+    public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
+        Object rowID = valueChangeEvent.getProperty().getValue();
+        String gameName = (String)servers.getContainerProperty(rowID, "Game name").getValue();
+        for (MainViewListener listener : listeners) {
+            listener.valueChange(gameName);
+        }
+    }
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         MenuBar.MenuItem currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
@@ -97,4 +109,5 @@ public class MainView extends CustomComponent
     public void addListener(MainViewListener listener) {
         listeners.add(listener);
     }
+
 }
