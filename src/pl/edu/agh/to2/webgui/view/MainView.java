@@ -77,7 +77,7 @@ public class MainView extends CustomComponent
     @Override
     public void buttonClick(Button.ClickEvent clickEvent) {
         for (MainViewListener listener : listeners) {
-            listener.buttonClick(clickEvent.getButton().toString());
+            listener.buttonClick(clickEvent.getButton().getCaption());
         }
     }
 

@@ -5,6 +5,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import com.vaadin.server.VaadinRequest;
 import pl.edu.agh.to2.webgui.presenter.MainPresenter;
+import pl.edu.agh.to2.webgui.view.CreateGameView;
 import pl.edu.agh.to2.webgui.view.LoginView;
 import pl.edu.agh.to2.webgui.view.MainView;
 import pl.edu.agh.to2.webgui.presenter.LoginPresenter;
@@ -29,6 +30,7 @@ public class WebGUI extends UI {
 //        getNavigator().addView(MainView.NAME, mainView);
         getNavigator().addView(MainView.NAME, MainView.class);
         getNavigator().addView(LoginView.NAME, loginView);
+        getNavigator().addView(CreateGameView.NAME, CreateGameView.class);
 
         getNavigator().addViewChangeListener(new ViewChangeListener() {
             @Override

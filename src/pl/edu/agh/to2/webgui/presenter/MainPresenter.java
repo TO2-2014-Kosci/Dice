@@ -2,6 +2,7 @@ package pl.edu.agh.to2.webgui.presenter;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.MenuBar;
+import pl.edu.agh.to2.webgui.view.CreateGameView;
 import pl.edu.agh.to2.webgui.view.IMainView;
 import pl.edu.agh.to2.webgui.view.LoginView;
 import pl.edu.agh.to2.webgui.view.MainView;
@@ -29,7 +30,7 @@ public class MainPresenter implements IMainView.MainViewListener {
                 VaadinSession.getCurrent().setAttribute("user", null);
                 view.getUI().getNavigator().navigateTo(LoginView.NAME);
             } else if (command.equals(MainView.CREATE_TEXT)) {
-//                view.getUI().getNavigator().navigateTo(CreateGameView.NAME);
+                view.getUI().getNavigator().navigateTo(CreateGameView.NAME);
             }
         }
     }
