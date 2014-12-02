@@ -13,6 +13,10 @@ import pl.edu.agh.to2.webgui.view.LobbyView;
 import pl.edu.agh.to2.webgui.view.LoginView;
 import pl.edu.agh.to2.webgui.view.MainView;
 import pl.edu.agh.to2.webgui.presenter.LoginPresenter;
+import to2.dice.game.GameState;
+import to2.dice.messaging.LocalConnectionProxy;
+import to2.dice.server.Server;
+import to2.dice.server.ServerMessageListener;
 
 /**
  * Created by Maciej on 2014-11-28.
@@ -20,13 +24,19 @@ import pl.edu.agh.to2.webgui.presenter.LoginPresenter;
 public class WebGUI extends UI {
     @Override
     public void init(VaadinRequest request) {
-//        VerticalLayout layout = new VerticalLayout();
-//        setContent(layout);
-//        layout.addComponent(new Label("Hello world!"));
+        Server server = new Server();
+        ServerMessageListener listener = new ServerMessageListener() {
+            @Override
+            public void onGameStateChange(GameState gameState) {
+                return;
+            }
+        };
+        LocalConnectionProxy lcp = new LocalConnectionProxy(server, listener);
+
 
         new Navigator(this, this);
         LoginView loginView = new LoginView();
-        LoginPresenter loginPresenter = new LoginPresenter(loginView);
+        LoginPresenter loginPresenter = new LoginPresenter(loginView, lcp);
         
         LobbyView lobbyView = new LobbyView();
         new LobbyPresenter(lobbyView);
