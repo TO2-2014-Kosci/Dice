@@ -3,8 +3,11 @@ package pl.edu.agh.to2.webgui.view;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import pl.edu.agh.to2.webgui.presenter.CreateGamePresenter;
+import to2.dice.game.GameType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,13 @@ public class CreateGameView extends CustomComponent
     public static final String CREATE_TEXT = "Create game";
 
     private MenuBar menu = new MenuBar();
+    private TextField gameName;
+    private ComboBox gameType;
+    private TextField playersNumber;
+    private TextField timeForMove;
+    private TextField maxInactiveTurns;
+    private TextField roundsToWin;
+
 
     public CreateGameView() {
         CreateGamePresenter presenter = new CreateGamePresenter(this);
@@ -44,19 +54,25 @@ public class CreateGameView extends CustomComponent
         VerticalLayout fields = new VerticalLayout();
         fields.setSpacing(true);
 
-        final ComboBox gameType = new ComboBox("Game type");
-        gameType.addItems("N*", "N+", "Poker");
-
-        TextField playersNumber = new TextField("Number of players");
-        TextField botsNumber = new TextField("Number of bots");
-        final ComboBox level = new ComboBox("Game level");
-        level.addItems("Easy", "Hard");
+        gameName = new TextField("Game Name");
+        gameType = new ComboBox("Game type");
+        gameType.addItems(GameType.values());
+        playersNumber = new TextField("Number of human players");
+        timeForMove = new TextField("Time for move");
+        maxInactiveTurns = new TextField("Max inactive turns");
+        roundsToWin = new TextField("Rounds to win");
 
         final Button createGame = new Button(CREATE_TEXT, this);
         final Button cancel = new Button(CANCEL_TEXT, this);
 
-        fields.addComponents(gameType, playersNumber, botsNumber, level, createGame, cancel);
+        fields.addComponents(gameName, gameType, playersNumber, timeForMove, maxInactiveTurns, roundsToWin, createGame, cancel);
         return fields;
+    }
+
+    public void showNotification(String message) {
+        Notification notification = new Notification(message);
+        notification.setPosition(Position.BOTTOM_CENTER);
+        notification.show(Page.getCurrent());
     }
 
     List<CreateGameViewListener> listeners = new ArrayList<CreateGameViewListener>();
@@ -87,5 +103,27 @@ public class CreateGameView extends CustomComponent
 
     }
 
+    public String getGameName() {
+        return gameName.getValue();
+    }
 
+    public GameType getGameType() {
+        return (GameType) gameType.getValue();
+    }
+
+    public int getPlayersNumber() {
+        return Integer.parseInt(playersNumber.getValue());
+    }
+
+    public int getTimeForMove() {
+        return Integer.parseInt(timeForMove.getValue());
+    }
+
+    public int getMaxInactiveTurns() {
+        return Integer.parseInt(maxInactiveTurns.getValue());
+    }
+
+    public int getRoundsToWin() {
+        return Integer.parseInt(roundsToWin.getValue());
+    }
 }
