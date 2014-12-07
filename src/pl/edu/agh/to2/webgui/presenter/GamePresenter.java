@@ -11,6 +11,8 @@ import to2.dice.game.Player;
 import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,6 +53,17 @@ public class GamePresenter implements IGameView.GameViewListener {
     }
 
     public void updateGameState(GameState gameState) {
-
+        List<Player> players = gameState.getPlayers();
+        List<Object[]> updatedPlayersList = new ArrayList<Object[]>();
+        for (Player p : players) {
+            String playerName = p.getName();
+            Integer playerScore = p.getScore();
+            int[] playerDices = p.getDice().getDice();
+            updatedPlayersList.add(new Object[]{playerName, playerScore, Arrays.toString(playerDices)});
+            if (playerName == username) {
+                view.setDices(playerDices);
+            }
+        }
+        view.updatePlayersList(updatedPlayersList);
     }
 }

@@ -11,9 +11,8 @@ import to2.dice.game.GameState;
 import to2.dice.game.Player;
 import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Maciej on 2014-11-28.

@@ -95,4 +95,18 @@ public class GameView extends CustomComponent
         }
         return dices;
     }
+
+    public void updatePlayersList(List<Object[]> updatedPlayersList) {
+        players.removeAllItems();
+        for (Object[] updatedPlayer : updatedPlayersList) {
+            players.addItem(updatedPlayer);
+        }
+
+    }
+
+    public void setDices(int[] updatedDices) {
+        for (int i = 0; i < updatedDices.length; i++) {
+            checkBoxes.get(i).setCaption(Integer.toString(updatedDices[i]));
+        }
+    }
 }
