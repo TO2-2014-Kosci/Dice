@@ -4,6 +4,8 @@ import com.vaadin.data.Property;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -24,6 +26,7 @@ public class MainView extends CustomComponent
     public static final String NAME = "";
     public static final String LOGOUT_TEXT = "Logout";
     public static final String CREATE_TEXT = "Create game";
+    public static final String REFRESH_TEXT = "Refresh";
 
     public Button join = new Button("Join now!", this);
     private MenuBar menu = new MenuBar();
@@ -66,10 +69,16 @@ public class MainView extends CustomComponent
     private Component buildMenu() {
         menu.setWidth("100%");
         MenuBar.MenuItem createGame = menu.addItem(CREATE_TEXT, FontAwesome.PLUS_SQUARE, this);
-        MenuBar.MenuItem refresh = menu.addItem("Refresh", FontAwesome.REFRESH, this);
+        MenuBar.MenuItem refresh = menu.addItem(REFRESH_TEXT, FontAwesome.REFRESH, this);
 
 
         return menu;
+    }
+
+    public void showNotification(String message) {
+        Notification notification = new Notification(message);
+        notification.setPosition(Position.BOTTOM_CENTER);
+        notification.show(Page.getCurrent());
     }
 
     List<MainViewListener> listeners = new ArrayList<MainViewListener>();

@@ -22,6 +22,8 @@ import to2.dice.server.ServerMessageListener;
  * Created by Maciej on 2014-11-28.
  */
 public class WebGUI extends UI {
+    public static LocalConnectionProxy lcp;
+
     @Override
     public void init(VaadinRequest request) {
         Server server = new Server();
@@ -31,7 +33,7 @@ public class WebGUI extends UI {
                 return;
             }
         };
-        LocalConnectionProxy lcp = new LocalConnectionProxy(server, listener);
+        lcp = new LocalConnectionProxy(server, listener);
 
 
         new Navigator(this, this);
