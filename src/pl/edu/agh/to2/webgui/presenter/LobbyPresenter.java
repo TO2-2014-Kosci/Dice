@@ -8,8 +8,12 @@ import pl.edu.agh.to2.webgui.view.ILobbyView;
 import pl.edu.agh.to2.webgui.view.LobbyView;
 import pl.edu.agh.to2.webgui.view.MainView;
 import to2.dice.game.GameState;
+import to2.dice.game.Player;
 import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Maciej on 2014-11-28.
@@ -63,7 +67,12 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
     }
 
     public void updateGameState(GameState gameState) {
-
+        List<Player> players = gameState.getPlayers();
+        List<String> playersNames = new ArrayList<String>();
+        for(Player player : players) {
+            playersNames.add(player.getName());
+        }
+        view.setPlayersList(playersNames);
     }
 
 }

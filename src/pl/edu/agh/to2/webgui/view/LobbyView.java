@@ -34,9 +34,9 @@ public class LobbyView extends CustomComponent
         setSizeFull();
         users.addContainerProperty("User", String.class, null);
         users.setPageLength(users.size());
-        users.addItem(new Object[]{"X"}, 1);
-        users.addItem(new Object[]{"Y"} , 2);
-        users.addItem(new Object[]{"Z"}, 3);
+//        users.addItem(new Object[]{"X"}, 1);
+//        users.addItem(new Object[]{"Y"} , 2);
+//        users.addItem(new Object[]{"Z"}, 3);
         panelLayout.setWidth("100%");
         panelLayout.addComponent(info, 0, 0);
         panelLayout.addComponent(users,0,1);
@@ -51,6 +51,13 @@ public class LobbyView extends CustomComponent
         Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);
         notification.show(Page.getCurrent());
+    }
+
+    public void setPlayersList(List<String> playersList) {
+        users.removeAllItems();
+        for(String playerName : playersList) {
+            users.addItem(new Object[] {playerName});
+        }
     }
 
     @Override
