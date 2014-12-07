@@ -22,17 +22,18 @@ import to2.dice.server.ServerMessageListener;
  * Created by Maciej on 2014-11-28.
  */
 public class WebGUI extends UI {
-    public static LocalConnectionProxy lcp;
+    public static LocalConnectionProxy lcp; //TODO przerobic
 
     @Override
     public void init(VaadinRequest request) {
         Server server = new Server();
-        ServerMessageListener listener = new ServerMessageListener() {
-            @Override
-            public void onGameStateChange(GameState gameState) {
-                return;
-            }
-        };
+//        ServerMessageListener listener = new ServerMessageListener() {
+//            @Override
+//            public void onGameStateChange(GameState gameState) {
+//                return;
+//            }
+//        };
+        MessageListener listener = new MessageListener();
         lcp = new LocalConnectionProxy(server, listener);
 
 
@@ -41,15 +42,14 @@ public class WebGUI extends UI {
         LoginPresenter loginPresenter = new LoginPresenter(loginView, lcp);
         
         LobbyView lobbyView = new LobbyView();
-        new LobbyPresenter(lobbyView);
+        LobbyPresenter lobbyPresenter = new LobbyPresenter(lobbyView);
         
         GameView gameView = new GameView();
-        new GamePresenter(gameView);
+        GamePresenter gamePresenter = new GamePresenter(gameView);
 
-//        MainView mainView = new MainView();
-//        MainPresenter mainPresenter = new MainPresenter(mainView);
+        listener.setGamePresenter(gamePresenter);
+        listener.setLobbyPresenter(lobbyPresenter);
 
-//        getNavigator().addView(MainView.NAME, mainView);
         getNavigator().addView(MainView.NAME, MainView.class);
         getNavigator().addView(LoginView.NAME, loginView);
         getNavigator().addView(CreateGameView.NAME, CreateGameView.class);

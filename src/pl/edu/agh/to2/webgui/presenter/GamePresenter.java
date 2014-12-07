@@ -49,4 +49,8 @@ public class GamePresenter implements IGameView.GameViewListener {
             }
         }
     }
+
+    public void updateGameState(GameState gameState) {
+
+    }
 }

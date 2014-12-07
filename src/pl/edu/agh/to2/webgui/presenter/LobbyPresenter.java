@@ -7,6 +7,7 @@ import pl.edu.agh.to2.webgui.view.GameView;
 import pl.edu.agh.to2.webgui.view.ILobbyView;
 import pl.edu.agh.to2.webgui.view.LobbyView;
 import pl.edu.agh.to2.webgui.view.MainView;
+import to2.dice.game.GameState;
 import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
 
@@ -58,6 +59,10 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
         else if(operation.equalsIgnoreCase(LobbyView.START_TEXT)) { // TODO wyrzucic ta akcje i przycisk
             view.getUI().getNavigator().navigateTo(GameView.NAME);
         }
+
+    }
+
+    public void updateGameState(GameState gameState) {
 
     }
 
