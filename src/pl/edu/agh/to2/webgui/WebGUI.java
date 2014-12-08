@@ -26,15 +26,12 @@ public class WebGUI extends UI {
 
     @Override
     public void init(VaadinRequest request) {
-        Server server = new Server();
-//        ServerMessageListener listener = new ServerMessageListener() {
-//            @Override
-//            public void onGameStateChange(GameState gameState) {
-//                return;
-//            }
-//        };
+        //Server server = new Server();
+        //Server server = ContextListener.server;
         MessageListener listener = new MessageListener();
-        lcp = new LocalConnectionProxy(server, listener);
+        //lcp = new LocalConnectionProxy(server, listener);
+        lcp = ContextListener.lcp;
+
 
 
         new Navigator(this, this);
