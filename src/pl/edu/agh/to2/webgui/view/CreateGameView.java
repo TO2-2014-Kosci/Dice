@@ -7,10 +7,13 @@ import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import pl.edu.agh.to2.webgui.presenter.CreateGamePresenter;
+import to2.dice.game.BotLevel;
 import to2.dice.game.GameType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Maciej on 2014-12-02.
@@ -25,10 +28,13 @@ public class CreateGameView extends CustomComponent
     private MenuBar menu = new MenuBar();
     private TextField gameName;
     private ComboBox gameType;
+    private TextField diceNumber;
     private TextField playersNumber;
     private TextField timeForMove;
     private TextField maxInactiveTurns;
     private TextField roundsToWin;
+    private TextField lowBots;
+    private TextField highBots;
 
 
     public CreateGameView() {
@@ -57,15 +63,18 @@ public class CreateGameView extends CustomComponent
         gameName = new TextField("Game Name");
         gameType = new ComboBox("Game type");
         gameType.addItems(GameType.values());
+        diceNumber = new TextField("Number of dices");
         playersNumber = new TextField("Number of human players");
         timeForMove = new TextField("Time for move");
         maxInactiveTurns = new TextField("Max inactive turns");
         roundsToWin = new TextField("Rounds to win");
+        lowBots = new TextField("Number of low bots");
+        highBots = new TextField("Number of high bots");
 
         final Button createGame = new Button(CREATE_TEXT, this);
         final Button cancel = new Button(CANCEL_TEXT, this);
 
-        fields.addComponents(gameName, gameType, playersNumber, timeForMove, maxInactiveTurns, roundsToWin, createGame, cancel);
+        fields.addComponents(gameName, gameType, diceNumber, playersNumber, timeForMove, maxInactiveTurns, roundsToWin, lowBots, highBots, createGame, cancel);
         return fields;
     }
 
@@ -112,6 +121,10 @@ public class CreateGameView extends CustomComponent
         return (GameType) gameType.getValue();
     }
 
+    public int getDiceNumber() {
+        return Integer.parseInt(diceNumber.getValue());
+    }
+
     public int getPlayersNumber() {
         return Integer.parseInt(playersNumber.getValue());
     }
@@ -126,5 +139,17 @@ public class CreateGameView extends CustomComponent
 
     public int getRoundsToWin() {
         return Integer.parseInt(roundsToWin.getValue());
+    }
+
+    public Map<BotLevel,Integer> getBots() {
+        Map<BotLevel, Integer> bots = new HashMap<BotLevel, Integer>();
+        int j = 0;
+        for(int i = 0; i < Integer.parseInt(lowBots.getValue()); i++) {
+            bots.put(BotLevel.LOW, j++);
+        }
+        for(int i = 0; i < Integer.parseInt(highBots.getValue()); i++) {
+            bots.put(BotLevel.HIGH, j++);
+        }
+        return bots;
     }
 }
