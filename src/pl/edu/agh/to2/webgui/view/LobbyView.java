@@ -19,7 +19,7 @@ public class LobbyView extends CustomComponent
     public static final String LEAVE_TEXT = "Leave lobby";
     public static final String SIT_DOWN_TEXT = "Sit down";
     public static final String STAND_UP_TEXT = "Sit down";
-    public static final String START_TEXT = "Start game";
+    public static final String START_TEXT = "Start game (test)";
 
     List<LobbyViewListener> listeners = new ArrayList<LobbyViewListener>();
     Table users = new Table("Users in lobby");
@@ -60,6 +60,14 @@ public class LobbyView extends CustomComponent
         }
     }
 
+    public void sitDown() {
+        sitdown.setCaption(STAND_UP_TEXT);
+    }
+
+    public void standUp() {
+        sitdown.setCaption(SIT_DOWN_TEXT);
+    }
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
 
@@ -69,12 +77,12 @@ public class LobbyView extends CustomComponent
         for(LobbyViewListener listener : listeners) {
             listener.buttonClick(clickEvent.getButton().getCaption());
         }
-        if(clickEvent.getButton().getCaption().equalsIgnoreCase(SIT_DOWN_TEXT)) {
-            clickEvent.getButton().setCaption(STAND_UP_TEXT);
-        }
-        else if(clickEvent.getButton().getCaption().equalsIgnoreCase(STAND_UP_TEXT)){
-            clickEvent.getButton().setCaption(SIT_DOWN_TEXT);
-        }
+//        if(clickEvent.getButton().getCaption().equalsIgnoreCase(SIT_DOWN_TEXT)) {
+//            clickEvent.getButton().setCaption(STAND_UP_TEXT);
+//        }
+//        else if(clickEvent.getButton().getCaption().equalsIgnoreCase(STAND_UP_TEXT)){
+//            clickEvent.getButton().setCaption(SIT_DOWN_TEXT);
+//        }
     }
 
     @Override

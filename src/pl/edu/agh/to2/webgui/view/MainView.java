@@ -54,14 +54,14 @@ public class MainView extends CustomComponent
         servers.setSelectable(true);
         servers.setImmediate(true);
         servers.addContainerProperty("Game name", String.class, null);
-        servers.addContainerProperty("Game type", String.class, null);
-        servers.addContainerProperty("Players", Integer.class, null);
+        servers.addContainerProperty("Players", String.class, null);
+        servers.addContainerProperty("Game type", Integer.class, null);
         servers.setPageLength(servers.size());
 
-        //mockup items
-        servers.addItem(new Object[] {"Gra 1", "N+", 10}, null);
-        servers.addItem(new Object[] {"Gra 2", "N*", 5}, null);
-        servers.addItem(new Object[] {"Gra 3", "Poker", 20}, null);
+        //mockup items TODO wyrzucic mockupy
+        servers.addItem(new Object[] {"mockup game 1", "N+", 10}, null);
+        servers.addItem(new Object[] {"mockup game 2", "N*", 5}, null);
+        servers.addItem(new Object[] {"mockup game 3", "Poker", 20}, null);
 
         return servers;
     }
@@ -79,6 +79,13 @@ public class MainView extends CustomComponent
         Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);
         notification.show(Page.getCurrent());
+    }
+
+    public void refreshGamesList(List<Object[]> games) {
+        servers.removeAllItems();
+        for (Object[] o : games) {
+            servers.addItem(o);
+        }
     }
 
     List<MainViewListener> listeners = new ArrayList<MainViewListener>();

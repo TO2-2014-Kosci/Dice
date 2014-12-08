@@ -43,7 +43,7 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
             Response response = lcp.sitDown(username);
             if(response.isSuccess()) {
                 view.showNotification("You've sat down");
-                // TODO zmiana przycisku sit na stand
+                view.sitDown();
             }
             else {
                 view.showNotification(response.message);
@@ -53,7 +53,7 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
             Response response = lcp.standUp(username);
             if(response.isSuccess()) {
                 view.showNotification("You've stood up");
-                // TODO zmiana przycisku stand na sit
+                view.standUp();
             }
             else {
                 view.showNotification(response.message);

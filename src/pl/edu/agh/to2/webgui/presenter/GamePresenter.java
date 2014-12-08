@@ -43,7 +43,7 @@ public class GamePresenter implements IGameView.GameViewListener {
         else if(operation.equalsIgnoreCase(GameView.REROLL_TEXT)) {
             boolean[] dicesToReroll = view.getDices();
             Response response = lcp.reroll(dicesToReroll, username);
-            if(response.isSuccess()) { // TODO - zapewne nie trzeba if'a
+            if(response.isSuccess()) {
                 view.showNotification("Dices rerolled");
             }
             else {

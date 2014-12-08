@@ -9,6 +9,7 @@ import to2.dice.game.GameState;
 import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,7 +48,11 @@ public class MainPresenter implements IMainView.MainViewListener {
                 view.getUI().getNavigator().navigateTo(CreateGameView.NAME);
             } else if (command.equals(MainView.REFRESH_TEXT)) {
                 List<GameInfo> gamesList = lcp.getRoomList();
-                // TODO odswiezyc liste gier w widoku
+                List<Object[]> games = new ArrayList<Object[]>();
+                for (GameInfo gi : gamesList) {
+                    games.add(new Object[] {gi.getSettings().getName(), gi.getPlayersNumber() + "/" + gi.getSettings().getMaxHumanPlayers(), gi.getSettings().getGameType().toString()});
+                }
+                view.refreshGamesList(games);
             }
         }
     }
