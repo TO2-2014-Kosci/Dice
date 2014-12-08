@@ -16,7 +16,7 @@ import java.util.List;
 public class MessageListener implements ServerMessageListener {
     private GamePresenter gamePresenter;
     private LobbyPresenter lobbyPresenter;
-    private boolean gameStarted = false;
+    private boolean gameStarted = false; // TODO inaczej to zrobic
 
     @Override
     public void onGameStateChange(GameState gameState) {
@@ -33,6 +33,7 @@ public class MessageListener implements ServerMessageListener {
                 }
                 else {
                     lobbyPresenter.updateGameState(gameState);
+                    gameStarted = false;
                 }
                 break;
             }
