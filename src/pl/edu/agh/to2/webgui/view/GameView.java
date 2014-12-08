@@ -82,6 +82,7 @@ public class GameView extends CustomComponent
         players.addItem(new Object[]{"Z", 0,"1,1,5,3,2"}, 3);
     }
 
+    @Override
     public void showNotification(String message) {
         Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);

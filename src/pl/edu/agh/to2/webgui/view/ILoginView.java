@@ -9,4 +9,5 @@ public interface ILoginView {
     }
 
     public void addListener(LoginViewListener listener);
+    public void showNotification(String message);
 }

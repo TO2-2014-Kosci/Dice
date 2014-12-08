@@ -69,6 +69,7 @@ public class CreateGameView extends CustomComponent
         return fields;
     }
 
+    @Override
     public void showNotification(String message) {
         Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);

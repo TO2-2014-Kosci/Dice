@@ -75,6 +75,7 @@ public class MainView extends CustomComponent
         return menu;
     }
 
+    @Override
     public void showNotification(String message) {
         Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);
