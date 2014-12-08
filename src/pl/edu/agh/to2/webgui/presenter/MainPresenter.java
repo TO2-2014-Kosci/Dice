@@ -53,6 +53,7 @@ public class MainPresenter implements IMainView.MainViewListener {
                     games.add(new Object[] {gi.getSettings().getName(), gi.getPlayersNumber() + "/" + gi.getSettings().getMaxHumanPlayers(), gi.getSettings().getGameType().toString()});
                 }
                 view.refreshGamesList(games);
+                view.showNotification("Refreshing games...");
             }
         }
     }
