@@ -1,9 +1,11 @@
 package pl.edu.agh.to2.webgui;
 
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.UI;
 import pl.edu.agh.to2.webgui.presenter.GamePresenter;
 import pl.edu.agh.to2.webgui.presenter.LobbyPresenter;
 import pl.edu.agh.to2.webgui.view.GameView;
+import pl.edu.agh.to2.webgui.view.LobbyView;
 import to2.dice.game.GameState;
 import to2.dice.game.Player;
 import to2.dice.server.ServerMessageListener;
@@ -16,7 +18,6 @@ import java.util.List;
 public class MessageListener implements ServerMessageListener {
     private GamePresenter gamePresenter;
     private LobbyPresenter lobbyPresenter;
-    private boolean gameStarted = false; // TODO inaczej to zrobic
 
     @Override
     public void onGameStateChange(GameState gameState) {
@@ -24,16 +25,14 @@ public class MessageListener implements ServerMessageListener {
         String username = (String) VaadinSession.getCurrent().getAttribute("user");
         for(Player player : players) {
             if (player.getName().equals(username) && gamePresenter != null && lobbyPresenter != null) {
-                if (gameState.isGameStarted() && !gameStarted) {
-                    lobbyPresenter.startGame();
-                    gameStarted = true;
-                }
                 if (gameState.isGameStarted()) { //Game presenter
+                    if (UI.getCurrent().getClass().getName().equals(LobbyView.NAME)) {
+                        lobbyPresenter.startGame();
+                    }
                     gamePresenter.updateGameState(gameState);
                 }
                 else {
                     lobbyPresenter.updateGameState(gameState);
-                    gameStarted = false;
                 }
                 break;
             }
