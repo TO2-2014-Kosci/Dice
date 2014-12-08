@@ -74,4 +74,7 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
         view.setPlayersList(playersNames);
     }
 
+    public void startGame() {
+        view.getUI().getNavigator().navigateTo(GameView.NAME);
+    }
 }

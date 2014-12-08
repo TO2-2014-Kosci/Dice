@@ -16,16 +16,22 @@ import java.util.List;
 public class MessageListener implements ServerMessageListener {
     private GamePresenter gamePresenter;
     private LobbyPresenter lobbyPresenter;
+    private boolean gameStarted = false;
 
     @Override
     public void onGameStateChange(GameState gameState) {
         List<Player> players = gameState.getPlayers();
         String username = (String) VaadinSession.getCurrent().getAttribute("user");
         for(Player player : players) {
-            if (player.getName().equals(username)) {
-                if (gamePresenter != null && gameState.isGameStarted()) { //Game presenter
+            if (player.getName().equals(username) && gamePresenter != null && lobbyPresenter != null) {
+                if (gameState.isGameStarted() && !gameStarted) {
+                    lobbyPresenter.startGame();
+                    gameStarted = true;
+                }
+                if (gameState.isGameStarted()) { //Game presenter
                     gamePresenter.updateGameState(gameState);
-                } else if (lobbyPresenter != null) {
+                }
+                else {
                     lobbyPresenter.updateGameState(gameState);
                 }
                 break;
