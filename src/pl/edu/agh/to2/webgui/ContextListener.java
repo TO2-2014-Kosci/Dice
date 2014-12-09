@@ -11,15 +11,15 @@ import javax.servlet.ServletContextListener;
  */
 public class ContextListener implements ServletContextListener {
     public static Server server;
-    public static LocalConnectionProxy lcp;
-    public MessageListener listener;
+//    public static LocalConnectionProxy lcp;
+//    public MessageListener listener;
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         System.out.println("Creating server..");
         server = new Server();
-        listener = new MessageListener();
-        lcp = new LocalConnectionProxy(server, listener);
+//        listener = new MessageListener();
+//        lcp = new LocalConnectionProxy(server, listener);
     }
 
     @Override
