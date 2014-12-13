@@ -13,31 +13,38 @@ import pl.edu.agh.to2.webgui.view.LobbyView;
 import pl.edu.agh.to2.webgui.view.LoginView;
 import pl.edu.agh.to2.webgui.view.MainView;
 import pl.edu.agh.to2.webgui.presenter.LoginPresenter;
+import to2.dice.game.GameState;
+import to2.dice.messaging.LocalConnectionProxy;
+import to2.dice.server.Server;
+import to2.dice.server.ServerMessageListener;
 
 /**
  * Created by Maciej on 2014-11-28.
  */
 public class WebGUI extends UI {
+    public static LocalConnectionProxy lcp; //TODO przerobic
+
     @Override
     public void init(VaadinRequest request) {
-//        VerticalLayout layout = new VerticalLayout();
-//        setContent(layout);
-//        layout.addComponent(new Label("Hello world!"));
+        Server server = ContextListener.server;
+        MessageListener listener = new MessageListener();
+        lcp = new LocalConnectionProxy(server, listener);
+//        lcp = ContextListener.lcp;
+
 
         new Navigator(this, this);
         LoginView loginView = new LoginView();
-        LoginPresenter loginPresenter = new LoginPresenter(loginView);
+        LoginPresenter loginPresenter = new LoginPresenter(loginView, lcp);
         
         LobbyView lobbyView = new LobbyView();
-        new LobbyPresenter(lobbyView);
+        LobbyPresenter lobbyPresenter = new LobbyPresenter(lobbyView);
         
         GameView gameView = new GameView();
-        new GamePresenter(gameView);
+        GamePresenter gamePresenter = new GamePresenter(gameView);
 
-//        MainView mainView = new MainView();
-//        MainPresenter mainPresenter = new MainPresenter(mainView);
+        listener.setGamePresenter(gamePresenter);
+        listener.setLobbyPresenter(lobbyPresenter);
 
-//        getNavigator().addView(MainView.NAME, mainView);
         getNavigator().addView(MainView.NAME, MainView.class);
         getNavigator().addView(LoginView.NAME, loginView);
         getNavigator().addView(CreateGameView.NAME, CreateGameView.class);

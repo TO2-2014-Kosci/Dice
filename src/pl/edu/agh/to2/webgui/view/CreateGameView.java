@@ -3,11 +3,17 @@ package pl.edu.agh.to2.webgui.view;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import pl.edu.agh.to2.webgui.presenter.CreateGamePresenter;
+import to2.dice.game.BotLevel;
+import to2.dice.game.GameType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Maciej on 2014-12-02.
@@ -20,6 +26,16 @@ public class CreateGameView extends CustomComponent
     public static final String CREATE_TEXT = "Create game";
 
     private MenuBar menu = new MenuBar();
+    private TextField gameName;
+    private ComboBox gameType;
+    private TextField diceNumber;
+    private TextField playersNumber;
+    private TextField timeForMove;
+    private TextField maxInactiveTurns;
+    private TextField roundsToWin;
+    private TextField lowBots;
+    private TextField highBots;
+
 
     public CreateGameView() {
         CreateGamePresenter presenter = new CreateGamePresenter(this);
@@ -44,19 +60,29 @@ public class CreateGameView extends CustomComponent
         VerticalLayout fields = new VerticalLayout();
         fields.setSpacing(true);
 
-        final ComboBox gameType = new ComboBox("Game type");
-        gameType.addItems("N*", "N+", "Poker");
-
-        TextField playersNumber = new TextField("Number of players");
-        TextField botsNumber = new TextField("Number of bots");
-        final ComboBox level = new ComboBox("Game level");
-        level.addItems("Easy", "Hard");
+        gameName = new TextField("Game Name");
+        gameType = new ComboBox("Game type");
+        gameType.addItems(GameType.values());
+        diceNumber = new TextField("Number of dices");
+        playersNumber = new TextField("Number of human players");
+        timeForMove = new TextField("Time for move");
+        maxInactiveTurns = new TextField("Max inactive turns");
+        roundsToWin = new TextField("Rounds to win");
+        lowBots = new TextField("Number of low bots");
+        highBots = new TextField("Number of high bots");
 
         final Button createGame = new Button(CREATE_TEXT, this);
         final Button cancel = new Button(CANCEL_TEXT, this);
 
-        fields.addComponents(gameType, playersNumber, botsNumber, level, createGame, cancel);
+        fields.addComponents(gameName, gameType, diceNumber, playersNumber, timeForMove, maxInactiveTurns, roundsToWin, lowBots, highBots, createGame, cancel);
         return fields;
+    }
+
+    @Override
+    public void showNotification(String message) {
+        Notification notification = new Notification(message);
+        notification.setPosition(Position.BOTTOM_CENTER);
+        notification.show(Page.getCurrent());
     }
 
     List<CreateGameViewListener> listeners = new ArrayList<CreateGameViewListener>();
@@ -87,5 +113,43 @@ public class CreateGameView extends CustomComponent
 
     }
 
+    public String getGameName() {
+        return gameName.getValue();
+    }
 
+    public GameType getGameType() {
+        return (GameType) gameType.getValue();
+    }
+
+    public int getDiceNumber() {
+        return Integer.parseInt(diceNumber.getValue());
+    }
+
+    public int getPlayersNumber() {
+        return Integer.parseInt(playersNumber.getValue());
+    }
+
+    public int getTimeForMove() {
+        return Integer.parseInt(timeForMove.getValue());
+    }
+
+    public int getMaxInactiveTurns() {
+        return Integer.parseInt(maxInactiveTurns.getValue());
+    }
+
+    public int getRoundsToWin() {
+        return Integer.parseInt(roundsToWin.getValue());
+    }
+
+    public Map<BotLevel,Integer> getBots() {
+        Map<BotLevel, Integer> bots = new HashMap<BotLevel, Integer>();
+        int j = 0;
+        for(int i = 0; i < Integer.parseInt(lowBots.getValue()); i++) {
+            bots.put(BotLevel.LOW, j++);
+        }
+        for(int i = 0; i < Integer.parseInt(highBots.getValue()); i++) {
+            bots.put(BotLevel.HIGH, j++);
+        }
+        return bots;
+    }
 }

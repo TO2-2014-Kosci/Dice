@@ -11,4 +11,5 @@ public interface IMainView {
     }
 
     public void addListener(MainViewListener listener);
+    public void showNotification(String message);
 }

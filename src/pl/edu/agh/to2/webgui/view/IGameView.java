@@ -9,4 +9,5 @@ public interface IGameView {
     }
 
     public void addListener(GameViewListener listener);
+    public void showNotification(String message);
 }
