@@ -69,6 +69,7 @@ public class LoginView extends VerticalLayout
         return fields;
     }
 
+    @Override
     public void showNotification(String message) {
         Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);

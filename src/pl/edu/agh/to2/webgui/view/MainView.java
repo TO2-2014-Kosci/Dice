@@ -4,6 +4,8 @@ import com.vaadin.data.Property;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -24,6 +26,7 @@ public class MainView extends CustomComponent
     public static final String NAME = "";
     public static final String LOGOUT_TEXT = "Logout";
     public static final String CREATE_TEXT = "Create game";
+    public static final String REFRESH_TEXT = "Refresh";
 
     public Button join = new Button("Join now!", this);
     private MenuBar menu = new MenuBar();
@@ -51,14 +54,14 @@ public class MainView extends CustomComponent
         servers.setSelectable(true);
         servers.setImmediate(true);
         servers.addContainerProperty("Game name", String.class, null);
-        servers.addContainerProperty("Game type", String.class, null);
-        servers.addContainerProperty("Players", Integer.class, null);
+        servers.addContainerProperty("Players", String.class, null);
+        servers.addContainerProperty("Game type", Integer.class, null);
         servers.setPageLength(servers.size());
 
-        //mockup items
-        servers.addItem(new Object[] {"Gra 1", "N+", 10}, null);
-        servers.addItem(new Object[] {"Gra 2", "N*", 5}, null);
-        servers.addItem(new Object[] {"Gra 3", "Poker", 20}, null);
+        //mockup items TODO wyrzucic mockupy
+        servers.addItem(new Object[] {"mockup game 1", "N+", 10}, null);
+        servers.addItem(new Object[] {"mockup game 2", "N*", 5}, null);
+        servers.addItem(new Object[] {"mockup game 3", "Poker", 20}, null);
 
         return servers;
     }
@@ -66,10 +69,24 @@ public class MainView extends CustomComponent
     private Component buildMenu() {
         menu.setWidth("100%");
         MenuBar.MenuItem createGame = menu.addItem(CREATE_TEXT, FontAwesome.PLUS_SQUARE, this);
-        MenuBar.MenuItem refresh = menu.addItem("Refresh", FontAwesome.REFRESH, this);
+        MenuBar.MenuItem refresh = menu.addItem(REFRESH_TEXT, FontAwesome.REFRESH, this);
 
 
         return menu;
+    }
+
+    @Override
+    public void showNotification(String message) {
+        Notification notification = new Notification(message);
+        notification.setPosition(Position.BOTTOM_CENTER);
+        notification.show(Page.getCurrent());
+    }
+
+    public void refreshGamesList(List<Object[]> games) {
+        servers.removeAllItems();
+        for (Object[] o : games) {
+            servers.addItem(o);
+        }
     }
 
     List<MainViewListener> listeners = new ArrayList<MainViewListener>();
