@@ -27,9 +27,9 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
         this.view = lobbyView;
         lobbyView.addListener(this);
         this.lcp = WebGUI.lcp;
-        this.username = (String) VaadinSession.getCurrent().getAttribute("user");
     }
     public void buttonClick(String operation) {
+        username = (String) VaadinSession.getCurrent().getAttribute("user");
         if(operation.equalsIgnoreCase(LobbyView.LEAVE_TEXT)) {
             Response response = lcp.leaveRoom(username);
             if(response.isSuccess()) {
