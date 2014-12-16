@@ -68,8 +68,8 @@ public class CreateGameView extends CustomComponent
         timeForMove = new TextField("Time for move");
         maxInactiveTurns = new TextField("Max inactive turns");
         roundsToWin = new TextField("Rounds to win");
-        lowBots = new TextField("Number of low bots");
-        highBots = new TextField("Number of high bots");
+        lowBots = new TextField("Number of easy bots"); //TODO zmienic lowBots na easyBots (i high tez)
+        highBots = new TextField("Number of hard bots");
 
         final Button createGame = new Button(CREATE_TEXT, this);
         final Button cancel = new Button(CANCEL_TEXT, this);
@@ -145,10 +145,10 @@ public class CreateGameView extends CustomComponent
         Map<BotLevel, Integer> bots = new HashMap<BotLevel, Integer>();
         int j = 0;
         for(int i = 0; i < Integer.parseInt(lowBots.getValue()); i++) {
-            bots.put(BotLevel.LOW, j++);
+            bots.put(BotLevel.EASY, j++);
         }
         for(int i = 0; i < Integer.parseInt(highBots.getValue()); i++) {
-            bots.put(BotLevel.HIGH, j++);
+            bots.put(BotLevel.HARD, j++);
         }
         return bots;
     }

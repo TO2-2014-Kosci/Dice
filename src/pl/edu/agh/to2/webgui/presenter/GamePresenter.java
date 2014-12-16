@@ -14,6 +14,7 @@ import to2.dice.messaging.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by lukasz on 01.12.14.
@@ -31,24 +32,36 @@ public class GamePresenter implements IGameView.GameViewListener {
     }
     public void buttonClick(String operation) {
         if(operation.equalsIgnoreCase(GameView.LEAVE_TEXT)) {
-            Response response = lcp.leaveRoom(username);
-            if(response.isSuccess()) {
-                view.showNotification("You left game");
-                view.getUI().getNavigator().navigateTo(MainView.NAME);
-            }
-            else {
-                view.showNotification(response.message);
-            }
+            Response response = null;
+//            try {
+                response = lcp.leaveRoom();
+                if(response.isSuccess()) {
+                    view.showNotification("You left game");
+                    view.getUI().getNavigator().navigateTo(MainView.NAME);
+                }
+                else {
+                    view.showNotification(response.message);
+                }
+//            } catch (TimeoutException e) { //TODO ogarnac wyjatek
+////                e.printStackTrace();
+//                view.showNotification("Timeout exception");
+//            }
         }
         else if(operation.equalsIgnoreCase(GameView.REROLL_TEXT)) {
             boolean[] dicesToReroll = view.getDices();
-            Response response = lcp.reroll(dicesToReroll, username);
-            if(response.isSuccess()) {
-                view.showNotification("Dices rerolled");
-            }
-            else {
-                view.showNotification(response.message);
-            }
+            Response response = null;
+//            try {
+                response = lcp.reroll(dicesToReroll);
+                if(response.isSuccess()) {
+                    view.showNotification("Dices rerolled");
+                }
+                else {
+                    view.showNotification(response.message);
+                }
+//            } catch (TimeoutException e) { //TODO ogarnac wyjatek
+//                e.printStackTrace();
+//                view.showNotification("Timeout exception");
+//            }
         }
     }
 
@@ -58,7 +71,7 @@ public class GamePresenter implements IGameView.GameViewListener {
         for (Player p : players) {
             String playerName = p.getName();
             Integer playerScore = p.getScore();
-            int[] playerDices = p.getDice().getDice();
+            int[] playerDices = p.getDice().getDiceArray();
             updatedPlayersList.add(new Object[]{playerName, playerScore, Arrays.toString(playerDices)});
             if (playerName == username) {
                 view.setDices(playerDices);

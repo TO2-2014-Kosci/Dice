@@ -55,13 +55,13 @@ public class MainView extends CustomComponent
         servers.setImmediate(true);
         servers.addContainerProperty("Game name", String.class, null);
         servers.addContainerProperty("Players", String.class, null);
-        servers.addContainerProperty("Game type", Integer.class, null);
+        servers.addContainerProperty("Game type", String.class, null);
         servers.setPageLength(servers.size());
 
         //mockup items TODO wyrzucic mockupy
-        servers.addItem(new Object[] {"mockup game 1", "N+", 10}, null);
-        servers.addItem(new Object[] {"mockup game 2", "N*", 5}, null);
-        servers.addItem(new Object[] {"mockup game 3", "Poker", 20}, null);
+        servers.addItem(new Object[] {"mockup game 1", "10/5", "N+"}, null);
+        servers.addItem(new Object[] {"mockup game 2", "5/10", "N*"}, null);
+        servers.addItem(new Object[] {"mockup game 3", "1/1", "Poker"}, null);
 
         return servers;
     }
@@ -84,8 +84,9 @@ public class MainView extends CustomComponent
 
     public void refreshGamesList(List<Object[]> games) {
         servers.removeAllItems();
+//        servers.addItem(new Object[] {"mockup", "5/10", "NT"}, null);
         for (Object[] o : games) {
-            servers.addItem(o);
+            servers.addItem(o, null);
         }
     }
 

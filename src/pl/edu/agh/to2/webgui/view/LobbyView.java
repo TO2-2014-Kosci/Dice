@@ -57,7 +57,7 @@ public class LobbyView extends CustomComponent
     public void setPlayersList(List<String> playersList) {
         users.removeAllItems();
         for(String playerName : playersList) {
-            users.addItem(new Object[] {playerName});
+            users.addItem(new Object[] {playerName}, null);
         }
     }
 

@@ -11,6 +11,7 @@ import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
 
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Maciej on 2014-12-02.
@@ -29,13 +30,19 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
     public void buttonClick(String operation) {
         if(operation != null) {
             if (operation.equals(CreateGameView.CREATE_TEXT)) {
-                Response response = lcp.createRoom(buildGameSettings(), (String) VaadinSession.getCurrent().getAttribute("user"));
-                if (response.isSuccess()) {
-                    view.getUI().getNavigator().navigateTo(LobbyView.NAME);
-                }
-                else {
-                    view.showNotification(response.message);
-                }
+                Response response = null;
+//                try {
+                    response = lcp.createRoom(buildGameSettings());
+                    if (response.isSuccess()) {
+                        view.getUI().getNavigator().navigateTo(LobbyView.NAME);
+                    }
+                    else {
+                        view.showNotification(response.message);
+                    }
+//                } catch (TimeoutException e) { //TODO ogarnac wyjatek
+//                    e.printStackTrace();
+//                    view.showNotification("Timeout exception");
+//                }
             }
             else if (operation.equals(CreateGameView.CANCEL_TEXT)) {
                 view.getUI().getNavigator().navigateTo(MainView.NAME);

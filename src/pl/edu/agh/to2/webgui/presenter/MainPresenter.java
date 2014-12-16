@@ -11,6 +11,7 @@ import to2.dice.messaging.Response;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Maciej on 2014-12-02.
@@ -27,14 +28,19 @@ public class MainPresenter implements IMainView.MainViewListener {
     }
     @Override
     public void buttonClick(String username) {
-        Response response = lcp.joinRoom(gameName, username);
-        if (response.isSuccess()) {
-            view.getUI().getNavigator().navigateTo(LobbyView.NAME);
-        }
-        else {
-            view.showNotification(response.message);
-        }
-
+        Response response = null;
+//        try {
+            response = lcp.joinRoom(gameName);
+            if (response.isSuccess()) {
+                view.getUI().getNavigator().navigateTo(LobbyView.NAME);
+            }
+            else {
+                view.showNotification(response.message);
+            }
+//        } catch (TimeoutException e) { //TODO ogarnac wyjatek
+//            e.printStackTrace();
+//            view.showNotification("Timeout exception");
+//        }
     }
 
     @Override

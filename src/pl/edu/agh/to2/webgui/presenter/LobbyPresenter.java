@@ -13,6 +13,7 @@ import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Maciej on 2014-11-28.
@@ -31,33 +32,50 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
     public void buttonClick(String operation) {
         username = (String) VaadinSession.getCurrent().getAttribute("user");
         if(operation.equalsIgnoreCase(LobbyView.LEAVE_TEXT)) {
-            Response response = lcp.leaveRoom(username);
-            if(response.isSuccess()) {
-                view.getUI().getNavigator().navigateTo(MainView.NAME);
-            }
-            else {
-                view.showNotification(response.message);
-            }
+            Response response = null;
+//            try {
+                response = lcp.leaveRoom();
+                if (response.isSuccess()) {
+                    view.getUI().getNavigator().navigateTo(MainView.NAME);
+                } else {
+                    view.showNotification(response.message);
+                }
+//            } catch (TimeoutException e) { //TODO ogarnac wyjatek
+//                e.printStackTrace();
+//                view.showNotification("Timeout exception");
+//            }
         }
         else if(operation.equalsIgnoreCase(LobbyView.SIT_DOWN_TEXT)){
-            Response response = lcp.sitDown(username);
-            if(response.isSuccess()) {
-                view.showNotification("You've sat down");
-                view.sitDown();
-            }
-            else {
-                view.showNotification(response.message);
-            }
+            Response response = null;
+//            try {
+                response = lcp.sitDown();
+                if(response.isSuccess()) {
+                    view.showNotification("You've sat down");
+                    view.sitDown();
+                }
+                else {
+                    view.showNotification(response.message);
+                }
+//            } catch (TimeoutException e) { //TODO ogarnac wyjatek
+////                e.printStackTrace();
+//                view.showNotification("Timeout exception");
+//            }
         }
         else if(operation.equalsIgnoreCase(LobbyView.STAND_UP_TEXT)){
-            Response response = lcp.standUp(username);
-            if(response.isSuccess()) {
-                view.showNotification("You've stood up");
-                view.standUp();
-            }
-            else {
-                view.showNotification(response.message);
-            }
+            Response response = null;
+//            try {
+                response = lcp.standUp();
+                if(response.isSuccess()) {
+                    view.showNotification("You've stood up");
+                    view.standUp();
+                }
+                else {
+                    view.showNotification(response.message);
+                }
+//            } catch (TimeoutException e) {
+////                e.printStackTrace();
+//                view.showNotification("Timeout exception");
+//            }
         }
         else if(operation.equalsIgnoreCase(LobbyView.START_TEXT)) { // TODO wyrzucic ta akcje i przycisk
             view.getUI().getNavigator().navigateTo(GameView.NAME);
