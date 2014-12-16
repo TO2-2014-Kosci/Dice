@@ -31,18 +31,13 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
         if(operation != null) {
             if (operation.equals(CreateGameView.CREATE_TEXT)) {
                 Response response = null;
-//                try {
-                    response = lcp.createRoom(buildGameSettings());
-                    if (response.isSuccess()) {
-                        view.getUI().getNavigator().navigateTo(LobbyView.NAME);
-                    }
-                    else {
-                        view.showNotification(response.message);
-                    }
-//                } catch (TimeoutException e) { //TODO ogarnac wyjatek
-//                    e.printStackTrace();
-//                    view.showNotification("Timeout exception");
-//                }
+                response = lcp.createRoom(buildGameSettings());
+                if (response.isSuccess()) {
+                    view.getUI().getNavigator().navigateTo(LobbyView.NAME);
+                }
+                else {
+                    view.showNotification(response.message);
+                }
             }
             else if (operation.equals(CreateGameView.CANCEL_TEXT)) {
                 view.getUI().getNavigator().navigateTo(MainView.NAME);

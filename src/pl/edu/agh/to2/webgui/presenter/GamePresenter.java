@@ -33,35 +33,25 @@ public class GamePresenter implements IGameView.GameViewListener {
     public void buttonClick(String operation) {
         if(operation.equalsIgnoreCase(GameView.LEAVE_TEXT)) {
             Response response = null;
-//            try {
-                response = lcp.leaveRoom();
-                if(response.isSuccess()) {
-                    view.showNotification("You left game");
-                    view.getUI().getNavigator().navigateTo(MainView.NAME);
-                }
-                else {
-                    view.showNotification(response.message);
-                }
-//            } catch (TimeoutException e) { //TODO ogarnac wyjatek
-////                e.printStackTrace();
-//                view.showNotification("Timeout exception");
-//            }
+            response = lcp.leaveRoom();
+            if(response.isSuccess()) {
+                view.showNotification("You left game");
+                view.getUI().getNavigator().navigateTo(MainView.NAME);
+            }
+            else {
+                view.showNotification(response.message);
+            }
         }
         else if(operation.equalsIgnoreCase(GameView.REROLL_TEXT)) {
             boolean[] dicesToReroll = view.getDices();
             Response response = null;
-//            try {
-                response = lcp.reroll(dicesToReroll);
-                if(response.isSuccess()) {
-                    view.showNotification("Dices rerolled");
-                }
-                else {
-                    view.showNotification(response.message);
-                }
-//            } catch (TimeoutException e) { //TODO ogarnac wyjatek
-//                e.printStackTrace();
-//                view.showNotification("Timeout exception");
-//            }
+            response = lcp.reroll(dicesToReroll);
+            if(response.isSuccess()) {
+                view.showNotification("Dices rerolled");
+            }
+            else {
+                view.showNotification(response.message);
+            }
         }
     }
 
@@ -73,7 +63,7 @@ public class GamePresenter implements IGameView.GameViewListener {
             Integer playerScore = p.getScore();
             int[] playerDices = p.getDice().getDiceArray();
             updatedPlayersList.add(new Object[]{playerName, playerScore, Arrays.toString(playerDices)});
-            if (playerName == username) {
+            if (playerName.equals(username)) {
                 view.setDices(playerDices);
             }
         }

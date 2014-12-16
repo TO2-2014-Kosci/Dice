@@ -29,18 +29,13 @@ public class MainPresenter implements IMainView.MainViewListener {
     @Override
     public void buttonClick(String username) {
         Response response = null;
-//        try {
-            response = lcp.joinRoom(gameName);
-            if (response.isSuccess()) {
-                view.getUI().getNavigator().navigateTo(LobbyView.NAME);
-            }
-            else {
-                view.showNotification(response.message);
-            }
-//        } catch (TimeoutException e) { //TODO ogarnac wyjatek
-//            e.printStackTrace();
-//            view.showNotification("Timeout exception");
-//        }
+        response = lcp.joinRoom(gameName);
+        if (response.isSuccess()) {
+            view.getUI().getNavigator().navigateTo(LobbyView.NAME);
+        }
+        else {
+            view.showNotification(response.message);
+        }
     }
 
     @Override

@@ -22,7 +22,6 @@ import java.util.concurrent.TimeoutException;
 public class LobbyPresenter implements ILobbyView.LobbyViewListener {
     private LobbyView view;
     private LocalConnectionProxy lcp;
-    private String username;
 
     public LobbyPresenter(LobbyView lobbyView){
         this.view = lobbyView;
@@ -30,52 +29,36 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
         this.lcp = WebGUI.lcp;
     }
     public void buttonClick(String operation) {
-        username = (String) VaadinSession.getCurrent().getAttribute("user");
         if(operation.equalsIgnoreCase(LobbyView.LEAVE_TEXT)) {
             Response response = null;
-//            try {
-                response = lcp.leaveRoom();
-                if (response.isSuccess()) {
-                    view.getUI().getNavigator().navigateTo(MainView.NAME);
-                } else {
-                    view.showNotification(response.message);
-                }
-//            } catch (TimeoutException e) { //TODO ogarnac wyjatek
-//                e.printStackTrace();
-//                view.showNotification("Timeout exception");
-//            }
+            response = lcp.leaveRoom();
+            if (response.isSuccess()) {
+                view.getUI().getNavigator().navigateTo(MainView.NAME);
+            } else {
+                view.showNotification(response.message);
+            }
         }
         else if(operation.equalsIgnoreCase(LobbyView.SIT_DOWN_TEXT)){
             Response response = null;
-//            try {
-                response = lcp.sitDown();
-                if(response.isSuccess()) {
-                    view.showNotification("You've sat down");
-                    view.sitDown();
-                }
-                else {
-                    view.showNotification(response.message);
-                }
-//            } catch (TimeoutException e) { //TODO ogarnac wyjatek
-////                e.printStackTrace();
-//                view.showNotification("Timeout exception");
-//            }
+            response = lcp.sitDown();
+            if(response.isSuccess()) {
+                view.showNotification("You've sat down");
+                view.sitDown();
+            }
+            else {
+                view.showNotification(response.message);
+            }
         }
         else if(operation.equalsIgnoreCase(LobbyView.STAND_UP_TEXT)){
             Response response = null;
-//            try {
-                response = lcp.standUp();
-                if(response.isSuccess()) {
-                    view.showNotification("You've stood up");
-                    view.standUp();
-                }
-                else {
-                    view.showNotification(response.message);
-                }
-//            } catch (TimeoutException e) {
-////                e.printStackTrace();
-//                view.showNotification("Timeout exception");
-//            }
+            response = lcp.standUp();
+            if(response.isSuccess()) {
+                view.showNotification("You've stood up");
+                view.standUp();
+            }
+            else {
+                view.showNotification(response.message);
+            }
         }
         else if(operation.equalsIgnoreCase(LobbyView.START_TEXT)) { // TODO wyrzucic ta akcje i przycisk
             view.getUI().getNavigator().navigateTo(GameView.NAME);
