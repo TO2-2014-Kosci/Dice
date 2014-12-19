@@ -18,19 +18,29 @@ import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.server.Server;
 import to2.dice.server.ServerMessageListener;
 
+import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Maciej on 2014-11-28.
  */
 public class WebGUI extends UI {
-    public static LocalConnectionProxy lcp; //TODO przerobic
+//    public LocalConnectionProxy lcp; //TODO przerobic
 
     @Override
     public void init(VaadinRequest request) {
         Server server = ContextListener.server;
         MessageListener listener = new MessageListener();
-        lcp = new LocalConnectionProxy(server, listener);
+        LocalConnectionProxy lcp = null;
+        try {
+            lcp = new LocalConnectionProxy(server, listener);
+        } catch (ConnectException e) {
+            e.printStackTrace();
+        }
+//        lcp.addServerMessageListener(listener);
 //        lcp = ContextListener.lcp;
-
+        getSession().setAttribute("lcp", lcp);
 
         new Navigator(this, this);
         LoginView loginView = new LoginView();

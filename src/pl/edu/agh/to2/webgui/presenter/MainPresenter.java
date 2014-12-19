@@ -24,7 +24,8 @@ public class MainPresenter implements IMainView.MainViewListener {
     public MainPresenter(MainView view) {
         this.view = view;
         view.addListener(this);
-        this.lcp = WebGUI.lcp;
+//        this.lcp = WebGUI.lcp;
+        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
     }
     @Override
     public void buttonClick(String username) {

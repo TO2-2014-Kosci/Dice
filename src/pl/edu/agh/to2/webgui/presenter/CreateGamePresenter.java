@@ -23,7 +23,8 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
     public CreateGamePresenter(CreateGameView view) {
         this.view = view;
         this.view.addListener(this);
-        this.lcp = WebGUI.lcp;
+//        this.lcp = WebGUI.lcp;
+        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
     }
 
     @Override

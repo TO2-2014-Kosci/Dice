@@ -27,7 +27,8 @@ public class GamePresenter implements IGameView.GameViewListener {
     public GamePresenter(GameView gameView) {
         this.view = gameView;
         gameView.addListener(this);
-        this.lcp = WebGUI.lcp;
+//        this.lcp = WebGUI.lcp;
+        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
         this.username = (String) VaadinSession.getCurrent().getAttribute("user");
     }
     public void buttonClick(String operation) {

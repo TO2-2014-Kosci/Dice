@@ -1,5 +1,6 @@
 package pl.edu.agh.to2.webgui;
 
+import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import pl.edu.agh.to2.webgui.presenter.GamePresenter;
@@ -8,7 +9,10 @@ import pl.edu.agh.to2.webgui.view.GameView;
 import pl.edu.agh.to2.webgui.view.LobbyView;
 import to2.dice.game.GameState;
 import to2.dice.game.Player;
+import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.server.ServerMessageListener;
+
+
 
 import java.util.List;
 
@@ -18,23 +22,23 @@ import java.util.List;
 public class MessageListener implements ServerMessageListener {
     private GamePresenter gamePresenter;
     private LobbyPresenter lobbyPresenter;
+    private boolean gameStarted = false;
 
     @Override
     public void onGameStateChange(GameState gameState) {
-        List<Player> players = gameState.getPlayers();
         String username = (String) VaadinSession.getCurrent().getAttribute("user");
-        for(Player player : players) {
-            if (player.getName().equals(username) && gamePresenter != null && lobbyPresenter != null) {
-                if (gameState.isGameStarted()) { //Game presenter
-                    if (UI.getCurrent().getClass().getName().equals(LobbyView.NAME)) {
-                        lobbyPresenter.startGame();
-                    }
-                    gamePresenter.updateGameState(gameState);
-                }
-                else {
-                    lobbyPresenter.updateGameState(gameState);
-                }
-                break;
+        System.out.println("Incomming message to:\t" + username);
+        System.out.println(this.toString());
+        LocalConnectionProxy lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
+        System.out.println(((LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp")).getLoggedInUser());
+        if (gamePresenter != null && lobbyPresenter != null) {
+            if (gameState.isGameStarted() && !gameStarted) { //rozpoczecie gry
+                System.out.println("Starting game...");
+                gameStarted = true;
+                UI.getCurrent().getNavigator().navigateTo(GameView.NAME);
+            }
+            else if(!gameState.isGameStarted()) { //lobby
+                lobbyPresenter.updateGameState(gameState);
             }
         }
     }

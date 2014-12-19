@@ -120,7 +120,9 @@ public class MainView extends CustomComponent
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         MenuBar.MenuItem currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
         MenuBar.MenuItem logout = currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
-        //logout.setCommand(this);
+        for (MainViewListener listener : listeners) {
+            listener.menuSelected(REFRESH_TEXT);
+        }
     }
 
     @Override

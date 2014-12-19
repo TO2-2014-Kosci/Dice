@@ -18,14 +18,14 @@ public class LobbyView extends CustomComponent
     public static final String NAME = "lobby";
     public static final String LEAVE_TEXT = "Leave lobby";
     public static final String SIT_DOWN_TEXT = "Sit down";
-    public static final String STAND_UP_TEXT = "Sit down";
+    public static final String STAND_UP_TEXT = "Stand up";
     public static final String START_TEXT = "Start game (test)";
 
     List<LobbyViewListener> listeners = new ArrayList<LobbyViewListener>();
     Table users = new Table("Users in lobby");
     Panel panel = new Panel();
     Label info = new Label();
-    Button leave = new Button (LEAVE_TEXT,this);
+    Button leave = new Button(LEAVE_TEXT,this);
     Button sitdown = new Button(SIT_DOWN_TEXT, this);
     Button start = new Button(START_TEXT, this); //temporary button
     GridLayout panelLayout = new GridLayout(1,5);

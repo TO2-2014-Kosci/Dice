@@ -26,7 +26,8 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
     public LobbyPresenter(LobbyView lobbyView){
         this.view = lobbyView;
         lobbyView.addListener(this);
-        this.lcp = WebGUI.lcp;
+//        this.lcp = WebGUI.lcp;
+        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
     }
     public void buttonClick(String operation) {
         if(operation.equalsIgnoreCase(LobbyView.LEAVE_TEXT)) {
