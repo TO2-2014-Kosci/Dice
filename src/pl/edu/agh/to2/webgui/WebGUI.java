@@ -28,7 +28,6 @@ import java.util.List;
  */
 @Push
 public class WebGUI extends UI {
-//    public LocalConnectionProxy lcp; //TODO przerobic
 
     @Override
     public void init(VaadinRequest request) {
@@ -40,28 +39,28 @@ public class WebGUI extends UI {
         } catch (ConnectException e) {
             e.printStackTrace();
         }
-//        lcp.addServerMessageListener(listener);
 //        lcp = ContextListener.lcp;
         getSession().setAttribute("lcp", lcp);
+        getSession().setAttribute("listener", listener);
 
         new Navigator(this, this);
-        LoginView loginView = new LoginView();
-        LoginPresenter loginPresenter = new LoginPresenter(loginView, lcp);
+//        LoginView loginView = new LoginView();
+//        LoginPresenter loginPresenter = new LoginPresenter(loginView, lcp);
         
-        LobbyView lobbyView = new LobbyView();
-        LobbyPresenter lobbyPresenter = new LobbyPresenter(lobbyView);
+//        LobbyView lobbyView = new LobbyView();
+//        LobbyPresenter lobbyPresenter = new LobbyPresenter(lobbyView);
         
-        GameView gameView = new GameView();
-        GamePresenter gamePresenter = new GamePresenter(gameView);
+//        GameView gameView = new GameView();
+//        GamePresenter gamePresenter = new GamePresenter(gameView);
 
-        listener.setGamePresenter(gamePresenter);
-        listener.setLobbyPresenter(lobbyPresenter);
+//        listener.setGamePresenter(gamePresenter);
+//        listener.setLobbyPresenter(lobbyPresenter);
 
         getNavigator().addView(MainView.NAME, MainView.class);
-        getNavigator().addView(LoginView.NAME, loginView);
+        getNavigator().addView(LoginView.NAME, LoginView.class);
         getNavigator().addView(CreateGameView.NAME, CreateGameView.class);
-        getNavigator().addView(GameView.NAME, gameView);
-        getNavigator().addView(LobbyView.NAME, lobbyView);
+        getNavigator().addView(GameView.NAME, GameView.class);
+        getNavigator().addView(LobbyView.NAME, LobbyView.class);
         
         getNavigator().addViewChangeListener(new ViewChangeListener() {
             @Override

@@ -5,6 +5,8 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
+import pl.edu.agh.to2.webgui.presenter.GamePresenter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class GameView extends CustomComponent
     private List<CheckBox> checkBoxes = new ArrayList<CheckBox>();
 
     public GameView() {
+        new GamePresenter(this);
         setSizeFull();
         preparePanel();
         setCompositionRoot(generalPanel);

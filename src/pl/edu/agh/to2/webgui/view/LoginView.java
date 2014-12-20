@@ -9,6 +9,7 @@ import com.vaadin.server.Responsive;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import pl.edu.agh.to2.webgui.presenter.LoginPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class LoginView extends VerticalLayout
     private final TextField username = new TextField("username");
 
     public LoginView() {
+        new LoginPresenter(this);
         setSizeFull();
 
         Component loginForm = buildLoginForm();

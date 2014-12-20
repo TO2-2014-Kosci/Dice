@@ -5,6 +5,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
+import pl.edu.agh.to2.webgui.presenter.LobbyPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ public class LobbyView extends CustomComponent
     GridLayout panelLayout = new GridLayout(1,5);
 
     public LobbyView() {
+        new LobbyPresenter(this);
+
         setSizeFull();
         users.addContainerProperty("User", String.class, null);
         users.setPageLength(users.size());

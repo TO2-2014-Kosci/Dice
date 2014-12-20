@@ -2,6 +2,7 @@ package pl.edu.agh.to2.webgui.presenter;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Notification;
+import pl.edu.agh.to2.webgui.MessageListener;
 import pl.edu.agh.to2.webgui.WebGUI;
 import pl.edu.agh.to2.webgui.view.GameView;
 import pl.edu.agh.to2.webgui.view.IGameView;
@@ -30,6 +31,7 @@ public class GamePresenter implements IGameView.GameViewListener {
 //        this.lcp = WebGUI.lcp;
         this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
         this.username = (String) VaadinSession.getCurrent().getAttribute("user");
+        ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setGamePresenter(this);
     }
     public void buttonClick(String operation) {
         if(operation.equalsIgnoreCase(GameView.LEAVE_TEXT)) {
