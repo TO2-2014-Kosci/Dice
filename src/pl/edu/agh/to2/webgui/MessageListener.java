@@ -20,25 +20,58 @@ import java.util.List;
  * Created by Maciej on 2014-12-07.
  */
 public class MessageListener implements ServerMessageListener {
+    private final WebGUI ui;
     private GamePresenter gamePresenter;
     private LobbyPresenter lobbyPresenter;
     private boolean gameStarted = false;
 
+
+    public MessageListener(WebGUI ui) {
+        this.ui = ui;
+    }
+
     @Override
     public void onGameStateChange(GameState gameState) {
-        String username = (String) VaadinSession.getCurrent().getAttribute("user");
-        System.out.println("Incomming message to:\t" + username);
-        System.out.println(this.toString());
-        LocalConnectionProxy lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
-        System.out.println(((LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp")).getLoggedInUser());
-        if (gamePresenter != null && lobbyPresenter != null) {
-            if (gameState.isGameStarted() && !gameStarted) { //rozpoczecie gry
-                System.out.println("Starting game...");
-                gameStarted = true;
-                UI.getCurrent().getNavigator().navigateTo(GameView.NAME);
-            }
-            else if(!gameState.isGameStarted()) { //lobby
+        System.out.println("Incomming message to:\t" + this.toString());
+
+
+        if (lobbyPresenter != null && gameState.isGameStarted() && !gameStarted) { //rozpoczecie gry
+            gameStarted = true;
+            ui.access(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Starting game...");
+                    lobbyPresenter.startGame();
+                }
+            });
+        }
+        else {
+            ui.access(new GameStateFeeder(gameState));
+        }
+//        else if(lobbyPresenter != null && !gameState.isGameStarted()) { //aktualizacja lobby
+//            gameStarted = false;
+//            ui.access(new GameStateFeeder(gameState));
+//        }
+//        else if(gamePresenter != null && gameState.isGameStarted()) {
+//
+//        }
+    }
+
+    private class GameStateFeeder implements Runnable {
+        private final GameState gameState;
+
+        public GameStateFeeder(GameState gameState) {
+            this.gameState = gameState;
+        }
+
+        @Override
+        public void run() {
+            if (lobbyPresenter != null && !gameState.isGameStarted()) { //aktualizacja lobby
+                gameStarted = false;
                 lobbyPresenter.updateGameState(gameState);
+            }
+            else if(gamePresenter != null && gameState.isGameStarted() && gameStarted) {
+                gamePresenter.updateGameState(gameState);
             }
         }
     }

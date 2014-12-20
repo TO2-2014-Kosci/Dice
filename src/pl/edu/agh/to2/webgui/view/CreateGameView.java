@@ -143,13 +143,8 @@ public class CreateGameView extends CustomComponent
 
     public Map<BotLevel,Integer> getBots() {
         Map<BotLevel, Integer> bots = new HashMap<BotLevel, Integer>();
-        int j = 0;
-        for(int i = 0; i < Integer.parseInt(lowBots.getValue()); i++) {
-            bots.put(BotLevel.EASY, j++);
-        }
-        for(int i = 0; i < Integer.parseInt(highBots.getValue()); i++) {
-            bots.put(BotLevel.HARD, j++);
-        }
+        bots.put(BotLevel.EASY, Integer.parseInt(lowBots.getValue()));
+        bots.put(BotLevel.HARD, Integer.parseInt(highBots.getValue()));
         return bots;
     }
 }

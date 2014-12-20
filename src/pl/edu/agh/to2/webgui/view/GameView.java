@@ -100,7 +100,7 @@ public class GameView extends CustomComponent
     public void updatePlayersList(List<Object[]> updatedPlayersList) {
         players.removeAllItems();
         for (Object[] updatedPlayer : updatedPlayersList) {
-            players.addItem(updatedPlayer);
+            players.addItem(updatedPlayer, null);
         }
 
     }

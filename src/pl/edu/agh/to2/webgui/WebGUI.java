@@ -1,5 +1,6 @@
 package pl.edu.agh.to2.webgui;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -25,13 +26,14 @@ import java.util.List;
 /**
  * Created by Maciej on 2014-11-28.
  */
+@Push
 public class WebGUI extends UI {
 //    public LocalConnectionProxy lcp; //TODO przerobic
 
     @Override
     public void init(VaadinRequest request) {
         Server server = ContextListener.server;
-        MessageListener listener = new MessageListener();
+        MessageListener listener = new MessageListener(this);
         LocalConnectionProxy lcp = null;
         try {
             lcp = new LocalConnectionProxy(server, listener);
