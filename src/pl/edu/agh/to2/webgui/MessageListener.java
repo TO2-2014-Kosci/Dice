@@ -45,9 +45,7 @@ public class MessageListener implements ServerMessageListener {
                 }
             });
         }
-        else {
-            ui.access(new GameStateFeeder(gameState));
-        }
+        ui.access(new GameStateFeeder(gameState));
 //        else if(lobbyPresenter != null && !gameState.isGameStarted()) { //aktualizacja lobby
 //            gameStarted = false;
 //            ui.access(new GameStateFeeder(gameState));
