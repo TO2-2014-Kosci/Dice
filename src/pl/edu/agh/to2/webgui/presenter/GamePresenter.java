@@ -63,10 +63,11 @@ public class GamePresenter implements IGameView.GameViewListener {
             String playerName = p.getName();
             Integer playerScore = p.getScore();
             int[] playerDices = p.getDice().getDiceArray();
-            updatedPlayersList.add(new Object[]{playerName, playerScore, Arrays.toString(playerDices)});
-            if (playerName.equals(username)) {
+            updatedPlayersList.add(new Object[]{playerName, playerScore, Arrays.toString(playerDices).replace("[", "").replace("]", "")});
+            if (playerName.equals(VaadinSession.getCurrent().getAttribute("user"))) {
                 view.setDices(playerDices);
             }
+
         }
         view.updatePlayersList(updatedPlayersList);
     }

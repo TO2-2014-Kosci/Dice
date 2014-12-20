@@ -76,6 +76,7 @@ public class GameView extends CustomComponent
         players.addContainerProperty("Player", String.class, null);
         players.addContainerProperty("Score", Integer.class, null);
         players.addContainerProperty("Dices", String.class, null);
+        players.setColumnWidth("Dices", 60);
         players.setPageLength(players.size());
         players.addItem(new Object[]{"X",1, "3,3,3,4,5"}, 1);
         players.addItem(new Object[]{"Y",2, "1,1,5,3,2"},2);
@@ -106,7 +107,7 @@ public class GameView extends CustomComponent
     }
 
     public void setDices(int[] updatedDices) {
-        for (int i = 0; i < updatedDices.length; i++) {
+        for (int i = 0; i < 5; i++) {
             checkBoxes.get(i).setCaption(Integer.toString(updatedDices[i]));
         }
     }
