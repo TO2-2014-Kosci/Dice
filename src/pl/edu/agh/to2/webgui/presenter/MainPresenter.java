@@ -20,6 +20,7 @@ public class MainPresenter implements IMainView.MainViewListener {
     private MainView view;
     private LocalConnectionProxy lcp;
     private String gameName;
+    private Boolean isStarted;
 
     public MainPresenter(MainView view) {
         this.view = view;
@@ -32,7 +33,12 @@ public class MainPresenter implements IMainView.MainViewListener {
         Response response = null;
         response = lcp.joinRoom(gameName);
         if (response.isSuccess()) {
-            view.getUI().getNavigator().navigateTo(LobbyView.NAME);
+            if(isStarted) {
+                view.getUI().getNavigator().navigateTo(GameView.NAME);
+            }
+            else {
+                view.getUI().getNavigator().navigateTo(LobbyView.NAME);
+            }
         }
         else {
             view.showNotification(response.message);
@@ -52,7 +58,7 @@ public class MainPresenter implements IMainView.MainViewListener {
                 List<GameInfo> gamesList = lcp.getRoomList();
                 List<Object[]> games = new ArrayList<Object[]>();
                 for (GameInfo gi : gamesList) {
-                    games.add(new Object[] {gi.getSettings().getName(), gi.getPlayersNumber() + "/" + gi.getSettings().getMaxHumanPlayers(), gi.getSettings().getGameType().toString()});
+                    games.add(new Object[] {gi.getSettings().getName(), gi.getPlayersNumber() + "/" + gi.getSettings().getMaxHumanPlayers(), gi.getSettings().getGameType().toString(), gi.isGameStarted()});
                 }
                 view.refreshGamesList(games);
                 view.showNotification("Refreshing games...");
@@ -61,8 +67,9 @@ public class MainPresenter implements IMainView.MainViewListener {
     }
 
     @Override
-    public void valueChange(String gameName) {
+    public void valueChange(String gameName, Boolean isStarted) {
         this.gameName = gameName;
+        this.isStarted = isStarted;
         view.join.setEnabled(true);
     }
 }

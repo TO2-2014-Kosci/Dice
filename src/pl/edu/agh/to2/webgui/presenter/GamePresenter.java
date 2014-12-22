@@ -51,6 +51,7 @@ public class GamePresenter implements IGameView.GameViewListener {
             response = lcp.reroll(dicesToReroll);
             if(response.isSuccess()) {
                 view.showNotification("Dices rerolled");
+                view.enableReroll(false);
             }
             else {
                 view.showNotification(response.message);
@@ -69,8 +70,12 @@ public class GamePresenter implements IGameView.GameViewListener {
             if (playerName.equals(VaadinSession.getCurrent().getAttribute("user"))) {
                 view.setDices(playerDices);
             }
-
         }
         view.updatePlayersList(updatedPlayersList);
+
+        if(gameState.getCurrentPlayer().getName().equals(username)) {
+            view.enableReroll(true);
+//            view.showNotification("Your turn");
+        }
     }
 }

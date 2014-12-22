@@ -7,7 +7,7 @@ public interface IMainView {
     interface MainViewListener {
         void buttonClick(String operation);
         void menuSelected(String command);
-        void valueChange(String gameName);
+        void valueChange(String gameName, Boolean isStarted);
     }
 
     public void addListener(MainViewListener listener);

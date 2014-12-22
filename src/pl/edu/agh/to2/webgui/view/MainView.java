@@ -12,6 +12,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
+import org.apache.xpath.operations.Bool;
 import pl.edu.agh.to2.webgui.presenter.MainPresenter;
 
 import java.util.ArrayList;
@@ -56,12 +57,13 @@ public class MainView extends CustomComponent
         servers.addContainerProperty("Game name", String.class, null);
         servers.addContainerProperty("Players", String.class, null);
         servers.addContainerProperty("Game type", String.class, null);
+        servers.addContainerProperty("Is started", Boolean.class, null);
         servers.setPageLength(servers.size());
 
         //mockup items TODO wyrzucic mockupy
-        servers.addItem(new Object[] {"mockup game 1", "10/5", "N+"}, null);
-        servers.addItem(new Object[] {"mockup game 2", "5/10", "N*"}, null);
-        servers.addItem(new Object[] {"mockup game 3", "1/1", "Poker"}, null);
+//        servers.addItem(new Object[] {"mockup game 1", "10/5", "N+"}, null);
+//        servers.addItem(new Object[] {"mockup game 2", "5/10", "N*"}, null);
+//        servers.addItem(new Object[] {"mockup game 3", "1/1", "Poker"}, null);
 
         return servers;
     }
@@ -111,8 +113,9 @@ public class MainView extends CustomComponent
     public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
         Object rowID = valueChangeEvent.getProperty().getValue();
         String gameName = (String)servers.getContainerProperty(rowID, "Game name").getValue();
+        Boolean isStarted = (Boolean)servers.getContainerProperty(rowID, "Is started").getValue();
         for (MainViewListener listener : listeners) {
-            listener.valueChange(gameName);
+            listener.valueChange(gameName, isStarted);
         }
     }
 

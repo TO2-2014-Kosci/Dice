@@ -68,7 +68,7 @@ public class MessageListener implements ServerMessageListener {
                 gameStarted = false;
                 lobbyPresenter.updateGameState(gameState);
             }
-            else if(gamePresenter != null && gameState.isGameStarted() && gameStarted) {
+            else if(gamePresenter != null && gameState.isGameStarted()) { //aktualizacja gry
                 gamePresenter.updateGameState(gameState);
             }
         }
