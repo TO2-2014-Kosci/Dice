@@ -1,5 +1,6 @@
 package pl.edu.agh.to2.webgui.presenter;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import com.vaadin.server.VaadinSession;
 import pl.edu.agh.to2.webgui.WebGUI;
 import pl.edu.agh.to2.webgui.view.*;
@@ -10,7 +11,9 @@ import to2.dice.game.GameType;
 import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
 
+import javax.validation.constraints.Null;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Maciej on 2014-12-02.
@@ -22,14 +25,23 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
     public CreateGamePresenter(CreateGameView view) {
         this.view = view;
         this.view.addListener(this);
-        this.lcp = WebGUI.lcp;
+//        this.lcp = WebGUI.lcp;
+        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
     }
 
     @Override
     public void buttonClick(String operation) {
         if(operation != null) {
             if (operation.equals(CreateGameView.CREATE_TEXT)) {
-                Response response = lcp.createRoom(buildGameSettings(), (String) VaadinSession.getCurrent().getAttribute("user"));
+                Response response = null;
+                GameSettings gs = null;
+                try {
+                    gs = buildGameSettings();
+                } catch (NumberFormatException | NullPointerException e) {
+                    view.showNotification("Please put valid settings");
+                    return;
+                }
+                response = lcp.createRoom(gs);
                 if (response.isSuccess()) {
                     view.getUI().getNavigator().navigateTo(LobbyView.NAME);
                 }
@@ -55,7 +67,7 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
         }
     }
 
-    private GameSettings buildGameSettings() {
+    private GameSettings buildGameSettings() throws NumberFormatException, NullPointerException {
         GameType gameType = view.getGameType();
         int diceNumber;
         if (gameType.equals(GameType.POKER)) {

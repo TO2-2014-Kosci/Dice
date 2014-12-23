@@ -12,6 +12,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
+import org.apache.xpath.operations.Bool;
 import pl.edu.agh.to2.webgui.presenter.MainPresenter;
 
 import java.util.ArrayList;
@@ -55,13 +56,9 @@ public class MainView extends CustomComponent
         servers.setImmediate(true);
         servers.addContainerProperty("Game name", String.class, null);
         servers.addContainerProperty("Players", String.class, null);
-        servers.addContainerProperty("Game type", Integer.class, null);
+        servers.addContainerProperty("Game type", String.class, null);
+        servers.addContainerProperty("Is started", Boolean.class, null);
         servers.setPageLength(servers.size());
-
-        //mockup items TODO wyrzucic mockupy
-        servers.addItem(new Object[] {"mockup game 1", "N+", 10}, null);
-        servers.addItem(new Object[] {"mockup game 2", "N*", 5}, null);
-        servers.addItem(new Object[] {"mockup game 3", "Poker", 20}, null);
 
         return servers;
     }
@@ -84,8 +81,9 @@ public class MainView extends CustomComponent
 
     public void refreshGamesList(List<Object[]> games) {
         servers.removeAllItems();
+//        servers.addItem(new Object[] {"mockup", "5/10", "NT"}, null);
         for (Object[] o : games) {
-            servers.addItem(o);
+            servers.addItem(o, null);
         }
     }
 
@@ -110,8 +108,9 @@ public class MainView extends CustomComponent
     public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
         Object rowID = valueChangeEvent.getProperty().getValue();
         String gameName = (String)servers.getContainerProperty(rowID, "Game name").getValue();
+        Boolean isStarted = (Boolean)servers.getContainerProperty(rowID, "Is started").getValue();
         for (MainViewListener listener : listeners) {
-            listener.valueChange(gameName);
+            listener.valueChange(gameName, isStarted);
         }
     }
 
@@ -119,7 +118,9 @@ public class MainView extends CustomComponent
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         MenuBar.MenuItem currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
         MenuBar.MenuItem logout = currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
-        //logout.setCommand(this);
+        for (MainViewListener listener : listeners) {
+            listener.menuSelected(REFRESH_TEXT);
+        }
     }
 
     @Override

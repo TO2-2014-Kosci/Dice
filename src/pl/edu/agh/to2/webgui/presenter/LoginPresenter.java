@@ -20,9 +20,9 @@ public class LoginPresenter implements ILoginView.LoginViewListener {
     private LocalConnectionProxy lcp;
 
 
-    public LoginPresenter(LoginView view, LocalConnectionProxy lcp) {
+    public LoginPresenter(LoginView view) {
         this.view = view;
-        this.lcp = lcp;
+        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
         view.addListener(this);
     }
 
@@ -31,6 +31,7 @@ public class LoginPresenter implements ILoginView.LoginViewListener {
         if(!username.equals("")) {
             Response response = lcp.login(username);
             if (response.isSuccess()) {
+                System.out.println("User logged in: " + username);
                 VaadinSession.getCurrent().setAttribute("user", username);
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
             }

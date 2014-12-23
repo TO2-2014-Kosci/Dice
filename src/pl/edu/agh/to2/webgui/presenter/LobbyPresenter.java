@@ -2,6 +2,7 @@ package pl.edu.agh.to2.webgui.presenter;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Notification;
+import pl.edu.agh.to2.webgui.MessageListener;
 import pl.edu.agh.to2.webgui.WebGUI;
 import pl.edu.agh.to2.webgui.view.GameView;
 import pl.edu.agh.to2.webgui.view.ILobbyView;
@@ -13,6 +14,7 @@ import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Maciej on 2014-11-28.
@@ -21,26 +23,27 @@ import java.util.ArrayList;
 public class LobbyPresenter implements ILobbyView.LobbyViewListener {
     private LobbyView view;
     private LocalConnectionProxy lcp;
-    private String username;
 
     public LobbyPresenter(LobbyView lobbyView){
         this.view = lobbyView;
         lobbyView.addListener(this);
-        this.lcp = WebGUI.lcp;
-        this.username = (String) VaadinSession.getCurrent().getAttribute("user");
+//        this.lcp = WebGUI.lcp;
+        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
+        ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setLobbyPresenter(this);
     }
     public void buttonClick(String operation) {
         if(operation.equalsIgnoreCase(LobbyView.LEAVE_TEXT)) {
-            Response response = lcp.leaveRoom(username);
-            if(response.isSuccess()) {
+            Response response = null;
+            response = lcp.leaveRoom();
+            if (response.isSuccess()) {
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
-            }
-            else {
+            } else {
                 view.showNotification(response.message);
             }
         }
         else if(operation.equalsIgnoreCase(LobbyView.SIT_DOWN_TEXT)){
-            Response response = lcp.sitDown(username);
+            Response response = null;
+            response = lcp.sitDown();
             if(response.isSuccess()) {
                 view.showNotification("You've sat down");
                 view.sitDown();
@@ -50,7 +53,8 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
             }
         }
         else if(operation.equalsIgnoreCase(LobbyView.STAND_UP_TEXT)){
-            Response response = lcp.standUp(username);
+            Response response = null;
+            response = lcp.standUp();
             if(response.isSuccess()) {
                 view.showNotification("You've stood up");
                 view.standUp();
@@ -58,9 +62,6 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
             else {
                 view.showNotification(response.message);
             }
-        }
-        else if(operation.equalsIgnoreCase(LobbyView.START_TEXT)) { // TODO wyrzucic ta akcje i przycisk
-            view.getUI().getNavigator().navigateTo(GameView.NAME);
         }
 
     }
