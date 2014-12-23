@@ -11,6 +11,7 @@ import to2.dice.game.GameType;
 import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
 
+import javax.validation.constraints.Null;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
@@ -36,7 +37,7 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
                 GameSettings gs = null;
                 try {
                     gs = buildGameSettings();
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException | NullPointerException e) {
                     view.showNotification("Please put valid settings");
                     return;
                 }
@@ -66,7 +67,7 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
         }
     }
 
-    private GameSettings buildGameSettings() throws NumberFormatException {
+    private GameSettings buildGameSettings() throws NumberFormatException, NullPointerException {
         GameType gameType = view.getGameType();
         int diceNumber;
         if (gameType.equals(GameType.POKER)) {

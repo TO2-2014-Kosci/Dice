@@ -81,6 +81,8 @@ public class CreateGameView extends CustomComponent
 
     private void setValidation() {
         RegexpValidator num = new RegexpValidator("\\d+", "This field should contain only numbers");
+        gameName.setRequired(true);
+        gameType.setRequired(true);
         diceNumber.addValidator(num);
         diceNumber.setRequired(true);
         playersNumber.addValidator(num);
