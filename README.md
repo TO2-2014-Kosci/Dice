@@ -8,7 +8,7 @@ How to run:
 
 3. Extract jetty
 
-4. Move Dice.war to <jetty base>\webapps
+4. Move Dice.war to {jetty base}\webapps
 
 5. Run start.jar: java -jar start.jar
 
