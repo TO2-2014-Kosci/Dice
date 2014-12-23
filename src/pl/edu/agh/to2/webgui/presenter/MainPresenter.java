@@ -2,6 +2,7 @@ package pl.edu.agh.to2.webgui.presenter;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.MenuBar;
+import pl.edu.agh.to2.webgui.MessageListener;
 import pl.edu.agh.to2.webgui.WebGUI;
 import pl.edu.agh.to2.webgui.view.*;
 import to2.dice.game.GameInfo;
@@ -31,6 +32,7 @@ public class MainPresenter implements IMainView.MainViewListener {
     @Override
     public void buttonClick(String username) {
         Response response = null;
+        if(isStarted) ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setGameStarted(true);
         response = lcp.joinRoom(gameName);
         if (response.isSuccess()) {
             if(isStarted) {

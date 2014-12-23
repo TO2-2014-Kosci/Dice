@@ -1,10 +1,12 @@
 package pl.edu.agh.to2.webgui;
 
 import com.vaadin.navigator.Navigator;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import pl.edu.agh.to2.webgui.presenter.GamePresenter;
 import pl.edu.agh.to2.webgui.presenter.LobbyPresenter;
+import pl.edu.agh.to2.webgui.presenter.ScorePresenter;
 import pl.edu.agh.to2.webgui.view.GameView;
 import pl.edu.agh.to2.webgui.view.LobbyView;
 import to2.dice.game.GameState;
@@ -23,8 +25,8 @@ public class MessageListener implements ServerMessageListener {
     private final WebGUI ui;
     private GamePresenter gamePresenter;
     private LobbyPresenter lobbyPresenter;
+    private ScorePresenter scorePresenter;
     private boolean gameStarted = false;
-
 
     public MessageListener(WebGUI ui) {
         this.ui = ui;
@@ -33,7 +35,7 @@ public class MessageListener implements ServerMessageListener {
     @Override
     public void onGameStateChange(GameState gameState) {
         System.out.println("Incomming message to:\t" + this.toString());
-
+//        System.out.println(Page.getCurrent().);
 
         if (lobbyPresenter != null && gameState.isGameStarted() && !gameStarted) { //rozpoczecie gry
             gameStarted = true;
@@ -46,13 +48,6 @@ public class MessageListener implements ServerMessageListener {
             });
         }
         ui.access(new GameStateFeeder(gameState));
-//        else if(lobbyPresenter != null && !gameState.isGameStarted()) { //aktualizacja lobby
-//            gameStarted = false;
-//            ui.access(new GameStateFeeder(gameState));
-//        }
-//        else if(gamePresenter != null && gameState.isGameStarted()) {
-//
-//        }
     }
 
     private class GameStateFeeder implements Runnable {
@@ -64,12 +59,19 @@ public class MessageListener implements ServerMessageListener {
 
         @Override
         public void run() {
-            if (lobbyPresenter != null && !gameState.isGameStarted()) { //aktualizacja lobby
+            if (lobbyPresenter != null && !gameState.isGameStarted() && !gameStarted) { //aktualizacja lobby
                 gameStarted = false;
                 lobbyPresenter.updateGameState(gameState);
             }
-            else if(gamePresenter != null && gameState.isGameStarted()) { //aktualizacja gry
+            else if(gamePresenter != null && gameState.isGameStarted() && gameStarted) { //aktualizacja gry
                 gamePresenter.updateGameState(gameState);
+            }
+            else if(gamePresenter != null && !gameState.isGameStarted() && gameStarted) {
+                gamePresenter.endGame();
+            }
+            if(scorePresenter != null && !gameState.isGameStarted() && gameStarted) {
+                gameStarted = false;
+                scorePresenter.updateGameState(gameState);
             }
         }
     }
@@ -80,5 +82,13 @@ public class MessageListener implements ServerMessageListener {
 
     public void setLobbyPresenter(LobbyPresenter lobbyPresenter) {
         this.lobbyPresenter = lobbyPresenter;
+    }
+
+    public void setScorePresenter(ScorePresenter scorePresenter) {
+        this.scorePresenter = scorePresenter;
+    }
+
+    public void setGameStarted(Boolean gameStarted) { //TODO zmienic to
+        this.gameStarted = gameStarted;
     }
 }

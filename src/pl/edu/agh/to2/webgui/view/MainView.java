@@ -60,11 +60,6 @@ public class MainView extends CustomComponent
         servers.addContainerProperty("Is started", Boolean.class, null);
         servers.setPageLength(servers.size());
 
-        //mockup items TODO wyrzucic mockupy
-//        servers.addItem(new Object[] {"mockup game 1", "10/5", "N+"}, null);
-//        servers.addItem(new Object[] {"mockup game 2", "5/10", "N*"}, null);
-//        servers.addItem(new Object[] {"mockup game 3", "1/1", "Poker"}, null);
-
         return servers;
     }
 

@@ -1,18 +1,15 @@
 package pl.edu.agh.to2.webgui;
 
+import com.google.gwt.dev.jjs.SourceInfoCorrelation;
 import com.vaadin.annotations.Push;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import com.vaadin.server.VaadinRequest;
 import pl.edu.agh.to2.webgui.presenter.MainPresenter;
-import pl.edu.agh.to2.webgui.view.CreateGameView;
+import pl.edu.agh.to2.webgui.view.*;
 import pl.edu.agh.to2.webgui.presenter.GamePresenter;
 import pl.edu.agh.to2.webgui.presenter.LobbyPresenter;
-import pl.edu.agh.to2.webgui.view.GameView;
-import pl.edu.agh.to2.webgui.view.LobbyView;
-import pl.edu.agh.to2.webgui.view.LoginView;
-import pl.edu.agh.to2.webgui.view.MainView;
 import pl.edu.agh.to2.webgui.presenter.LoginPresenter;
 import to2.dice.game.GameState;
 import to2.dice.messaging.LocalConnectionProxy;
@@ -61,6 +58,7 @@ public class WebGUI extends UI {
         getNavigator().addView(CreateGameView.NAME, CreateGameView.class);
         getNavigator().addView(GameView.NAME, GameView.class);
         getNavigator().addView(LobbyView.NAME, LobbyView.class);
+        getNavigator().addView(ScoreView.NAME, ScoreView.class);
         
         getNavigator().addViewChangeListener(new ViewChangeListener() {
             @Override

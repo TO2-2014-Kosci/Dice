@@ -7,6 +7,7 @@ import pl.edu.agh.to2.webgui.WebGUI;
 import pl.edu.agh.to2.webgui.view.GameView;
 import pl.edu.agh.to2.webgui.view.IGameView;
 import pl.edu.agh.to2.webgui.view.MainView;
+import pl.edu.agh.to2.webgui.view.ScoreView;
 import to2.dice.game.GameState;
 import to2.dice.game.Player;
 import to2.dice.messaging.LocalConnectionProxy;
@@ -77,5 +78,10 @@ public class GamePresenter implements IGameView.GameViewListener {
             view.enableReroll(true);
 //            view.showNotification("Your turn");
         }
+    }
+
+    public void endGame() {
+        view.getUI().getNavigator().navigateTo(ScoreView.NAME);
+        lcp.leaveRoom();
     }
 }
