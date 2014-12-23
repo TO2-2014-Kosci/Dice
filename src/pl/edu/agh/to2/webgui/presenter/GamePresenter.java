@@ -41,6 +41,7 @@ public class GamePresenter implements IGameView.GameViewListener {
             response = lcp.leaveRoom();
             if(response.isSuccess()) {
                 view.showNotification("You left game");
+                ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setGameStarted(false); //TODO przerobic
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
             }
             else {
