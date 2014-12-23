@@ -1,5 +1,6 @@
 package pl.edu.agh.to2.webgui.view;
 
+import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
@@ -70,7 +71,7 @@ public class CreateGameView extends CustomComponent
         roundsToWin = new TextField("Rounds to win");
         lowBots = new TextField("Number of easy bots"); //TODO zmienic lowBots na easyBots (i high tez)
         highBots = new TextField("Number of hard bots");
-
+        setValidation();
         final Button createGame = new Button(CREATE_TEXT, this);
         final Button cancel = new Button(CANCEL_TEXT, this);
 
@@ -78,9 +79,27 @@ public class CreateGameView extends CustomComponent
         return fields;
     }
 
+    private void setValidation() {
+        RegexpValidator num = new RegexpValidator("\\d+", "This field should contain only numbers");
+        diceNumber.addValidator(num);
+        diceNumber.setRequired(true);
+        playersNumber.addValidator(num);
+        playersNumber.setRequired(true);
+        timeForMove.addValidator(num);
+        timeForMove.setRequired(true);
+        maxInactiveTurns.addValidator(num);
+        maxInactiveTurns.setRequired(true);
+        roundsToWin.addValidator(num);
+        roundsToWin.setRequired(true);
+        lowBots.addValidator(num);
+        lowBots.setRequired(true);
+        highBots.addValidator(num);
+        highBots.setRequired(true);
+    }
+
     @Override
     public void showNotification(String message) {
-        Notification notification = new Notification(message);
+        Notification notification = new Notification(message, Notification.TYPE_ERROR_MESSAGE);
         notification.setPosition(Position.BOTTOM_CENTER);
         notification.show(Page.getCurrent());
     }
