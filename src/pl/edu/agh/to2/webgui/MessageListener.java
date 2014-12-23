@@ -35,7 +35,7 @@ public class MessageListener implements ServerMessageListener {
     @Override
     public void onGameStateChange(GameState gameState) {
         System.out.println("Incomming message to:\t" + this.toString());
-//        System.out.println(Page.getCurrent().);
+        System.out.println(gameState.getClass().toString());
 
         if (lobbyPresenter != null && gameState.isGameStarted() && !gameStarted) { //rozpoczecie gry
             gameStarted = true;

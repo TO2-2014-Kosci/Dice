@@ -9,6 +9,7 @@ import pl.edu.agh.to2.webgui.view.IGameView;
 import pl.edu.agh.to2.webgui.view.MainView;
 import pl.edu.agh.to2.webgui.view.ScoreView;
 import to2.dice.game.GameState;
+import to2.dice.game.NGameState;
 import to2.dice.game.Player;
 import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
@@ -61,6 +62,10 @@ public class GamePresenter implements IGameView.GameViewListener {
     }
 
     public void updateGameState(GameState gameState) {
+        if(gameState.getClass().equals(NGameState.class)) {
+            view.setHeader("NGame: " + ((NGameState) gameState).getWinningNumber());
+        }
+        view.setInfo("Current player: " + gameState.getCurrentPlayer().getName());
         List<Player> players = gameState.getPlayers();
         List<Object[]> updatedPlayersList = new ArrayList<Object[]>();
         for (Player p : players) {

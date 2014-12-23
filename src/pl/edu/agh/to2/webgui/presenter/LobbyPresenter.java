@@ -63,9 +63,6 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
                 view.showNotification(response.message);
             }
         }
-        else if(operation.equalsIgnoreCase(LobbyView.START_TEXT)) { // TODO wyrzucic ta akcje i przycisk
-            view.getUI().getNavigator().navigateTo(GameView.NAME);
-        }
 
     }
 

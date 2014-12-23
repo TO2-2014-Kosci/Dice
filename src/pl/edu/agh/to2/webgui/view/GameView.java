@@ -26,6 +26,8 @@ public class GameView extends CustomComponent
     Panel dicesPanel = new Panel("Your dices");
     private List<CheckBox> checkBoxes = new ArrayList<CheckBox>();
     private Button reroll;
+    private Label header;
+    private Label info = new Label();
 
     public GameView() {
         new GamePresenter(this);
@@ -52,8 +54,8 @@ public class GameView extends CustomComponent
     }
 
     private void preparePanel(){
-        Label time = new Label("Time left : 40 seconds");
-        time.addStyleName("h2");
+        header = new Label("Poker game");
+        header.addStyleName("h2");
         populateTable();
         GridLayout generalPanelLayout = new GridLayout(9,9);
         HorizontalLayout dicesPanelLayout = new HorizontalLayout();
@@ -66,7 +68,8 @@ public class GameView extends CustomComponent
             dicesPanelLayout.addComponent(cb);
         }
         generalPanelLayout.setWidth("100%");
-        generalPanelLayout.addComponent(time, 4, 0);
+        generalPanelLayout.addComponent(header, 0, 0);
+        generalPanelLayout.addComponent(info, 4, 0);
         generalPanelLayout.addComponent(players,0,1);
         generalPanelLayout.addComponent(
             new Button(LEAVE_TEXT,this),0,4
@@ -84,9 +87,6 @@ public class GameView extends CustomComponent
         players.addContainerProperty("Dices", String.class, null);
         players.setColumnWidth("Dices", 60);
         players.setPageLength(players.size());
-        players.addItem(new Object[]{"X",1, "3,3,3,4,5"}, 1); //TODO usunac mockupy
-        players.addItem(new Object[]{"Y",2, "1,1,5,3,2"},2);
-        players.addItem(new Object[]{"Z", 0,"1,1,5,3,2"}, 3);
     }
 
     @Override
@@ -116,6 +116,13 @@ public class GameView extends CustomComponent
         for (int i = 0; i < 5; i++) {
             checkBoxes.get(i).setCaption(Integer.toString(updatedDices[i]));
         }
+    }
+
+    public void setHeader(String message) {
+        header.setValue(message);
+    }
+    public void setInfo (String message) {
+        info.setValue(message);
     }
 
     public void enableReroll(boolean enabled) {

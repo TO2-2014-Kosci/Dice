@@ -34,8 +34,8 @@ public class CreateGameView extends CustomComponent
     private TextField timeForMove;
     private TextField maxInactiveTurns;
     private TextField roundsToWin;
-    private TextField lowBots;
-    private TextField highBots;
+    private TextField easyBots;
+    private TextField hardBots;
 
 
     public CreateGameView() {
@@ -66,16 +66,16 @@ public class CreateGameView extends CustomComponent
         gameType.addItems(GameType.values());
         diceNumber = new TextField("Number of dices");
         playersNumber = new TextField("Number of human players");
-        timeForMove = new TextField("Time for move");
+        timeForMove = new TextField("Time for move [s]");
         maxInactiveTurns = new TextField("Max inactive turns");
         roundsToWin = new TextField("Rounds to win");
-        lowBots = new TextField("Number of easy bots"); //TODO zmienic lowBots na easyBots (i high tez)
-        highBots = new TextField("Number of hard bots");
+        easyBots = new TextField("Number of easy bots");
+        hardBots = new TextField("Number of hard bots");
         setValidation();
         final Button createGame = new Button(CREATE_TEXT, this);
         final Button cancel = new Button(CANCEL_TEXT, this);
 
-        fields.addComponents(gameName, gameType, diceNumber, playersNumber, timeForMove, maxInactiveTurns, roundsToWin, lowBots, highBots, createGame, cancel);
+        fields.addComponents(gameName, gameType, playersNumber, timeForMove, maxInactiveTurns, roundsToWin, easyBots, hardBots, createGame, cancel);
         return fields;
     }
 
@@ -83,8 +83,8 @@ public class CreateGameView extends CustomComponent
         RegexpValidator num = new RegexpValidator("\\d+", "This field should contain only numbers");
         gameName.setRequired(true);
         gameType.setRequired(true);
-        diceNumber.addValidator(num);
-        diceNumber.setRequired(true);
+//        diceNumber.addValidator(num);
+//        diceNumber.setRequired(true);
         playersNumber.addValidator(num);
         playersNumber.setRequired(true);
         timeForMove.addValidator(num);
@@ -93,10 +93,10 @@ public class CreateGameView extends CustomComponent
         maxInactiveTurns.setRequired(true);
         roundsToWin.addValidator(num);
         roundsToWin.setRequired(true);
-        lowBots.addValidator(num);
-        lowBots.setRequired(true);
-        highBots.addValidator(num);
-        highBots.setRequired(true);
+        easyBots.addValidator(num);
+        easyBots.setRequired(true);
+        hardBots.addValidator(num);
+        hardBots.setRequired(true);
     }
 
     @Override
@@ -143,7 +143,8 @@ public class CreateGameView extends CustomComponent
     }
 
     public int getDiceNumber() {
-        return Integer.parseInt(diceNumber.getValue());
+//        return Integer.parseInt(diceNumber.getValue());
+        return 5; //TODO ilosc kosci
     }
 
     public int getPlayersNumber() {
@@ -164,8 +165,8 @@ public class CreateGameView extends CustomComponent
 
     public Map<BotLevel,Integer> getBots() {
         Map<BotLevel, Integer> bots = new HashMap<BotLevel, Integer>();
-        bots.put(BotLevel.EASY, Integer.parseInt(lowBots.getValue()));
-        bots.put(BotLevel.HARD, Integer.parseInt(highBots.getValue()));
+        bots.put(BotLevel.EASY, Integer.parseInt(easyBots.getValue()));
+        bots.put(BotLevel.HARD, Integer.parseInt(hardBots.getValue()));
         return bots;
     }
 }
