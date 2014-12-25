@@ -4,7 +4,7 @@ How to run:
 
 1. Download war: Dice/artifacts/Dice.war
 
-2. Download server: Dice/jetty-distribution-9.2.6.v20141205.zip
+2. Download server: http://download.eclipse.org/jetty/stable-9/dist/
 
 3. Extract jetty
 
