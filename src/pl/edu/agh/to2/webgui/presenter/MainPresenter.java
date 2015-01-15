@@ -31,9 +31,7 @@ public class MainPresenter implements IMainView.MainViewListener {
     }
     @Override
     public void buttonClick(String username) {
-        Response response = null;
-        if(isStarted) ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setGameStarted(true);
-        response = lcp.joinRoom(gameName);
+        Response response = lcp.joinRoom(gameName);
         if (response.isSuccess()) {
             if(isStarted) {
                 view.getUI().getNavigator().navigateTo(GameView.NAME);
