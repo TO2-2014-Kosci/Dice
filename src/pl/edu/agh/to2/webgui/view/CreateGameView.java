@@ -36,10 +36,10 @@ public class CreateGameView extends CustomComponent
     private TextField roundsToWin;
     private TextField easyBots;
     private TextField hardBots;
-
+    private MenuBar.MenuItem currentUser;
 
     public CreateGameView() {
-        CreateGamePresenter presenter = new CreateGamePresenter(this);
+//        CreateGamePresenter presenter = new CreateGamePresenter(this);
         setSizeFull();
         GridLayout gridLayout = new GridLayout(1, 4);
         gridLayout.setWidth("100%");
@@ -129,9 +129,13 @@ public class CreateGameView extends CustomComponent
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        MenuBar.MenuItem currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
-        MenuBar.MenuItem logout = currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
-
+        if (currentUser == null) {
+            currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
+            MenuBar.MenuItem logout = currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
+        }
+        else {
+            currentUser.setText((String)getSession().getAttribute("user"));
+        }
     }
 
     public String getGameName() {

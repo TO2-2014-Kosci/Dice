@@ -30,7 +30,7 @@ public class LobbyView extends CustomComponent
     GridLayout panelLayout = new GridLayout(1,5);
 
     public LobbyView() {
-        new LobbyPresenter(this);
+//        new LobbyPresenter(this);
 
         setSizeFull();
         users.addContainerProperty("User", String.class, null);

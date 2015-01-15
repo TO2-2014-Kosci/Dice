@@ -23,11 +23,11 @@ public class MainPresenter implements IMainView.MainViewListener {
     private String gameName;
     private Boolean isStarted;
 
-    public MainPresenter(MainView view) {
+    public MainPresenter(MainView view, LocalConnectionProxy lcp) {
         this.view = view;
         view.addListener(this);
-//        this.lcp = WebGUI.lcp;
-        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
+        this.lcp = lcp;
+//        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
     }
     @Override
     public void buttonClick(String username) {

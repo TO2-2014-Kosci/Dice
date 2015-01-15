@@ -22,11 +22,11 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
     private CreateGameView view;
     private LocalConnectionProxy lcp;
 
-    public CreateGamePresenter(CreateGameView view) {
+    public CreateGamePresenter(CreateGameView view, LocalConnectionProxy lcp) {
         this.view = view;
         this.view.addListener(this);
-//        this.lcp = WebGUI.lcp;
-        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
+        this.lcp = lcp;
+//        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
     }
 
     @Override
@@ -41,6 +41,7 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
                     view.showNotification("Please put valid settings");
                     return;
                 }
+                System.out.println(lcp.toString());
                 response = lcp.createRoom(gs);
                 if (response.isSuccess()) {
                     view.getUI().getNavigator().navigateTo(LobbyView.NAME);

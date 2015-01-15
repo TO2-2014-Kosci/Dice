@@ -32,9 +32,10 @@ public class MainView extends CustomComponent
     public Button join = new Button("Join now!", this);
     private MenuBar menu = new MenuBar();
     private Table servers = new Table("List of servers");
+    private MenuBar.MenuItem currentUser;
 
     public MainView() {
-        MainPresenter mainPresenter = new MainPresenter(this);
+//        MainPresenter mainPresenter = new MainPresenter(this);
         GridLayout panelLayout = new GridLayout(1, 4);
         Label selected = new Label("Selected: ");
 
@@ -116,8 +117,13 @@ public class MainView extends CustomComponent
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        MenuBar.MenuItem currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
-        MenuBar.MenuItem logout = currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
+        if (currentUser == null) {
+            currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
+            MenuBar.MenuItem logout = currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
+        }
+        else {
+            currentUser.setText((String)getSession().getAttribute("user"));
+        }
         for (MainViewListener listener : listeners) {
             listener.menuSelected(REFRESH_TEXT);
         }

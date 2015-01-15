@@ -24,12 +24,12 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
     private LobbyView view;
     private LocalConnectionProxy lcp;
 
-    public LobbyPresenter(LobbyView lobbyView){
+    public LobbyPresenter(LobbyView lobbyView, LocalConnectionProxy lcp){
         this.view = lobbyView;
         lobbyView.addListener(this);
-//        this.lcp = WebGUI.lcp;
-        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
-        ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setLobbyPresenter(this);
+        this.lcp = lcp;
+//        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
+//        ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setLobbyPresenter(this);
     }
     public void buttonClick(String operation) {
         if(operation.equalsIgnoreCase(LobbyView.LEAVE_TEXT)) {

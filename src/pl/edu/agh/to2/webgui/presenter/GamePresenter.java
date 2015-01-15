@@ -27,18 +27,17 @@ public class GamePresenter implements IGameView.GameViewListener {
     private LocalConnectionProxy lcp;
     private String username;
 
-    public GamePresenter(GameView gameView) {
+    public GamePresenter(GameView gameView, LocalConnectionProxy lcp) {
         this.view = gameView;
         gameView.addListener(this);
-//        this.lcp = WebGUI.lcp;
-        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
-        this.username = (String) VaadinSession.getCurrent().getAttribute("user");
-        ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setGamePresenter(this);
+        this.lcp = lcp;
+//        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
+//        this.username = (String) VaadinSession.getCurrent().getAttribute("user");
+//        ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setGamePresenter(this);
     }
     public void buttonClick(String operation) {
         if(operation.equalsIgnoreCase(GameView.LEAVE_TEXT)) {
-            Response response = null;
-            response = lcp.leaveRoom();
+            Response response = lcp.leaveRoom();
             if(response.isSuccess()) {
                 view.showNotification("You left game");
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
@@ -78,6 +77,8 @@ public class GamePresenter implements IGameView.GameViewListener {
             }
         }
         view.updatePlayersList(updatedPlayersList);
+
+        this.username = (String) VaadinSession.getCurrent().getAttribute("user");
 
         if(gameState.getCurrentPlayer().getName().equals(username)) {
             view.enableReroll(true);

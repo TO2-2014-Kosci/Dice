@@ -23,7 +23,7 @@ public class ScoreView extends VerticalLayout
     Table players = new Table();
 
     public ScoreView() {
-        new ScorePresenter(this);
+//        new ScorePresenter(this);
         setSizeFull();
 
         Component layout = buildScoreTable();

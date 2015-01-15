@@ -30,7 +30,7 @@ public class GameView extends CustomComponent
     private Label info = new Label();
 
     public GameView() {
-        new GamePresenter(this);
+//        new GamePresenter(this);
         setSizeFull();
         preparePanel();
         setCompositionRoot(generalPanel);

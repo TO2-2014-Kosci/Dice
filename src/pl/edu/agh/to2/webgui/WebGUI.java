@@ -1,16 +1,14 @@
 package pl.edu.agh.to2.webgui;
 
 import com.google.gwt.dev.jjs.SourceInfoCorrelation;
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import com.vaadin.server.VaadinRequest;
-import pl.edu.agh.to2.webgui.presenter.MainPresenter;
+import pl.edu.agh.to2.webgui.presenter.*;
 import pl.edu.agh.to2.webgui.view.*;
-import pl.edu.agh.to2.webgui.presenter.GamePresenter;
-import pl.edu.agh.to2.webgui.presenter.LobbyPresenter;
-import pl.edu.agh.to2.webgui.presenter.LoginPresenter;
 import to2.dice.game.GameState;
 import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.server.Server;
@@ -24,6 +22,7 @@ import java.util.List;
  * Created by Maciej on 2014-11-28.
  */
 @Push
+@PreserveOnRefresh
 public class WebGUI extends UI {
 
     @Override
@@ -36,7 +35,6 @@ public class WebGUI extends UI {
         } catch (ConnectException e) {
             e.printStackTrace();
         }
-//        lcp = ContextListener.lcp;
         getSession().setAttribute("lcp", lcp);
         getSession().setAttribute("listener", listener);
 
@@ -49,16 +47,27 @@ public class WebGUI extends UI {
         
 //        GameView gameView = new GameView();
 //        GamePresenter gamePresenter = new GamePresenter(gameView);
+        MainView mv = new MainView();
+        new MainPresenter(mv, lcp);
+        getNavigator().addView(MainView.NAME, mv);
 
-//        listener.setGamePresenter(gamePresenter);
-//        listener.setLobbyPresenter(lobbyPresenter);
-
-        getNavigator().addView(MainView.NAME, MainView.class);
         getNavigator().addView(LoginView.NAME, LoginView.class);
-        getNavigator().addView(CreateGameView.NAME, CreateGameView.class);
-        getNavigator().addView(GameView.NAME, GameView.class);
-        getNavigator().addView(LobbyView.NAME, LobbyView.class);
-        getNavigator().addView(ScoreView.NAME, ScoreView.class);
+
+        CreateGameView cgv = new CreateGameView();
+        new CreateGamePresenter(cgv, lcp);
+        getNavigator().addView(CreateGameView.NAME, cgv);
+
+        GameView gv = new GameView();
+        listener.setGamePresenter(new GamePresenter(gv, lcp));
+        getNavigator().addView(GameView.NAME, gv);
+
+        LobbyView lv = new LobbyView();
+        listener.setLobbyPresenter(new LobbyPresenter(lv, lcp));
+        getNavigator().addView(LobbyView.NAME, lv);
+
+        ScoreView sv = new ScoreView();
+        listener.setScorePresenter(new ScorePresenter(sv));
+        getNavigator().addView(ScoreView.NAME, sv);
         
         getNavigator().addViewChangeListener(new ViewChangeListener() {
             @Override
