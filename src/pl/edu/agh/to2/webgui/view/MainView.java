@@ -108,10 +108,12 @@ public class MainView extends CustomComponent
     @Override
     public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
         Object rowID = valueChangeEvent.getProperty().getValue();
-        String gameName = (String)servers.getContainerProperty(rowID, "Game name").getValue();
-        Boolean isStarted = (Boolean)servers.getContainerProperty(rowID, "Is started").getValue();
-        for (MainViewListener listener : listeners) {
-            listener.valueChange(gameName, isStarted);
+        if(rowID != null) {
+            String gameName = (String) servers.getContainerProperty(rowID, "Game name").getValue();
+            Boolean isStarted = (Boolean) servers.getContainerProperty(rowID, "Is started").getValue();
+            for (MainViewListener listener : listeners) {
+                listener.valueChange(gameName, isStarted);
+            }
         }
     }
 

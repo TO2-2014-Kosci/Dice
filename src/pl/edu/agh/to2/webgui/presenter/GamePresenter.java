@@ -40,6 +40,7 @@ public class GamePresenter implements IGameView.GameViewListener {
             Response response = lcp.leaveRoom();
             if(response.isSuccess()) {
                 view.showNotification("You left game");
+                view.getUI().getSession().setAttribute("state", MainView.NAME);
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
             }
             else {
@@ -87,6 +88,7 @@ public class GamePresenter implements IGameView.GameViewListener {
     }
 
     public void endGame() {
+        view.getUI().getSession().setAttribute("state", ScoreView.NAME);
         view.getUI().getNavigator().navigateTo(ScoreView.NAME);
         lcp.leaveRoom();
     }

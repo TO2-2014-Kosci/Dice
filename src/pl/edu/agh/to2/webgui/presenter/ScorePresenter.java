@@ -32,6 +32,7 @@ public class ScorePresenter implements IScoreView.ScoreViewListener {
         if(operation.equals(ScoreView.EXIT_TEXT)) {
 //            Response response = lcp.leaveRoom();
 //            if(response.isSuccess()) {
+            view.getUI().getSession().setAttribute("state", MainView.NAME);
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
 //            }
 //            else {

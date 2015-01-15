@@ -36,6 +36,7 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
             Response response = null;
             response = lcp.leaveRoom();
             if (response.isSuccess()) {
+                view.getUI().getSession().setAttribute("state", MainView.NAME);
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
             } else {
                 view.showNotification(response.message);
@@ -76,6 +77,7 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
     }
 
     public void startGame() {
+        view.getUI().getSession().setAttribute("state", GameView.NAME);
         view.getUI().getNavigator().navigateTo(GameView.NAME);
     }
 }

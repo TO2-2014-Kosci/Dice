@@ -34,9 +34,11 @@ public class MainPresenter implements IMainView.MainViewListener {
         Response response = lcp.joinRoom(gameName);
         if (response.isSuccess()) {
             if(isStarted) {
+                view.getUI().getSession().setAttribute("state", GameView.NAME);
                 view.getUI().getNavigator().navigateTo(GameView.NAME);
             }
             else {
+                view.getUI().getSession().setAttribute("state", LobbyView.NAME);
                 view.getUI().getNavigator().navigateTo(LobbyView.NAME);
             }
         }
@@ -51,8 +53,10 @@ public class MainPresenter implements IMainView.MainViewListener {
             if (command.equals(MainView.LOGOUT_TEXT)) {
 //                Response response = lcp.l TODO dodac logout
                 VaadinSession.getCurrent().setAttribute("user", null);
+                view.getUI().getSession().setAttribute("state", LoginView.NAME);
                 view.getUI().getNavigator().navigateTo(LoginView.NAME);
             } else if (command.equals(MainView.CREATE_TEXT)) {
+                view.getUI().getSession().setAttribute("state", CreateGameView.NAME);
                 view.getUI().getNavigator().navigateTo(CreateGameView.NAME);
             } else if (command.equals(MainView.REFRESH_TEXT)) {
                 List<GameInfo> gamesList = lcp.getRoomList();

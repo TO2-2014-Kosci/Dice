@@ -34,6 +34,7 @@ public class LoginPresenter implements ILoginView.LoginViewListener {
             if (response.isSuccess()) {
                 System.out.println("User logged in: " + username);
                 VaadinSession.getCurrent().setAttribute("user", username);
+                view.getUI().getSession().setAttribute("state", MainView.NAME);
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
             }
             else {

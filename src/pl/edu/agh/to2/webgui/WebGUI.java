@@ -29,6 +29,8 @@ public class WebGUI extends UI {
     public void init(VaadinRequest request) {
         Server server = ContextListener.server;
         MessageListener listener = new MessageListener(this);
+        getSession().setAttribute("user", null);
+        getSession().setAttribute("state", null);
         LocalConnectionProxy lcp = null;
         try {
             lcp = new LocalConnectionProxy(server, listener);
@@ -71,12 +73,22 @@ public class WebGUI extends UI {
                 boolean isLoginView = viewChangeEvent.getNewView() instanceof LoginView;
 
                 if(!isLoggedIn && !isLoginView) {
+                    getSession().setAttribute("state", LoginView.NAME);
                     getNavigator().navigateTo(LoginView.NAME);
                     return false;
                 } else if (isLoggedIn && isLoginView) {
+                    getNavigator().navigateTo((String)getSession().getAttribute("state"));
+                    return false;
+                } else if (!isLoggedIn) {
+                    return true;
+                }
+                if (viewChangeEvent.getViewName().equals(getSession().getAttribute("state"))) {
+                    return true;
+                } else {
+                    getNavigator().navigateTo((String) getSession().getAttribute("state"));
                     return false;
                 }
-                return true;
+//                return true;
             }
 
             @Override
