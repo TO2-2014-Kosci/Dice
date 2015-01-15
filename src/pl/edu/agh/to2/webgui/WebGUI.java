@@ -35,39 +35,34 @@ public class WebGUI extends UI {
         } catch (ConnectException e) {
             e.printStackTrace();
         }
-        getSession().setAttribute("lcp", lcp);
-        getSession().setAttribute("listener", listener);
+//        getSession().setAttribute("lcp", lcp);
+//        getSession().setAttribute("listener", listener);
 
         new Navigator(this, this);
-//        LoginView loginView = new LoginView();
-//        LoginPresenter loginPresenter = new LoginPresenter(loginView, lcp);
-        
-//        LobbyView lobbyView = new LobbyView();
-//        LobbyPresenter lobbyPresenter = new LobbyPresenter(lobbyView);
-        
-//        GameView gameView = new GameView();
-//        GamePresenter gamePresenter = new GamePresenter(gameView);
-        MainView mv = new MainView();
-        new MainPresenter(mv, lcp);
-        getNavigator().addView(MainView.NAME, mv);
 
-        getNavigator().addView(LoginView.NAME, LoginView.class);
+        MainView mainView = new MainView();
+        new MainPresenter(mainView, lcp);
+        getNavigator().addView(MainView.NAME, mainView);
 
-        CreateGameView cgv = new CreateGameView();
-        new CreateGamePresenter(cgv, lcp);
-        getNavigator().addView(CreateGameView.NAME, cgv);
+        LoginView loginView = new LoginView();
+        new LoginPresenter(loginView, lcp);
+        getNavigator().addView(LoginView.NAME, loginView);
 
-        GameView gv = new GameView();
-        listener.setGamePresenter(new GamePresenter(gv, lcp));
-        getNavigator().addView(GameView.NAME, gv);
+        CreateGameView createGameView = new CreateGameView();
+        new CreateGamePresenter(createGameView, lcp);
+        getNavigator().addView(CreateGameView.NAME, createGameView);
 
-        LobbyView lv = new LobbyView();
-        listener.setLobbyPresenter(new LobbyPresenter(lv, lcp));
-        getNavigator().addView(LobbyView.NAME, lv);
+        GameView gameView = new GameView();
+        listener.setGamePresenter(new GamePresenter(gameView, lcp));
+        getNavigator().addView(GameView.NAME, gameView);
 
-        ScoreView sv = new ScoreView();
-        listener.setScorePresenter(new ScorePresenter(sv));
-        getNavigator().addView(ScoreView.NAME, sv);
+        LobbyView lobbyView = new LobbyView();
+        listener.setLobbyPresenter(new LobbyPresenter(lobbyView, lcp));
+        getNavigator().addView(LobbyView.NAME, lobbyView);
+
+        ScoreView scoreView = new ScoreView();
+        listener.setScorePresenter(new ScorePresenter(scoreView));
+        getNavigator().addView(ScoreView.NAME, scoreView);
         
         getNavigator().addViewChangeListener(new ViewChangeListener() {
             @Override

@@ -24,7 +24,7 @@ public class LoginView extends VerticalLayout
     private final TextField username = new TextField("username");
 
     public LoginView() {
-        new LoginPresenter(this);
+//        new LoginPresenter(this);
         setSizeFull();
 
         Component loginForm = buildLoginForm();

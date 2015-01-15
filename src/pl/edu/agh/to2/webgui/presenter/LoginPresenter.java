@@ -20,9 +20,9 @@ public class LoginPresenter implements ILoginView.LoginViewListener {
     private LocalConnectionProxy lcp;
 
 
-    public LoginPresenter(LoginView view) {
+    public LoginPresenter(LoginView view, LocalConnectionProxy lcp) {
         this.view = view;
-        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
+//        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
         view.addListener(this);
     }
 
