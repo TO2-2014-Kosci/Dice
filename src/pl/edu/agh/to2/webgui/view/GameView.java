@@ -1,10 +1,13 @@
 package pl.edu.agh.to2.webgui.view;
 
+import com.google.gwt.layout.client.*;
+import com.google.gwt.layout.client.Layout;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import pl.edu.agh.to2.webgui.presenter.GamePresenter;
 
 import java.util.ArrayList;
@@ -13,7 +16,7 @@ import java.util.List;
 /**
  * Created by lukasz on 01.12.14.
  */
-public class GameView extends CustomComponent
+public class GameView extends VerticalLayout
         implements IGameView, View,Button.ClickListener {
 
     public static final String NAME = "game";
@@ -24,16 +27,23 @@ public class GameView extends CustomComponent
     Table players = new Table();
     Panel generalPanel = new Panel();
     Panel dicesPanel = new Panel("Your dices");
+    Panel centralPanel = new Panel();
     private List<CheckBox> checkBoxes = new ArrayList<CheckBox>();
     private Button reroll;
+    private Button leave;
     private Label header;
     private Label info = new Label();
 
     public GameView() {
 //        new GamePresenter(this);
-        setSizeFull();
+        header = new Label("Poker game");
+        header.addStyleName("h1 align-center");
+
+        addComponent(header);
+        setComponentAlignment(header, Alignment.TOP_CENTER);
         preparePanel();
-        setCompositionRoot(generalPanel);
+        addComponent(generalPanel);
+        setComponentAlignment(generalPanel, Alignment.MIDDLE_CENTER);
     }
 
     @Override
@@ -54,11 +64,10 @@ public class GameView extends CustomComponent
     }
 
     private void preparePanel(){
-        header = new Label("Poker game");
-        header.addStyleName("h2");
         populateTable();
-        GridLayout generalPanelLayout = new GridLayout(9,9);
+        VerticalLayout generalPanelLayout = new VerticalLayout();
         HorizontalLayout dicesPanelLayout = new HorizontalLayout();
+        VerticalLayout centralPanelLayout = new VerticalLayout();
         checkBoxes.add(new CheckBox("10"));
         checkBoxes.add(new CheckBox("20"));
         checkBoxes.add(new CheckBox("30"));
@@ -66,26 +75,39 @@ public class GameView extends CustomComponent
         checkBoxes.add(new CheckBox("50"));
         for(CheckBox cb : checkBoxes) {
             dicesPanelLayout.addComponent(cb);
+            dicesPanelLayout.setComponentAlignment(cb, Alignment.TOP_CENTER);
         }
-        generalPanelLayout.setWidth("100%");
-        generalPanelLayout.addComponent(header, 0, 0);
-        generalPanelLayout.addComponent(info, 4, 0);
-        generalPanelLayout.addComponent(players,0,1);
-        generalPanelLayout.addComponent(
-            new Button(LEAVE_TEXT,this),0,4
-        );
+        info.addStyleName("h2 align-center");
+        //generalPanelLayout.setWidth("100%");
+        generalPanelLayout.addComponent(info);
+        generalPanelLayout.setComponentAlignment(info, Alignment.TOP_CENTER);
+        generalPanelLayout.addComponent(players);
+        generalPanelLayout.addComponent(dicesPanel);
+        dicesPanel.setWidth("285");
+        generalPanelLayout.setComponentAlignment(players, Alignment.TOP_CENTER);
+        generalPanelLayout.setComponentAlignment(dicesPanel, Alignment.MIDDLE_CENTER);
         reroll = new Button(REROLL_TEXT, this);
+        reroll.addStyleName(ValoTheme.BUTTON_PRIMARY);
         reroll.setEnabled(false);
-        generalPanelLayout.addComponent(reroll,4,3);
+        generalPanelLayout.addComponent(reroll);
+        generalPanelLayout.setComponentAlignment(reroll, Alignment.BOTTOM_CENTER);
+        generalPanelLayout.setMargin(true);
+        generalPanelLayout.setSpacing(true);
         dicesPanel.setContent(dicesPanelLayout);
-        generalPanelLayout.addComponent(dicesPanel,4,2);
+        dicesPanelLayout.setMargin(true);
+        dicesPanelLayout.setSpacing(true);
+        leave = new Button(LEAVE_TEXT, this);
+        leave.addStyleName(ValoTheme.BUTTON_SMALL);
+        generalPanelLayout.addComponent(leave);
+        generalPanelLayout.setComponentAlignment(leave, Alignment.BOTTOM_LEFT);
+
         generalPanel.setContent(generalPanelLayout);
     }
     private void populateTable(){
         players.addContainerProperty("Player", String.class, null);
         players.addContainerProperty("Score", Integer.class, null);
         players.addContainerProperty("Dices", String.class, null);
-        players.setColumnWidth("Dices", 60);
+        players.setColumnWidth("Dices", 100);
         players.setPageLength(players.size());
     }
 
