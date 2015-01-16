@@ -68,8 +68,9 @@ public class LobbyView extends CustomComponent
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
+        standUp();
     }
+
     @Override
     public void buttonClick(Button.ClickEvent clickEvent) {
         for(LobbyViewListener listener : listeners) {
