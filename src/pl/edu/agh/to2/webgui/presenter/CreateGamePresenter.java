@@ -61,13 +61,19 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
     @Override
     public void menuSelected(String operation) {
         if(operation != null) {
-            if (operation.equals(CreateGameView.LOGOUT_TEXT)) {
-                VaadinSession.getCurrent().setAttribute("user", null);
-                view.getUI().getSession().setAttribute("state", LoginView.NAME);
-                view.getUI().getNavigator().navigateTo(LoginView.NAME);
-            } else if (operation.equals(CreateGameView.CANCEL_TEXT)) {
-                view.getUI().getSession().setAttribute("state", MainView.NAME);
-                view.getUI().getNavigator().navigateTo(MainView.NAME);
+            switch (operation) {
+                case CreateGameView.LOGOUT_TEXT:
+                    VaadinSession.getCurrent().setAttribute("user", null);
+                    view.getUI().getSession().setAttribute("state", LoginView.NAME);
+                    view.getUI().getNavigator().navigateTo(LoginView.NAME);
+                    break;
+                case CreateGameView.CANCEL_TEXT:
+                    view.getUI().getSession().setAttribute("state", MainView.NAME);
+                    view.getUI().getNavigator().navigateTo(MainView.NAME);
+                    break;
+                case CreateGameView.RANDOM_TEXT:
+                    view.setRandom();
+                    break;
             }
         }
     }
