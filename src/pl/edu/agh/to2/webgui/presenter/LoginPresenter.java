@@ -42,7 +42,7 @@ public class LoginPresenter implements ILoginView.LoginViewListener {
             }
         }
         else {
-            view.showNotification("User Name can't be empty");
+            view.showNotification("Login can't be empty");
         }
 
     }

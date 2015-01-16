@@ -21,7 +21,7 @@ public class LoginView extends VerticalLayout
     implements ILoginView, View, Button.ClickListener {
 
     public static final String NAME = "login";
-    private final TextField username = new TextField("User Name");
+    private final TextField username = new TextField("Username");
 
     public LoginView() {
         setSizeFull();
