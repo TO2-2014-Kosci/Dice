@@ -3,8 +3,10 @@ package pl.edu.agh.to2.webgui;
 import com.google.gwt.dev.jjs.SourceInfoCorrelation;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
+import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.server.VaadinRequest;
 import pl.edu.agh.to2.webgui.presenter.*;
@@ -21,12 +23,15 @@ import java.util.List;
 /**
  * Created by Maciej on 2014-11-28.
  */
+
+@Theme("valo")
 @Push
 @PreserveOnRefresh
 public class WebGUI extends UI {
 
     @Override
     public void init(VaadinRequest request) {
+        Page.getCurrent().setTitle("Dice");
         Server server = ContextListener.server;
         MessageListener listener = new MessageListener(this);
         getSession().setAttribute("user", null);
@@ -37,8 +42,6 @@ public class WebGUI extends UI {
         } catch (ConnectException e) {
             e.printStackTrace();
         }
-//        getSession().setAttribute("lcp", lcp);
-//        getSession().setAttribute("listener", listener);
 
         new Navigator(this, this);
 
@@ -88,7 +91,6 @@ public class WebGUI extends UI {
                     getNavigator().navigateTo((String) getSession().getAttribute("state"));
                     return false;
                 }
-//                return true;
             }
 
             @Override

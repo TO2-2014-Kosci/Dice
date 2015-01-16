@@ -21,10 +21,9 @@ public class LoginView extends VerticalLayout
     implements ILoginView, View, Button.ClickListener {
 
     public static final String NAME = "login";
-    private final TextField username = new TextField("username");
+    private final TextField username = new TextField("User Name");
 
     public LoginView() {
-//        new LoginPresenter(this);
         setSizeFull();
 
         Component loginForm = buildLoginForm();
@@ -36,6 +35,8 @@ public class LoginView extends VerticalLayout
         final VerticalLayout loginPanel = new VerticalLayout();
         loginPanel.setSizeUndefined();
         loginPanel.setSpacing(true);
+        loginPanel.setMargin(true);
+        loginPanel.addStyleName("well");
         Responsive.makeResponsive(loginPanel);
 
         loginPanel.addComponent(buildLabels());
@@ -47,6 +48,8 @@ public class LoginView extends VerticalLayout
         CssLayout labels = new CssLayout();
 
         Label welcome = new Label("Welcome");
+        welcome.addStyleName("huge");
+        welcome.addStyleName("bold");
         welcome.setSizeUndefined();
         labels.addComponent(welcome);
 
@@ -73,8 +76,10 @@ public class LoginView extends VerticalLayout
 
     @Override
     public void showNotification(String message) {
-        Notification notification = new Notification(message);
+        Notification notification = new Notification("Enter valid username!");
         notification.setPosition(Position.BOTTOM_CENTER);
+        notification.setStyleName("tray failure");
+        notification.setDescription(message);
         notification.show(Page.getCurrent());
     }
 
