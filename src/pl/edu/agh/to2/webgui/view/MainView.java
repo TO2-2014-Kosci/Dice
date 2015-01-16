@@ -5,6 +5,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
+import com.vaadin.server.Sizeable;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button;
@@ -12,6 +13,8 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.themes.ValoTheme;
+import javafx.geometry.Pos;
 import org.apache.xpath.operations.Bool;
 import pl.edu.agh.to2.webgui.presenter.MainPresenter;
 
@@ -22,7 +25,7 @@ import java.util.List;
 /**
  * Created by Maciej on 2014-12-01.
  */
-public class MainView extends CustomComponent
+public class MainView extends VerticalLayout
         implements IMainView, View, Button.ClickListener, MenuBar.Command, Property.ValueChangeListener {
     public static final String NAME = "";
     public static final String LOGOUT_TEXT = "Logout";
@@ -31,58 +34,73 @@ public class MainView extends CustomComponent
 
     public Button join = new Button("Join now!", this);
     private MenuBar menu = new MenuBar();
-    private Table servers = new Table("List of servers");
+    private Table servers = new Table();
     private MenuBar.MenuItem currentUser;
 
     public MainView() {
-//        MainPresenter mainPresenter = new MainPresenter(this);
-        GridLayout panelLayout = new GridLayout(1, 4);
-        Label selected = new Label("Selected: ");
-
         setSizeFull();
-        join.setEnabled(false);
+        setHeightUndefined();
 
-        panelLayout.setWidth("100%");
-        panelLayout.addComponent(join, 0, 3);
-        panelLayout.addComponent(selected, 0, 2);
-        panelLayout.addComponent(buildGamesList(), 0, 1);
-        panelLayout.addComponent(buildMenu(), 0, 0);
-        setCompositionRoot(panelLayout);
+        addComponent(buildMenu());
+        menu.setHeightUndefined();
+        setComponentAlignment(menu, Alignment.TOP_CENTER);
+
+        Component gamesList = buildGamesList();
+        addComponent(gamesList);
+        setComponentAlignment(gamesList, Alignment.TOP_CENTER);
+
+
+        join.setEnabled(false);
+        join.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        addComponent(join);
+        setComponentAlignment(join, Alignment.BOTTOM_CENTER);
     }
 
     private Component buildGamesList() {
-        servers.addValueChangeListener(this);
+        VerticalLayout content = new VerticalLayout();
 
+        Label serversLabel = new Label("List of games");
+        serversLabel.addStyleName("huge bold");
+        serversLabel.setSizeUndefined();
+        content.addComponent(serversLabel);
+        content.setComponentAlignment(serversLabel, Alignment.TOP_CENTER);
+
+        servers.addValueChangeListener(this);
         servers.setSelectable(true);
+        servers.setSortEnabled(true);
         servers.setImmediate(true);
         servers.addContainerProperty("Game name", String.class, null);
         servers.addContainerProperty("Players", String.class, null);
         servers.addContainerProperty("Game type", String.class, null);
         servers.addContainerProperty("Is started", Boolean.class, null);
+        servers.addContainerProperty("Rounds to win", Integer.class, null);
         servers.setPageLength(servers.size());
+        content.addComponent(servers);
+        content.setComponentAlignment(servers, Alignment.MIDDLE_CENTER);
 
-        return servers;
+        content.setMargin(true);
+        return content;
     }
 
     private Component buildMenu() {
         menu.setWidth("100%");
-        MenuBar.MenuItem createGame = menu.addItem(CREATE_TEXT, FontAwesome.PLUS_SQUARE, this);
-        MenuBar.MenuItem refresh = menu.addItem(REFRESH_TEXT, FontAwesome.REFRESH, this);
-
+        menu.setStyleName("normal");
+        menu.addItem(CREATE_TEXT, FontAwesome.PLUS_SQUARE, this);
+        menu.addItem(REFRESH_TEXT, FontAwesome.REFRESH, this);
 
         return menu;
     }
 
     @Override
-    public void showNotification(String message) {
+    public void showNotification(String message, String style) {
         Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);
+        notification.setStyleName(style);
         notification.show(Page.getCurrent());
     }
 
     public void refreshGamesList(List<Object[]> games) {
         servers.removeAllItems();
-//        servers.addItem(new Object[] {"mockup", "5/10", "NT"}, null);
         for (Object[] o : games) {
             servers.addItem(o, null);
         }
@@ -121,7 +139,7 @@ public class MainView extends CustomComponent
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         if (currentUser == null) {
             currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
-            MenuBar.MenuItem logout = currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
+            currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
         }
         else {
             currentUser.setText((String)getSession().getAttribute("user"));

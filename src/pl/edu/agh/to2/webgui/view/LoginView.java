@@ -48,8 +48,8 @@ public class LoginView extends VerticalLayout
         CssLayout labels = new CssLayout();
 
         Label welcome = new Label("Welcome");
-        welcome.addStyleName("huge");
-        welcome.addStyleName("bold");
+        welcome.addStyleName("huge bold");
+//        welcome.addStyleName("bold");
         welcome.setSizeUndefined();
         labels.addComponent(welcome);
 

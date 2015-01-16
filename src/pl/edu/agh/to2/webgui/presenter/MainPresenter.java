@@ -43,7 +43,7 @@ public class MainPresenter implements IMainView.MainViewListener {
             }
         }
         else {
-            view.showNotification(response.message);
+            view.showNotification(response.message, "failure");
         }
     }
 
@@ -62,10 +62,10 @@ public class MainPresenter implements IMainView.MainViewListener {
                 List<GameInfo> gamesList = lcp.getRoomList();
                 List<Object[]> games = new ArrayList<Object[]>();
                 for (GameInfo gi : gamesList) {
-                    games.add(new Object[] {gi.getSettings().getName(), gi.getPlayersNumber() + "/" + gi.getSettings().getMaxHumanPlayers(), gi.getSettings().getGameType().toString(), gi.isGameStarted()});
+                    games.add(new Object[] {gi.getSettings().getName(), gi.getPlayersNumber() + "/" + gi.getSettings().getMaxPlayers(), gi.getSettings().getGameType().toString(), gi.isGameStarted(), gi.getSettings().getRoundsToWin()});
                 }
                 view.refreshGamesList(games);
-                view.showNotification("Refreshing games...");
+                view.showNotification("Games list refreshed", "success");
             }
         }
     }
