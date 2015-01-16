@@ -40,15 +40,15 @@ public class MessageListener implements ServerMessageListener {
 
         String state = ui.getNavigator().getState();
 
-        if (lobbyPresenter != null && gameState.isGameStarted() && state.equals(LobbyView.NAME)) { // jestesmy w lobby i rozpoczynamy gre
-            ui.access(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("Starting game...");
-                    lobbyPresenter.startGame();
-                }
-            });
-        }
+//        if (lobbyPresenter != null && gameState.isGameStarted() && state.equals(LobbyView.NAME)) { // jestesmy w lobby i rozpoczynamy gre
+//            ui.access(new Runnable() {
+//                @Override
+//                public void run() {
+//                    System.out.println("Starting game...");
+//                    lobbyPresenter.startGame();
+//                }
+//            });
+//        }
         ui.access(new GameStateFeeder(gameState));
     }
 
@@ -61,18 +61,20 @@ public class MessageListener implements ServerMessageListener {
 
         @Override
         public void run() {
-            String state = ui.getNavigator().getState();
-
-            if (lobbyPresenter != null && !gameState.isGameStarted() && state.equals(LobbyView.NAME)) { // jestesmy w lobby i aktualizujemy liste graczy
-                lobbyPresenter.updateGameState(gameState);
-            }
-            else if(gamePresenter != null && gameState.isGameStarted() && state.equals(GameView.NAME)) { // jestesmy w grze, gra trwa i aktualizujemy widok
+            if (gameState.isGameStarted() && ui.getNavigator().getState().equals(LobbyView.NAME)) { // jestesmy w lobby i rozpoczynamy gre
+                lobbyPresenter.startGame();
                 gamePresenter.updateGameState(gameState);
             }
-            else if(gamePresenter != null && !gameState.isGameStarted() && state.equals(GameView.NAME)) { // jestesmy w grze, gra sie konczy
+            if (!gameState.isGameStarted() && ui.getNavigator().getState().equals(LobbyView.NAME)) { // jestesmy w lobby i aktualizujemy liste graczy
+                lobbyPresenter.updateGameState(gameState);
+            }
+            else if(gameState.isGameStarted() && ui.getNavigator().getState().equals(GameView.NAME)) { // jestesmy w grze, gra trwa i aktualizujemy widok
+                gamePresenter.updateGameState(gameState);
+            }
+            else if(!gameState.isGameStarted() && ui.getNavigator().getState().equals(GameView.NAME)) { // jestesmy w grze, gra sie konczy
                 gamePresenter.endGame();
             }
-            if(scorePresenter != null && !gameState.isGameStarted() && ui.getNavigator().getState().equals(ScoreView.NAME)) {
+            if(!gameState.isGameStarted() && ui.getNavigator().getState().equals(ScoreView.NAME)) {
                 scorePresenter.updateGameState(gameState);
             }
         }
