@@ -117,6 +117,7 @@ public class MainView extends VerticalLayout
 
     @Override
     public void menuSelected(MenuBar.MenuItem menuItem) {
+        join.setEnabled(false);
         for (MainViewListener listener : listeners) {
             listener.menuSelected(menuItem.getText());
         }
@@ -137,7 +138,7 @@ public class MainView extends VerticalLayout
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        join.setEnabled(true);
+        join.setEnabled(false);
         if (currentUser == null) {
             currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
             currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
