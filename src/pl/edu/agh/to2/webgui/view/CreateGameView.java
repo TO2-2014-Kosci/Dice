@@ -7,24 +7,23 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import pl.edu.agh.to2.webgui.presenter.CreateGamePresenter;
 import to2.dice.game.BotLevel;
 import to2.dice.game.GameType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Maciej on 2014-12-02.
  */
-public class CreateGameView extends CustomComponent
+public class CreateGameView extends VerticalLayout
         implements ICreateGameView, View, Button.ClickListener, MenuBar.Command {
     public static final String NAME = "create";
     public static final String CANCEL_TEXT = "List of games";
     public static final String LOGOUT_TEXT = "Logout";
     public static final String CREATE_TEXT = "Create game";
+    public static final String RANDOM_TEXT = "Random game";
 
     private MenuBar menu = new MenuBar();
     private TextField gameName;
@@ -39,20 +38,22 @@ public class CreateGameView extends CustomComponent
     private MenuBar.MenuItem currentUser;
 
     public CreateGameView() {
-//        CreateGamePresenter presenter = new CreateGamePresenter(this);
         setSizeFull();
-        GridLayout gridLayout = new GridLayout(1, 4);
-        gridLayout.setWidth("100%");
+        setHeightUndefined();
 
+        addComponent(buildMenu());
+        menu.setHeightUndefined();
+        setComponentAlignment(menu, Alignment.TOP_CENTER);
 
-        gridLayout.addComponent(buildMenu(), 0, 0);
-        gridLayout.addComponent(buildGameForm(), 0, 1);
-        setCompositionRoot(gridLayout);
+        Component gameForm = buildGameForm();
+        addComponent(gameForm);
+        setComponentAlignment(gameForm, Alignment.MIDDLE_CENTER);
     }
 
     private Component buildMenu() {
         menu.setWidth("100%");
-        MenuBar.MenuItem cancel = menu.addItem(CANCEL_TEXT, FontAwesome.LIST, this);
+        menu.addItem(CANCEL_TEXT, FontAwesome.LIST, this);
+        menu.addItem(RANDOM_TEXT, FontAwesome.RANDOM, this);
 
         return menu;
     }
@@ -60,6 +61,11 @@ public class CreateGameView extends CustomComponent
     private Component buildGameForm() {
         VerticalLayout fields = new VerticalLayout();
         fields.setSpacing(true);
+
+        Label header = new Label("Create new game");
+        header.setStyleName("huge bold");
+        fields.addComponent(header);
+        fields.setComponentAlignment(header, Alignment.TOP_CENTER);
 
         gameName = new TextField("Game Name");
         gameType = new ComboBox("Game type");
@@ -72,15 +78,21 @@ public class CreateGameView extends CustomComponent
         easyBots = new TextField("Number of easy bots");
         hardBots = new TextField("Number of hard bots");
         setValidation();
+
+//        HorizontalLayout buttons = new HorizontalLayout();
+//        buttons.setSpacing(true);
         final Button createGame = new Button(CREATE_TEXT, this);
+        createGame.setStyleName(ValoTheme.BUTTON_PRIMARY);
         final Button cancel = new Button(CANCEL_TEXT, this);
+//        buttons.addComponents(createGame, cancel);
 
         fields.addComponents(gameName, gameType, playersNumber, timeForMove, maxInactiveTurns, roundsToWin, easyBots, hardBots, createGame, cancel);
+        fields.setMargin(true);
         return fields;
     }
 
     private void setValidation() {
-        RegexpValidator num = new RegexpValidator("\\d+", "This field should contain only numbers");
+        RegexpValidator num = new RegexpValidator("\\d+", true, "This field should contain only numbers");
         gameName.setRequired(true);
         gameType.setRequired(true);
 //        diceNumber.addValidator(num);
@@ -172,5 +184,17 @@ public class CreateGameView extends CustomComponent
         bots.put(BotLevel.EASY, Integer.parseInt(easyBots.getValue()));
         bots.put(BotLevel.HARD, Integer.parseInt(hardBots.getValue()));
         return bots;
+    }
+
+    public void setRandom() {
+        Random random = new Random();
+        gameName.setValue("Game" + System.currentTimeMillis());
+        gameType.setValue(GameType.values()[random.nextInt(3)]);
+        playersNumber.setValue(((Integer) random.nextInt(5)).toString());
+        timeForMove.setValue(((Integer)(random.nextInt(1000) + 10)).toString());
+        maxInactiveTurns.setValue(((Integer)random.nextInt(7)).toString());
+        roundsToWin.setValue(((Integer)(random.nextInt(9) + 1)).toString());
+        easyBots.setValue(((Integer)(random.nextInt(9) + 1)).toString());
+        hardBots.setValue(((Integer)(random.nextInt(9) + 1)).toString());
     }
 }
