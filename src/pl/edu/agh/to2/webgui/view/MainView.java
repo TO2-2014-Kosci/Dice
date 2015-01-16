@@ -137,6 +137,7 @@ public class MainView extends VerticalLayout
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+        join.setEnabled(true);
         if (currentUser == null) {
             currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
             currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
