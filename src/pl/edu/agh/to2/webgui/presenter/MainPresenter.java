@@ -1,6 +1,7 @@
 package pl.edu.agh.to2.webgui.presenter;
 
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
 import pl.edu.agh.to2.webgui.MessageListener;
 import pl.edu.agh.to2.webgui.WebGUI;
@@ -30,17 +31,17 @@ public class MainPresenter implements IMainView.MainViewListener {
 //        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
     }
     @Override
-    public void buttonClick(String username) {
-        Response response = lcp.joinRoom(gameName);
+    public void buttonClick(String operation, String roomName) {
+        Response response = lcp.joinRoom(roomName);
         if (response.isSuccess()) {
-            if(isStarted) {
-                view.getUI().getSession().setAttribute("state", GameView.NAME);
-                view.getUI().getNavigator().navigateTo(GameView.NAME);
-            }
-            else {
+//            if(isStarted) {
+//                view.getUI().getSession().setAttribute("state", GameView.NAME);
+//                view.getUI().getNavigator().navigateTo(GameView.NAME);
+//            }
+//            else {
                 view.getUI().getSession().setAttribute("state", LobbyView.NAME);
                 view.getUI().getNavigator().navigateTo(LobbyView.NAME);
-            }
+//            }
         }
         else {
             view.showNotification(response.message, "failure");
@@ -62,7 +63,9 @@ public class MainPresenter implements IMainView.MainViewListener {
                 List<GameInfo> gamesList = lcp.getRoomList();
                 List<Object[]> games = new ArrayList<Object[]>();
                 for (GameInfo gi : gamesList) {
-                    games.add(new Object[] {gi.getSettings().getName(), gi.getPlayersNumber() + "/" + gi.getSettings().getMaxPlayers(), gi.getSettings().getGameType().toString(), gi.isGameStarted(), gi.getSettings().getRoundsToWin()});
+                    Button b = new Button("Join", view);
+                    b.setDescription(gi.getSettings().getName());
+                    games.add(new Object[] {gi.getSettings().getName(), gi.getPlayersNumber() + "/" + gi.getSettings().getMaxPlayers(), gi.getSettings().getGameType().toString(), gi.isGameStarted(), gi.getSettings().getRoundsToWin(), b});
                 }
                 view.refreshGamesList(games);
                 view.showNotification("Games list refreshed", "success");

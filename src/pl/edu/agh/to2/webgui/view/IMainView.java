@@ -5,7 +5,7 @@ package pl.edu.agh.to2.webgui.view;
  */
 public interface IMainView {
     interface MainViewListener {
-        void buttonClick(String operation);
+        void buttonClick(String operation, String roomName);
         void menuSelected(String command);
         void valueChange(String gameName, Boolean isStarted);
     }

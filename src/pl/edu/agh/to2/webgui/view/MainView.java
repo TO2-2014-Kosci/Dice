@@ -74,6 +74,18 @@ public class MainView extends VerticalLayout
         servers.addContainerProperty("Game type", String.class, null);
         servers.addContainerProperty("Is started", Boolean.class, null);
         servers.addContainerProperty("Rounds to win", Integer.class, null);
+
+        Button.ClickListener listener = this;
+        servers.addContainerProperty("Join", Button.class, null);
+//        servers.addGeneratedColumn("Join", new Table.ColumnGenerator() {
+//            @Override
+//            public Object generateCell(Table components, Object itemId, Object columnId) {
+//                Button b = new Button("Join", listener);
+//                b.addStyleName(ValoTheme.BUTTON_SMALL + " " + ValoTheme.BUTTON_PRIMARY);
+//                return b;
+//            }
+//        });
+
         servers.setPageLength(servers.size());
         content.addComponent(servers);
         content.setComponentAlignment(servers, Alignment.MIDDLE_CENTER);
@@ -110,8 +122,9 @@ public class MainView extends VerticalLayout
 
     @Override
     public void buttonClick(Button.ClickEvent clickEvent) {
+
         for (MainViewListener listener : listeners) {
-            listener.buttonClick(clickEvent.getButton().getCaption());
+            listener.buttonClick(clickEvent.getButton().getCaption(), clickEvent.getButton().getDescription());
         }
     }
 
