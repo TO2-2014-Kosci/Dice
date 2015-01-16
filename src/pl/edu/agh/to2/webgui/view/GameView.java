@@ -27,7 +27,6 @@ public class GameView extends VerticalLayout
     Table players = new Table();
     Panel generalPanel = new Panel();
     Panel dicesPanel = new Panel("Your dices");
-    Panel centralPanel = new Panel();
     private List<CheckBox> checkBoxes = new ArrayList<CheckBox>();
     private Button reroll;
     private Button leave;
@@ -36,14 +35,7 @@ public class GameView extends VerticalLayout
 
     public GameView() {
 //        new GamePresenter(this);
-        header = new Label("Poker game");
-        header.addStyleName("h1 align-center");
-
-        addComponent(header);
-        setComponentAlignment(header, Alignment.TOP_CENTER);
-        preparePanel();
-        addComponent(generalPanel);
-        setComponentAlignment(generalPanel, Alignment.MIDDLE_CENTER);
+        prepareView();
     }
 
     @Override
@@ -63,46 +55,73 @@ public class GameView extends VerticalLayout
         listeners.add(listener);
     }
 
-    private void preparePanel(){
+    private void prepareView() {
+
+        createDicesPanel();
         populateTable();
-        VerticalLayout generalPanelLayout = new VerticalLayout();
+        header = new Label("Poker game");
+        header.addStyleName("h1 align-center");
+        addAndSetComponent(this, header, Alignment.TOP_CENTER);
+        generalPanel.setContent(createGeneralLayout());
+        addAndSetComponent(this, generalPanel, Alignment.MIDDLE_CENTER);
+    }
+
+    private void addAndSetComponent(AbstractOrderedLayout layout, Component component, Alignment alignment) {
+        layout.addComponent(component);
+        layout.setComponentAlignment(component, alignment);
+    }
+
+    private void createDicesPanel() {
+
         HorizontalLayout dicesPanelLayout = new HorizontalLayout();
-        VerticalLayout centralPanelLayout = new VerticalLayout();
+
+//      prepare dicesPanel layout
+
         checkBoxes.add(new CheckBox("10"));
         checkBoxes.add(new CheckBox("20"));
         checkBoxes.add(new CheckBox("30"));
         checkBoxes.add(new CheckBox("40"));
         checkBoxes.add(new CheckBox("50"));
-        for(CheckBox cb : checkBoxes) {
-            dicesPanelLayout.addComponent(cb);
-            dicesPanelLayout.setComponentAlignment(cb, Alignment.TOP_CENTER);
+
+        for (CheckBox cb : checkBoxes) {
+            addAndSetComponent(dicesPanelLayout, cb, Alignment.TOP_CENTER);
         }
-        info.addStyleName("h2 align-center");
-        //generalPanelLayout.setWidth("100%");
-        generalPanelLayout.addComponent(info);
-        generalPanelLayout.setComponentAlignment(info, Alignment.TOP_CENTER);
-        generalPanelLayout.addComponent(players);
-        generalPanelLayout.addComponent(dicesPanel);
+
+        dicesPanelLayout.setMargin(true);
+        dicesPanelLayout.setSpacing(true);
+
+//      set layout
+
+        dicesPanel.setContent(dicesPanelLayout);
         dicesPanel.setWidth("285");
-        generalPanelLayout.setComponentAlignment(players, Alignment.TOP_CENTER);
-        generalPanelLayout.setComponentAlignment(dicesPanel, Alignment.MIDDLE_CENTER);
+
+    }
+
+    private VerticalLayout createGeneralLayout() {
+
+        VerticalLayout generalPanelLayout = new VerticalLayout();
+
+        info.addStyleName("h2 align-center");
+        addAndSetComponent(generalPanelLayout, info, Alignment.TOP_CENTER);
+
+        addAndSetComponent(generalPanelLayout, players, Alignment.TOP_CENTER);
+        addAndSetComponent(generalPanelLayout, dicesPanel, Alignment.MIDDLE_CENTER);
+
         reroll = new Button(REROLL_TEXT, this);
         reroll.addStyleName(ValoTheme.BUTTON_PRIMARY);
         reroll.setEnabled(false);
-        generalPanelLayout.addComponent(reroll);
-        generalPanelLayout.setComponentAlignment(reroll, Alignment.BOTTOM_CENTER);
-        generalPanelLayout.setMargin(true);
-        generalPanelLayout.setSpacing(true);
-        dicesPanel.setContent(dicesPanelLayout);
-        dicesPanelLayout.setMargin(true);
-        dicesPanelLayout.setSpacing(true);
+        addAndSetComponent(generalPanelLayout, reroll, Alignment.BOTTOM_CENTER);
+
         leave = new Button(LEAVE_TEXT, this);
         leave.addStyleName(ValoTheme.BUTTON_SMALL);
-        generalPanelLayout.addComponent(leave);
-        generalPanelLayout.setComponentAlignment(leave, Alignment.BOTTOM_LEFT);
+        addAndSetComponent(generalPanelLayout, leave, Alignment.BOTTOM_LEFT);
 
-        generalPanel.setContent(generalPanelLayout);
+        generalPanelLayout.setMargin(true);
+        generalPanelLayout.setSpacing(true);
+
+        return generalPanelLayout;
     }
+
     private void populateTable(){
         players.addContainerProperty("Player", String.class, null);
         players.addContainerProperty("Score", Integer.class, null);
