@@ -79,6 +79,7 @@ public class LoginView extends VerticalLayout
         Notification notification = new Notification("Enter valid username!");
         notification.setPosition(Position.BOTTOM_CENTER);
         notification.setStyleName("tray failure");
+        notification.setDelayMsec(1000);
         notification.setDescription(message);
         notification.show(Page.getCurrent());
     }

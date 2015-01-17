@@ -115,6 +115,7 @@ public class CreateGameView extends VerticalLayout
     public void showNotification(String message) {
         Notification notification = new Notification(message, Notification.TYPE_ERROR_MESSAGE);
         notification.setPosition(Position.BOTTOM_CENTER);
+        notification.setDelayMsec(1000);
         notification.show(Page.getCurrent());
     }
 

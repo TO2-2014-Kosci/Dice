@@ -96,6 +96,7 @@ public class MainView extends VerticalLayout
         Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);
         notification.setStyleName(style);
+        notification.setDelayMsec(1000);
         notification.show(Page.getCurrent());
     }
 

@@ -144,9 +144,11 @@ public class GameView extends VerticalLayout
     }
 
     @Override
-    public void showNotification(String message) {
+    public void showNotification(String message, String style, Position position) {
         Notification notification = new Notification(message);
-        notification.setPosition(Position.BOTTOM_CENTER);
+        notification.setPosition(position);
+        notification.setStyleName(style);
+        notification.setDelayMsec(500);
         notification.show(Page.getCurrent());
     }
 
@@ -154,6 +156,7 @@ public class GameView extends VerticalLayout
         boolean[] dices = new boolean[5]; //TODO ustawic jakis ludzki rozmiar
         for(int i = 0; i < 5; i++) {
             dices[i] = checkBoxes.get(i).getValue();
+            checkBoxes.get(i).setValue(false);
         }
         return dices;
     }

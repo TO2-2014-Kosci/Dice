@@ -1,6 +1,7 @@
 package pl.edu.agh.to2.webgui.presenter;
 
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.Notification;
 import pl.edu.agh.to2.webgui.MessageListener;
 import pl.edu.agh.to2.webgui.WebGUI;
@@ -39,12 +40,12 @@ public class GamePresenter implements IGameView.GameViewListener {
         if(operation.equalsIgnoreCase(GameView.LEAVE_TEXT)) {
             Response response = lcp.leaveRoom();
             if(response.isSuccess()) {
-                view.showNotification("You left game");
+                view.showNotification("You left game", "success", Position.BOTTOM_CENTER);
                 view.getUI().getSession().setAttribute("state", MainView.NAME);
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
             }
             else {
-                view.showNotification(response.message);
+                view.showNotification(response.message, "failure", Position.BOTTOM_CENTER);
             }
         }
         else if(operation.equalsIgnoreCase(GameView.REROLL_TEXT)) {
@@ -52,16 +53,16 @@ public class GamePresenter implements IGameView.GameViewListener {
             Response response = null;
             response = lcp.reroll(dicesToReroll);
             if(response.isSuccess()) {
-                view.showNotification("Dices rerolled");
+                view.showNotification("Dices rerolled", "success", Position.BOTTOM_CENTER);
                 view.enableReroll(false);
             }
             else {
-                view.showNotification(response.message);
+                view.showNotification(response.message, "failure", Position.BOTTOM_CENTER);
             }
         } else if (operation.equalsIgnoreCase(GameView.STAND_UP_TEXT)) {
             Response response = lcp.standUp();
             if (response.isSuccess()) {
-                view.showNotification("You stood up");
+                view.showNotification("You stood up", "success", Position.BOTTOM_CENTER);
                 view.enablePlayerUI(false);
             }
         }
@@ -90,7 +91,7 @@ public class GamePresenter implements IGameView.GameViewListener {
 
         if(gameState.getCurrentPlayer().getName().equals(username)) {
             view.enableReroll(true);
-//            view.showNotification("Your turn");
+            view.showNotification("Your turn", "dark", Position.MIDDLE_CENTER);
         }
 
         view.setRoundInfo("Current round: " + gameState.getCurrentRound());

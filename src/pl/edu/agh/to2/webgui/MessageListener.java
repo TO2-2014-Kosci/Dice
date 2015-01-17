@@ -34,21 +34,12 @@ public class MessageListener implements ServerMessageListener {
 
     @Override
     public void onGameStateChange(GameState gameState) {
-        System.out.println("Incomming message to:\t" + this.toString());
+//        System.out.println("Incomming message to:\t" + this.toString());
 //        System.out.println(ui.getNavigator().getState());
 //        System.out.println(gameState.getClass().toString());
-        System.out.println(gameState.getPlayersNumber());
-        String state = ui.getNavigator().getState();
+//        System.out.println(gameState.getPlayersNumber());
+//        String state = ui.getNavigator().getState();
 
-//        if (lobbyPresenter != null && gameState.isGameStarted() && state.equals(LobbyView.NAME)) { // jestesmy w lobby i rozpoczynamy gre
-//            ui.access(new Runnable() {
-//                @Override
-//                public void run() {
-//                    System.out.println("Starting game...");
-//                    lobbyPresenter.startGame();
-//                }
-//            });
-//        }
         ui.access(new GameStateFeeder(gameState));
     }
 
