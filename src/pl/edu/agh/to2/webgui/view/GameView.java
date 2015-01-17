@@ -32,6 +32,7 @@ public class GameView extends VerticalLayout
     private Button leave;
     private Label header;
     private Label info = new Label();
+    private Label roundInfo = new Label();
 
     public GameView() {
 //        new GamePresenter(this);
@@ -64,6 +65,7 @@ public class GameView extends VerticalLayout
         addAndSetComponent(this, header, Alignment.TOP_CENTER);
         generalPanel.setContent(createGeneralLayout());
         addAndSetComponent(this, generalPanel, Alignment.MIDDLE_CENTER);
+
     }
 
     private void addAndSetComponent(AbstractOrderedLayout layout, Component component, Alignment alignment) {
@@ -94,12 +96,15 @@ public class GameView extends VerticalLayout
 
         dicesPanel.setContent(dicesPanelLayout);
         dicesPanel.setWidth("285");
-
+        dicesPanel.setVisible(false);
     }
 
     private VerticalLayout createGeneralLayout() {
 
         VerticalLayout generalPanelLayout = new VerticalLayout();
+
+        roundInfo.addStyleName("h2 align-center");
+        addAndSetComponent(generalPanelLayout, roundInfo, Alignment.TOP_CENTER);
 
         info.addStyleName("h2 align-center");
         addAndSetComponent(generalPanelLayout, info, Alignment.TOP_CENTER);
@@ -110,6 +115,7 @@ public class GameView extends VerticalLayout
         reroll = new Button(REROLL_TEXT, this);
         reroll.addStyleName(ValoTheme.BUTTON_PRIMARY);
         reroll.setEnabled(false);
+        reroll.setVisible(false);
         addAndSetComponent(generalPanelLayout, reroll, Alignment.BOTTOM_CENTER);
 
         leave = new Button(LEAVE_TEXT, this);
@@ -127,7 +133,7 @@ public class GameView extends VerticalLayout
         players.addContainerProperty("Score", Integer.class, null);
         players.addContainerProperty("Dices", String.class, null);
         players.setColumnWidth("Dices", 100);
-        players.setPageLength(players.size());
+
     }
 
     @Override
@@ -150,6 +156,11 @@ public class GameView extends VerticalLayout
         for (Object[] updatedPlayer : updatedPlayersList) {
             players.addItem(updatedPlayer, null);
         }
+        if (players.size() > 10) {
+            players.setPageLength(10);
+        } else {
+            players.setPageLength(players.size());
+        }
 
     }
 
@@ -166,6 +177,14 @@ public class GameView extends VerticalLayout
         info.setValue(message);
     }
 
+    public void setRoundInfo(String message) {
+        roundInfo.setValue(message);
+    }
+
+    public void enablePlayerUI(boolean enable) {
+        reroll.setVisible(enable);
+        dicesPanel.setVisible(enable);
+    }
     public void enableReroll(boolean enabled) {
         reroll.setEnabled(enabled);
     }

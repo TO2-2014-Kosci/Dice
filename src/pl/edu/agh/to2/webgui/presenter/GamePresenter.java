@@ -74,6 +74,7 @@ public class GamePresenter implements IGameView.GameViewListener {
             int[] playerDices = p.getDice().getDiceArray();
             updatedPlayersList.add(new Object[]{playerName, playerScore, Arrays.toString(playerDices).replace("[", "").replace("]", "")});
             if (playerName.equals(VaadinSession.getCurrent().getAttribute("user"))) {
+                view.enablePlayerUI(true);
                 view.setDices(playerDices);
             }
         }
@@ -85,6 +86,9 @@ public class GamePresenter implements IGameView.GameViewListener {
             view.enableReroll(true);
 //            view.showNotification("Your turn");
         }
+
+        view.setRoundInfo("Current round: " + gameState.getCurrentRound());
+
     }
 
     public void endGame() {
