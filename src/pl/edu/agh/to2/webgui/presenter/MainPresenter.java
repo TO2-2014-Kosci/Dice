@@ -33,7 +33,8 @@ public class MainPresenter implements IMainView.MainViewListener {
     public void buttonClick(String username) {
         Response response = lcp.joinRoom(gameName);
         if (response.isSuccess()) {
-            if(isStarted) {
+            view.getUI().getSession().setAttribute("gameName", gameName);
+            if(isStarted) { //TODO chyba mozna wywalic
                 view.getUI().getSession().setAttribute("state", GameView.NAME);
                 view.getUI().getNavigator().navigateTo(GameView.NAME);
             }

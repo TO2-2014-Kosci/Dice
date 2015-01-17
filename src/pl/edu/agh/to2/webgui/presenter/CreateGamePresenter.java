@@ -44,6 +44,7 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
                 System.out.println(lcp.toString());
                 response = lcp.createRoom(gs);
                 if (response.isSuccess()) {
+                    view.getUI().getSession().setAttribute("gameName", gs.getName());
                     view.getUI().getSession().setAttribute("state", LobbyView.NAME);
                     view.getUI().getNavigator().navigateTo(LobbyView.NAME);
                 }
