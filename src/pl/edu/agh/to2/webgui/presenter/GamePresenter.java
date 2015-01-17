@@ -58,6 +58,12 @@ public class GamePresenter implements IGameView.GameViewListener {
             else {
                 view.showNotification(response.message);
             }
+        } else if (operation.equalsIgnoreCase(GameView.STAND_UP_TEXT)) {
+            Response response = lcp.standUp();
+            if (response.isSuccess()) {
+                view.showNotification("You stood up");
+                view.enablePlayerUI(false);
+            }
         }
     }
 
@@ -74,6 +80,7 @@ public class GamePresenter implements IGameView.GameViewListener {
             int[] playerDices = p.getDice().getDiceArray();
             updatedPlayersList.add(new Object[]{playerName, playerScore, Arrays.toString(playerDices).replace("[", "").replace("]", "")});
             if (playerName.equals(VaadinSession.getCurrent().getAttribute("user"))) {
+                view.enablePlayerUI(true);
                 view.setDices(playerDices);
             }
         }
@@ -85,6 +92,9 @@ public class GamePresenter implements IGameView.GameViewListener {
             view.enableReroll(true);
 //            view.showNotification("Your turn");
         }
+
+        view.setRoundInfo("Current round: " + gameState.getCurrentRound());
+
     }
 
     public void endGame() {
