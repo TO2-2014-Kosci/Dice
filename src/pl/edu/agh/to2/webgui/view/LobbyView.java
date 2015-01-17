@@ -5,6 +5,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import pl.edu.agh.to2.webgui.presenter.LobbyPresenter;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
  * Created by Maciej on 2014-11-28.
  * Edited by Lukasz on 2014-12-01
  */
-public class LobbyView extends CustomComponent
+public class LobbyView extends VerticalLayout
     implements ILobbyView, View,Button.ClickListener {
     public static final String NAME = "lobby";
     public static final String LEAVE_TEXT = "Leave lobby";
@@ -22,7 +23,7 @@ public class LobbyView extends CustomComponent
     public static final String STAND_UP_TEXT = "Stand up";
 
     List<LobbyViewListener> listeners = new ArrayList<LobbyViewListener>();
-    Table users = new Table("Users in lobby");
+    Table users = new Table();
     Panel panel = new Panel();
     Label info = new Label();
     Button leave = new Button(LEAVE_TEXT,this);
@@ -30,18 +31,46 @@ public class LobbyView extends CustomComponent
     GridLayout panelLayout = new GridLayout(1,5);
 
     public LobbyView() {
-//        new LobbyPresenter(this);
-
         setSizeFull();
+        setSpacing(true);
+        setMargin(true);
+
+        Component usersList = buildUsersList();
+        addComponent(usersList);
+        setComponentAlignment(usersList, Alignment.TOP_CENTER);
+
+    }
+
+    private Component buildUsersList() {
+        GridLayout layout = new GridLayout(2, 1);
+        layout.setSpacing(true);
+
+        //users list
+        VerticalLayout usersLayout = new VerticalLayout();
+        usersLayout.setMargin(true);
+        usersLayout.setSpacing(true);
+        usersLayout.setSizeUndefined();
         users.addContainerProperty("User", String.class, null);
-        users.setPageLength(users.size());
-        panelLayout.setWidth("100%");
-        panelLayout.addComponent(info, 0, 0);
-        panelLayout.addComponent(users,0,1);
-        panelLayout.addComponent(sitdown,0,2);
-        panelLayout.addComponent(leave,0,3);
-        panel.setContent(panelLayout);
-        setCompositionRoot(panel);
+        usersLayout.addComponent(users);
+
+        //buttons
+        VerticalLayout buttons = new VerticalLayout();
+        buttons.setMargin(true);
+        buttons.setSpacing(true);
+        buttons.setSizeUndefined();
+//        buttons.setStyleName("well");
+        Label header = new Label("Users in lobby");
+        header.setStyleName("huge bold");
+        buttons.addComponent(header);
+        sitdown.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        buttons.addComponent(sitdown);
+        buttons.setComponentAlignment(sitdown, Alignment.TOP_CENTER);
+        buttons.addComponent(leave);
+        buttons.setComponentAlignment(leave, Alignment.TOP_CENTER);
+
+        layout.addComponent(buttons, 0, 0);
+        layout.addComponent(usersLayout, 1, 0);
+        return layout;
     }
 
     @Override
@@ -56,6 +85,8 @@ public class LobbyView extends CustomComponent
         for(String playerName : playersList) {
             users.addItem(new Object[] {playerName}, null);
         }
+        if(users.size() > 10) users.setPageLength(10);
+        else users.setPageLength(users.size());
     }
 
     public void sitDown() {
