@@ -58,6 +58,12 @@ public class GamePresenter implements IGameView.GameViewListener {
             else {
                 view.showNotification(response.message);
             }
+        } else if (operation.equalsIgnoreCase(GameView.STAND_UP_TEXT)) {
+            Response response = lcp.standUp();
+            if (response.isSuccess()) {
+                view.showNotification("You stood up");
+                view.enablePlayerUI(false);
+            }
         }
     }
 

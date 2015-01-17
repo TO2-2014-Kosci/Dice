@@ -22,12 +22,14 @@ public class GameView extends VerticalLayout
     public static final String NAME = "game";
     public static final String LEAVE_TEXT = "Leave game";
     public static final String REROLL_TEXT = "Reroll";
+    public static final String STAND_UP_TEXT = "Stand up";
 
     List<GameViewListener> listeners = new ArrayList<GameViewListener>();
     Table players = new Table();
     Panel generalPanel = new Panel();
     Panel dicesPanel = new Panel("Your dices");
     private List<CheckBox> checkBoxes = new ArrayList<CheckBox>();
+    private Button standUp;
     private Button reroll;
     private Button leave;
     private Label header;
@@ -118,6 +120,11 @@ public class GameView extends VerticalLayout
         reroll.setVisible(false);
         addAndSetComponent(generalPanelLayout, reroll, Alignment.BOTTOM_CENTER);
 
+        standUp = new Button(STAND_UP_TEXT, this);
+        standUp.addStyleName(ValoTheme.BUTTON_SMALL);
+        addAndSetComponent(generalPanelLayout, standUp, Alignment.BOTTOM_LEFT);
+        standUp.setVisible(false);
+
         leave = new Button(LEAVE_TEXT, this);
         leave.addStyleName(ValoTheme.BUTTON_SMALL);
         addAndSetComponent(generalPanelLayout, leave, Alignment.BOTTOM_LEFT);
@@ -156,8 +163,8 @@ public class GameView extends VerticalLayout
         for (Object[] updatedPlayer : updatedPlayersList) {
             players.addItem(updatedPlayer, null);
         }
-        if (players.size() > 10) {
-            players.setPageLength(10);
+        if (players.size() > 8) {
+            players.setPageLength(8);
         } else {
             players.setPageLength(players.size());
         }
@@ -184,6 +191,7 @@ public class GameView extends VerticalLayout
     public void enablePlayerUI(boolean enable) {
         reroll.setVisible(enable);
         dicesPanel.setVisible(enable);
+        standUp.setVisible(enable);
     }
     public void enableReroll(boolean enabled) {
         reroll.setEnabled(enabled);
