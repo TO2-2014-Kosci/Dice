@@ -39,6 +39,7 @@ public class LobbyView extends VerticalLayout
         setSizeFull();
         setSpacing(true);
         setMargin(true);
+        setStyleName("lobby-background");
 
         Component usersList = buildUsersList();
         addComponent(usersList);
@@ -63,20 +64,17 @@ public class LobbyView extends VerticalLayout
         buttons.setMargin(true);
         buttons.setSpacing(true);
         buttons.setSizeUndefined();
-//        buttons.setStyleName("well");
-        Label header = new Label("Users in lobby");
-        header.setStyleName("huge bold");
-        header.setSizeUndefined();
-        buttons.addComponent(header);
-        buttons.setComponentAlignment(header, Alignment.TOP_CENTER);
+
+        Component info = buildInfo();
+        buttons.addComponent(info);
+        buttons.setComponentAlignment(info, Alignment.TOP_CENTER);
+
         sitdown.setStyleName(ValoTheme.BUTTON_PRIMARY);
         buttons.addComponent(sitdown);
         buttons.setComponentAlignment(sitdown, Alignment.TOP_CENTER);
         buttons.addComponent(leave);
         buttons.setComponentAlignment(leave, Alignment.TOP_CENTER);
-        Component info = buildInfo();
-        buttons.addComponent(info);
-        buttons.setComponentAlignment(info, Alignment.TOP_CENTER);
+
 
         layout.addComponent(buttons, 0, 0);
         layout.addComponent(usersLayout, 1, 0);
@@ -89,6 +87,10 @@ public class LobbyView extends VerticalLayout
         layout.setSpacing(true);
         layout.setMargin(true);
         layout.setStyleName("well");
+        Label header = new Label("Game lobby");
+        header.setStyleName("huge bold");
+        layout.addComponent(header);
+
         layout.addComponents(gameName, players, rounds, turns, time);
 
         return layout;

@@ -39,25 +39,24 @@ public class MainView extends VerticalLayout
 
     public MainView() {
         setSizeFull();
-        setHeightUndefined();
+//        setHeightUndefined();
+        setStyleName("main-background");
 
-        addComponent(buildMenu());
-        menu.setHeightUndefined();
-        setComponentAlignment(menu, Alignment.TOP_CENTER);
+        buildMenu();
+
+//        addComponent(buildMenu());
+//        menu.setHeightUndefined();
+//        setComponentAlignment(menu, Alignment.TOP_CENTER);
 
         Component gamesList = buildGamesList();
         addComponent(gamesList);
         setComponentAlignment(gamesList, Alignment.TOP_CENTER);
-
-
-        join.setEnabled(false);
-        join.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        addComponent(join);
-        setComponentAlignment(join, Alignment.BOTTOM_CENTER);
     }
 
     private Component buildGamesList() {
         VerticalLayout content = new VerticalLayout();
+
+        content.addComponent(menu);
 
         Label serversLabel = new Label("List of games");
         serversLabel.addStyleName("huge bold");
@@ -78,7 +77,13 @@ public class MainView extends VerticalLayout
         content.addComponent(servers);
         content.setComponentAlignment(servers, Alignment.MIDDLE_CENTER);
 
-        content.setMargin(true);
+        join.setEnabled(false);
+        join.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        content.addComponent(join);
+        content.setComponentAlignment(join, Alignment.BOTTOM_CENTER);
+
+        content.setSpacing(true);
+//        content.setMargin(true);
         return content;
     }
 
@@ -105,6 +110,7 @@ public class MainView extends VerticalLayout
         for (Object[] o : games) {
             servers.addItem(o, null);
         }
+        servers.setPageLength(Math.min(15, servers.size()));
     }
 
     List<MainViewListener> listeners = new ArrayList<MainViewListener>();

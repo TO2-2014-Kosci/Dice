@@ -28,6 +28,7 @@ public class ScoreView extends VerticalLayout
         setSizeFull();
 //        setHeightUndefined();
         setSpacing(true);
+        setStyleName("score-background");
 
         Component scoreTable = buildScoreTable();
         addComponent(scoreTable);

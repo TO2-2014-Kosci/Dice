@@ -24,7 +24,7 @@ import java.util.List;
  * Created by Maciej on 2014-11-28.
  */
 
-@Theme("valo")
+@Theme("mytheme")
 @Push
 @PreserveOnRefresh
 public class WebGUI extends UI {

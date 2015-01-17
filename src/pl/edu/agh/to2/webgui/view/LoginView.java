@@ -25,7 +25,8 @@ public class LoginView extends VerticalLayout
 
     public LoginView() {
         setSizeFull();
-
+        setStyleName("login-background");
+//        Responsive.makeResponsive(this);
         Component loginForm = buildLoginForm();
         addComponent(loginForm);
         setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
