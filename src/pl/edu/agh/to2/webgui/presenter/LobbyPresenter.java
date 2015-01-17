@@ -38,29 +38,29 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
                 view.getUI().getSession().setAttribute("state", MainView.NAME);
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
             } else {
-                view.showNotification(response.message);
+                view.showNotification(response.message, "failure");
             }
         }
         else if(operation.equalsIgnoreCase(LobbyView.SIT_DOWN_TEXT)){
             Response response = null;
             response = lcp.sitDown();
             if(response.isSuccess()) {
-                view.showNotification("You've sat down");
+                view.showNotification("You've sat down", "success");
                 view.sitDown();
             }
             else {
-                view.showNotification(response.message);
+                view.showNotification(response.message, "failure");
             }
         }
         else if(operation.equalsIgnoreCase(LobbyView.STAND_UP_TEXT)){
             Response response = null;
             response = lcp.standUp();
             if(response.isSuccess()) {
-                view.showNotification("You've stood up");
+                view.showNotification("You've stood up", "success");
                 view.standUp();
             }
             else {
-                view.showNotification(response.message);
+                view.showNotification(response.message, "failure");
             }
         }
 

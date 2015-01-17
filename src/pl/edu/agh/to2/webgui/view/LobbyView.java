@@ -24,11 +24,8 @@ public class LobbyView extends VerticalLayout
 
     List<LobbyViewListener> listeners = new ArrayList<LobbyViewListener>();
     Table users = new Table();
-    Panel panel = new Panel();
-    Label info = new Label();
     Button leave = new Button(LEAVE_TEXT,this);
     Button sitdown = new Button(SIT_DOWN_TEXT, this);
-    GridLayout panelLayout = new GridLayout(1,5);
 
     public LobbyView() {
         setSizeFull();
@@ -74,9 +71,10 @@ public class LobbyView extends VerticalLayout
     }
 
     @Override
-    public void showNotification(String message) {
+    public void showNotification(String message, String style) {
         Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);
+        notification.setStyleName(style);
         notification.show(Page.getCurrent());
     }
 

@@ -11,5 +11,5 @@ public interface ILobbyView {
     }
 
     public void addListener(LobbyViewListener listener);
-    public void showNotification(String message);
+    public void showNotification(String message, String style);
 }
