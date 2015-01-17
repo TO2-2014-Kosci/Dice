@@ -7,6 +7,7 @@ import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import pl.edu.agh.to2.webgui.presenter.LobbyPresenter;
+import to2.dice.game.GameInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,18 @@ public class LobbyView extends VerticalLayout
     public static final String LEAVE_TEXT = "Leave lobby";
     public static final String SIT_DOWN_TEXT = "Sit down";
     public static final String STAND_UP_TEXT = "Stand up";
+    public static final String INFO_TEXT = "Info";
 
     List<LobbyViewListener> listeners = new ArrayList<LobbyViewListener>();
     Table users = new Table();
     Button leave = new Button(LEAVE_TEXT,this);
     Button sitdown = new Button(SIT_DOWN_TEXT, this);
+
+    Label gameName = new Label("Game: ");
+    Label players = new Label("Players: ");
+    Label rounds = new Label("Rounds to win: ");
+    Label turns = new Label("Max inactive turns: ");
+    Label time = new Label("Time for move: ");
 
     public LobbyView() {
         setSizeFull();
@@ -58,15 +66,31 @@ public class LobbyView extends VerticalLayout
 //        buttons.setStyleName("well");
         Label header = new Label("Users in lobby");
         header.setStyleName("huge bold");
+        header.setSizeUndefined();
         buttons.addComponent(header);
+        buttons.setComponentAlignment(header, Alignment.TOP_CENTER);
         sitdown.setStyleName(ValoTheme.BUTTON_PRIMARY);
         buttons.addComponent(sitdown);
         buttons.setComponentAlignment(sitdown, Alignment.TOP_CENTER);
         buttons.addComponent(leave);
         buttons.setComponentAlignment(leave, Alignment.TOP_CENTER);
+        Component info = buildInfo();
+        buttons.addComponent(info);
+        buttons.setComponentAlignment(info, Alignment.TOP_CENTER);
 
         layout.addComponent(buttons, 0, 0);
         layout.addComponent(usersLayout, 1, 0);
+        return layout;
+    }
+
+    private Component buildInfo() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setSizeUndefined();
+        layout.setSpacing(true);
+        layout.setMargin(true);
+        layout.setStyleName("well");
+        layout.addComponents(gameName, players, rounds, turns, time);
+
         return layout;
     }
 
@@ -95,9 +119,20 @@ public class LobbyView extends VerticalLayout
         sitdown.setCaption(SIT_DOWN_TEXT);
     }
 
+    public void setInfo(GameInfo gi) {
+        gameName.setValue("Game: " + gi.getSettings().getName());
+        players.setValue("Players: " + gi.getPlayersNumber() + "/" + gi.getSettings().getMaxPlayers());
+        rounds.setValue("Rounds to win: " + gi.getSettings().getRoundsToWin());
+        turns.setValue("Max inactive turrns: " + gi.getSettings().getMaxInactiveTurns());
+        time.setValue("Time for move: " + gi.getSettings().getTimeForMove());
+    }
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         standUp();
+        for(LobbyViewListener listener : listeners) {
+            listener.buttonClick(INFO_TEXT);
+        }
     }
 
     @Override

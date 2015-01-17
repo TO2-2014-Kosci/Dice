@@ -8,6 +8,7 @@ import pl.edu.agh.to2.webgui.view.GameView;
 import pl.edu.agh.to2.webgui.view.ILobbyView;
 import pl.edu.agh.to2.webgui.view.LobbyView;
 import pl.edu.agh.to2.webgui.view.MainView;
+import to2.dice.game.GameInfo;
 import to2.dice.game.GameState;
 import to2.dice.game.Player;
 import to2.dice.messaging.LocalConnectionProxy;
@@ -63,6 +64,9 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
                 view.showNotification(response.message, "failure");
             }
         }
+        else if(operation.equals(LobbyView.INFO_TEXT)) {
+            buildInfo();
+        }
 
     }
 
@@ -73,10 +77,21 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
             playersNames.add(player.getName());
         }
         view.setPlayersList(playersNames);
+        buildInfo();
     }
 
     public void startGame() {
         view.getUI().getSession().setAttribute("state", GameView.NAME);
         view.getUI().getNavigator().navigateTo(GameView.NAME);
+    }
+
+    public void buildInfo() {
+        List<GameInfo> gameInfoList = lcp.getRoomList();
+        for(GameInfo gi : gameInfoList) {
+            if(gi.getSettings().getName().equals(view.getUI().getSession().getAttribute("gameName"))) {
+                view.setInfo(gi);
+                return;
+            }
+        }
     }
 }
