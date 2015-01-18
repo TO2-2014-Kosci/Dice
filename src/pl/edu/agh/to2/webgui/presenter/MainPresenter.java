@@ -34,14 +34,14 @@ public class MainPresenter implements IMainView.MainViewListener {
         Response response = lcp.joinRoom(gameName);
         if (response.isSuccess()) {
             view.getUI().getSession().setAttribute("gameName", gameName);
-            if(isStarted) { //TODO chyba mozna wywalic
-                view.getUI().getSession().setAttribute("state", GameView.NAME);
-                view.getUI().getNavigator().navigateTo(GameView.NAME);
-            }
-            else {
+//            if(isStarted) {
+//                view.getUI().getSession().setAttribute("state", GameView.NAME);
+//                view.getUI().getNavigator().navigateTo(GameView.NAME);
+//            }
+//            else {
                 view.getUI().getSession().setAttribute("state", LobbyView.NAME);
                 view.getUI().getNavigator().navigateTo(LobbyView.NAME);
-            }
+//            }
         }
         else {
             view.showNotification(response.message, "failure");
@@ -54,7 +54,7 @@ public class MainPresenter implements IMainView.MainViewListener {
             switch (command) {
                 case MainView.LOGOUT_TEXT:
                     try {
-                        Response response = lcp.logout((String) VaadinSession.getCurrent().getAttribute("user")); //TODO dodac logout
+                        Response response = lcp.logout((String) VaadinSession.getCurrent().getAttribute("user"));
                         if (response.isSuccess()) {
                             VaadinSession.getCurrent().setAttribute("user", null);
                             view.showNotification("You have successfully logged out", "success");

@@ -26,23 +26,20 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
         this.view = view;
         this.view.addListener(this);
         this.lcp = lcp;
-//        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
     }
 
     @Override
     public void buttonClick(String operation) {
         if(operation != null) {
             if (operation.equals(CreateGameView.CREATE_TEXT)) {
-                Response response = null;
-                GameSettings gs = null;
+                GameSettings gs;
                 try {
                     gs = buildGameSettings();
                 } catch (NumberFormatException | NullPointerException e) {
                     view.showNotification("Please put valid settings", "failure");
                     return;
                 }
-                System.out.println(lcp.toString());
-                response = lcp.createRoom(gs);
+                Response response = lcp.createRoom(gs);
                 if (response.isSuccess()) {
                     view.getUI().getSession().setAttribute("gameName", gs.getName());
                     view.getUI().getSession().setAttribute("state", LobbyView.NAME);
@@ -65,7 +62,7 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
             switch (operation) {
                 case CreateGameView.LOGOUT_TEXT:
                     try {
-                        Response response = lcp.logout((String) VaadinSession.getCurrent().getAttribute("user")); //TODO dodac logout
+                        Response response = lcp.logout((String) VaadinSession.getCurrent().getAttribute("user"));
                         if(response.isSuccess()) {
                             VaadinSession.getCurrent().setAttribute("user", null);
                             view.showNotification("You have successfully logged out", "success");
