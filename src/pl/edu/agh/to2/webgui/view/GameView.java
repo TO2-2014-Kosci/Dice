@@ -2,16 +2,19 @@ package pl.edu.agh.to2.webgui.view;
 
 import com.google.gwt.layout.client.*;
 import com.google.gwt.layout.client.Layout;
+import com.google.gwt.user.client.Timer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.commons.lang3.time.StopWatch;
 import pl.edu.agh.to2.webgui.presenter.GamePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by lukasz on 01.12.14.
@@ -26,47 +29,24 @@ public class GameView extends VerticalLayout
 
     List<GameViewListener> listeners = new ArrayList<GameViewListener>();
     Table players = new Table();
-    Panel generalPanel = new Panel();
     Panel dicesPanel = new Panel("Your dices");
     private List<CheckBox> checkBoxes = new ArrayList<CheckBox>();
     private Button standUp;
     private Button reroll;
-    private Button leave;
     private Label header;
     private Label info = new Label();
     private Label roundInfo = new Label();
+    private Label countDown = new Label("Time left: ");
+    private ProgressBar progressBar = new ProgressBar(0.0f);
 
     public GameView() {
-//        new GamePresenter(this);
-        prepareView();
-    }
-
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
-    }
-
-    @Override
-    public void buttonClick(Button.ClickEvent clickEvent) {
-        for(GameViewListener gameViewListener : listeners){
-            gameViewListener.buttonClick(clickEvent.getButton().getCaption());
-        }
-    }
-
-    @Override
-    public void addListener(GameViewListener listener) {
-        listeners.add(listener);
-    }
-
-    private void prepareView() {
+        setSizeFull();
 
         createDicesPanel();
         populateTable();
-        header = new Label("Poker game");
-        header.addStyleName("h1 align-center");
-        addAndSetComponent(this, header, Alignment.TOP_CENTER);
-        generalPanel.setContent(createGeneralLayout());
-        addAndSetComponent(this, generalPanel, Alignment.MIDDLE_CENTER);
+
+        addAndSetComponent(this, createGeneralLayout(), Alignment.MIDDLE_CENTER);
+        addStyleName("game-background");
 
     }
 
@@ -104,13 +84,11 @@ public class GameView extends VerticalLayout
     private VerticalLayout createGeneralLayout() {
 
         VerticalLayout generalPanelLayout = new VerticalLayout();
+        generalPanelLayout.setSizeFull();
 
-        roundInfo.addStyleName("h2 align-center");
-        addAndSetComponent(generalPanelLayout, roundInfo, Alignment.TOP_CENTER);
+        addAndSetComponent(generalPanelLayout, createHeaders(), Alignment.TOP_CENTER);
 
-        info.addStyleName("h2 align-center");
-        addAndSetComponent(generalPanelLayout, info, Alignment.TOP_CENTER);
-
+        players.setSizeFull();
         addAndSetComponent(generalPanelLayout, players, Alignment.TOP_CENTER);
         addAndSetComponent(generalPanelLayout, dicesPanel, Alignment.MIDDLE_CENTER);
 
@@ -120,28 +98,73 @@ public class GameView extends VerticalLayout
         reroll.setVisible(false);
         addAndSetComponent(generalPanelLayout, reroll, Alignment.BOTTOM_CENTER);
 
+        HorizontalLayout buttons = new HorizontalLayout();
         standUp = new Button(STAND_UP_TEXT, this);
         standUp.addStyleName(ValoTheme.BUTTON_SMALL);
-        addAndSetComponent(generalPanelLayout, standUp, Alignment.BOTTOM_LEFT);
         standUp.setVisible(false);
+        Button leave = new Button(LEAVE_TEXT, this);
+        leave.setStyleName(ValoTheme.BUTTON_SMALL);
+        buttons.addComponent(standUp);
+        buttons.addComponent(leave);
+        buttons.setSpacing(true);
 
-        leave = new Button(LEAVE_TEXT, this);
-        leave.addStyleName(ValoTheme.BUTTON_SMALL);
-        addAndSetComponent(generalPanelLayout, leave, Alignment.BOTTOM_LEFT);
+        addAndSetComponent(generalPanelLayout, buttons, Alignment.BOTTOM_CENTER);
 
         generalPanelLayout.setMargin(true);
         generalPanelLayout.setSpacing(true);
+        generalPanelLayout.setSizeUndefined();
 
         return generalPanelLayout;
+    }
+
+    private VerticalLayout createHeaders() {
+        VerticalLayout headersVerticalLayout = new VerticalLayout();
+        headersVerticalLayout.setSizeFull();
+        headersVerticalLayout.setMargin(true);
+        headersVerticalLayout.setStyleName("well");
+
+        header = new Label("Poker game");
+        header.addStyleName("h1 bold align-center");
+        addAndSetComponent(headersVerticalLayout, header, Alignment.TOP_CENTER);
+
+        roundInfo.addStyleName("huge align-center");
+        addAndSetComponent(headersVerticalLayout, roundInfo, Alignment.TOP_CENTER);
+
+        info.addStyleName("huge align-center padding ");
+        addAndSetComponent(headersVerticalLayout, info, Alignment.TOP_CENTER);
+
+//      TODO ProgressBar debug - delete in final version
+//        countDown.addStyleName("align-center");
+//        addAndSetComponent(generalPanelLayout, countDown, Alignment.TOP_CENTER);
+
+        addAndSetComponent(headersVerticalLayout, progressBar, Alignment.TOP_CENTER);
+
+        return headersVerticalLayout;
     }
 
     private void populateTable(){
         players.addContainerProperty("Player", String.class, null);
         players.addContainerProperty("Score", Integer.class, null);
         players.addContainerProperty("Dices", String.class, null);
-        players.setColumnWidth("Dices", 100);
+    }
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
 
     }
+
+    @Override
+    public void buttonClick(Button.ClickEvent clickEvent) {
+        for(GameViewListener gameViewListener : listeners){
+            gameViewListener.buttonClick(clickEvent.getButton().getCaption());
+        }
+    }
+
+    @Override
+    public void addListener(GameViewListener listener) {
+        listeners.add(listener);
+    }
+
 
     @Override
     public void showNotification(String message, String style, Position position) {
@@ -191,6 +214,7 @@ public class GameView extends VerticalLayout
         roundInfo.setValue(message);
     }
 
+
     public void enablePlayerUI(boolean enable) {
         reroll.setVisible(enable);
         dicesPanel.setVisible(enable);
@@ -199,4 +223,19 @@ public class GameView extends VerticalLayout
     public void enableReroll(boolean enabled) {
         reroll.setEnabled(enabled);
     }
+
+    public void updateCountDown(String message) {
+        countDown.setValue(message);
+
+    }
+
+    public void updateProgressBar(float progress) {
+        progressBar.setValue(progress);
+    }
+
+    public void resetProgressBar() {
+        progressBar.setValue(0.0f);
+    }
+
+
 }
