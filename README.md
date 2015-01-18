@@ -10,7 +10,11 @@ How to run:
 
 4. Move Dice.war to {jetty base}\webapps
 
-5. Run start.jar: java -jar start.jar
+5. Download and install RabbitMQ Server: http://www.rabbitmq.com/download.html
+
+6. Run RabbitMQ Server
+
+6. Run start.jar: java -jar start.jar
 
 6. Goto http://localhost:8080/Dice
 
