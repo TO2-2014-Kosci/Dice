@@ -9,6 +9,7 @@ import pl.edu.agh.to2.webgui.presenter.LobbyPresenter;
 import pl.edu.agh.to2.webgui.presenter.ScorePresenter;
 import pl.edu.agh.to2.webgui.view.GameView;
 import pl.edu.agh.to2.webgui.view.LobbyView;
+import pl.edu.agh.to2.webgui.view.ScoreView;
 import to2.dice.game.GameState;
 import to2.dice.game.Player;
 import to2.dice.messaging.LocalConnectionProxy;
@@ -26,7 +27,7 @@ public class MessageListener implements ServerMessageListener {
     private GamePresenter gamePresenter;
     private LobbyPresenter lobbyPresenter;
     private ScorePresenter scorePresenter;
-    private boolean gameStarted = false;
+    private boolean finished = false;
 
     public MessageListener(WebGUI ui) {
         this.ui = ui;
@@ -34,19 +35,6 @@ public class MessageListener implements ServerMessageListener {
 
     @Override
     public void onGameStateChange(GameState gameState) {
-        System.out.println("Incomming message to:\t" + this.toString());
-        System.out.println(gameState.getClass().toString());
-
-        if (lobbyPresenter != null && gameState.isGameStarted() && !gameStarted) { //rozpoczecie gry
-            gameStarted = true;
-            ui.access(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("Starting game...");
-                    lobbyPresenter.startGame();
-                }
-            });
-        }
         ui.access(new GameStateFeeder(gameState));
     }
 
@@ -59,19 +47,23 @@ public class MessageListener implements ServerMessageListener {
 
         @Override
         public void run() {
-            if (lobbyPresenter != null && !gameState.isGameStarted() && !gameStarted) { //aktualizacja lobby
-                gameStarted = false;
-                lobbyPresenter.updateGameState(gameState);
-            }
-            else if(gamePresenter != null && gameState.isGameStarted() && gameStarted) { //aktualizacja gry
+            if (gameState.isGameStarted() && ui.getNavigator().getState().equals(LobbyView.NAME)) { // jestesmy w lobby i rozpoczynamy gre
+                lobbyPresenter.startGame();
                 gamePresenter.updateGameState(gameState);
             }
-            else if(gamePresenter != null && !gameState.isGameStarted() && gameStarted) {
+            if (!gameState.isGameStarted() && ui.getNavigator().getState().equals(LobbyView.NAME)) { // jestesmy w lobby i aktualizujemy liste graczy
+                lobbyPresenter.updateGameState(gameState);
+            }
+            else if(gameState.isGameStarted() && ui.getNavigator().getState().equals(GameView.NAME)) { // jestesmy w grze, gra trwa i aktualizujemy widok
+                gamePresenter.updateGameState(gameState);
+                finished = false;
+            }
+            else if(!gameState.isGameStarted() && ui.getNavigator().getState().equals(GameView.NAME)) { // jestesmy w grze, gra sie konczy
                 gamePresenter.endGame();
             }
-            if(scorePresenter != null && !gameState.isGameStarted() && gameStarted) {
-                gameStarted = false;
+            if(!gameState.isGameStarted() && ui.getNavigator().getState().equals(ScoreView.NAME) && !finished) {
                 scorePresenter.updateGameState(gameState);
+                finished = true;
             }
         }
     }
@@ -86,9 +78,5 @@ public class MessageListener implements ServerMessageListener {
 
     public void setScorePresenter(ScorePresenter scorePresenter) {
         this.scorePresenter = scorePresenter;
-    }
-
-    public void setGameStarted(Boolean gameStarted) { //TODO zmienic to
-        this.gameStarted = gameStarted;
     }
 }

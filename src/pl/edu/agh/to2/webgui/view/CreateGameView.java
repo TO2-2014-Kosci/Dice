@@ -7,14 +7,12 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import pl.edu.agh.to2.webgui.presenter.CreateGamePresenter;
 import to2.dice.game.BotLevel;
 import to2.dice.game.GameType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Maciej on 2014-12-02.
@@ -25,6 +23,7 @@ public class CreateGameView extends CustomComponent
     public static final String CANCEL_TEXT = "List of games";
     public static final String LOGOUT_TEXT = "Logout";
     public static final String CREATE_TEXT = "Create game";
+    public static final String RANDOM_TEXT = "Random game";
 
     private MenuBar menu = new MenuBar();
     private TextField gameName;
@@ -36,23 +35,30 @@ public class CreateGameView extends CustomComponent
     private TextField roundsToWin;
     private TextField easyBots;
     private TextField hardBots;
-
+    private MenuBar.MenuItem currentUser;
 
     public CreateGameView() {
-        CreateGamePresenter presenter = new CreateGamePresenter(this);
         setSizeFull();
-        GridLayout gridLayout = new GridLayout(1, 4);
-        gridLayout.setWidth("100%");
+//        setHeightUndefined();
+        setStyleName("create-background");
 
+        VerticalLayout panel = new VerticalLayout();
+        panel.setHeightUndefined();
+        panel.addComponent(buildMenu());
+        menu.setHeightUndefined();
+        panel.setComponentAlignment(menu, Alignment.TOP_CENTER);
 
-        gridLayout.addComponent(buildMenu(), 0, 0);
-        gridLayout.addComponent(buildGameForm(), 0, 1);
-        setCompositionRoot(gridLayout);
+        Component gameForm = buildGameForm();
+        panel.addComponent(gameForm);
+        panel.setComponentAlignment(gameForm, Alignment.MIDDLE_CENTER);
+
+        setCompositionRoot(panel);
     }
 
     private Component buildMenu() {
         menu.setWidth("100%");
-        MenuBar.MenuItem cancel = menu.addItem(CANCEL_TEXT, FontAwesome.LIST, this);
+        menu.addItem(CANCEL_TEXT, FontAwesome.LIST, this);
+        menu.addItem(RANDOM_TEXT, FontAwesome.RANDOM, this);
 
         return menu;
     }
@@ -60,6 +66,11 @@ public class CreateGameView extends CustomComponent
     private Component buildGameForm() {
         VerticalLayout fields = new VerticalLayout();
         fields.setSpacing(true);
+
+        Label header = new Label("Create new game");
+        header.setStyleName("huge bold");
+        fields.addComponent(header);
+        fields.setComponentAlignment(header, Alignment.TOP_CENTER);
 
         gameName = new TextField("Game Name");
         gameType = new ComboBox("Game type");
@@ -72,15 +83,21 @@ public class CreateGameView extends CustomComponent
         easyBots = new TextField("Number of easy bots");
         hardBots = new TextField("Number of hard bots");
         setValidation();
+
+//        HorizontalLayout buttons = new HorizontalLayout();
+//        buttons.setSpacing(true);
         final Button createGame = new Button(CREATE_TEXT, this);
+        createGame.setStyleName(ValoTheme.BUTTON_PRIMARY);
         final Button cancel = new Button(CANCEL_TEXT, this);
+//        buttons.addComponents(createGame, cancel);
 
         fields.addComponents(gameName, gameType, playersNumber, timeForMove, maxInactiveTurns, roundsToWin, easyBots, hardBots, createGame, cancel);
+        fields.setMargin(true);
         return fields;
     }
 
     private void setValidation() {
-        RegexpValidator num = new RegexpValidator("\\d+", "This field should contain only numbers");
+        RegexpValidator num = new RegexpValidator("\\d+", true, "This field should contain only numbers");
         gameName.setRequired(true);
         gameType.setRequired(true);
 //        diceNumber.addValidator(num);
@@ -100,9 +117,11 @@ public class CreateGameView extends CustomComponent
     }
 
     @Override
-    public void showNotification(String message) {
-        Notification notification = new Notification(message, Notification.TYPE_ERROR_MESSAGE);
+    public void showNotification(String message, String style) {
+        Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);
+        notification.setStyleName(style);
+        notification.setDelayMsec(1000);
         notification.show(Page.getCurrent());
     }
 
@@ -129,9 +148,13 @@ public class CreateGameView extends CustomComponent
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        MenuBar.MenuItem currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
-        MenuBar.MenuItem logout = currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
-
+        if (currentUser == null) {
+            currentUser = menu.addItem(String.valueOf(getSession().getAttribute("user")), FontAwesome.USER, null);
+            MenuBar.MenuItem logout = currentUser.addItem(LOGOUT_TEXT, FontAwesome.SIGN_OUT, this);
+        }
+        else {
+            currentUser.setText((String)getSession().getAttribute("user"));
+        }
     }
 
     public String getGameName() {
@@ -168,5 +191,17 @@ public class CreateGameView extends CustomComponent
         bots.put(BotLevel.EASY, Integer.parseInt(easyBots.getValue()));
         bots.put(BotLevel.HARD, Integer.parseInt(hardBots.getValue()));
         return bots;
+    }
+
+    public void setRandom() {
+        Random random = new Random();
+        gameName.setValue("Game" + System.currentTimeMillis());
+        gameType.setValue(GameType.values()[random.nextInt(3)]);
+        playersNumber.setValue(((Integer) random.nextInt(5)).toString());
+        timeForMove.setValue(((Integer)(random.nextInt(1000) + 10)).toString());
+        maxInactiveTurns.setValue(((Integer)random.nextInt(7)).toString());
+        roundsToWin.setValue(((Integer)(random.nextInt(9) + 1)).toString());
+        easyBots.setValue(((Integer)(random.nextInt(9) + 1)).toString());
+        hardBots.setValue(((Integer)(random.nextInt(9) + 1)).toString());
     }
 }

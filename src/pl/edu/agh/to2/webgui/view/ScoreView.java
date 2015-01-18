@@ -3,8 +3,10 @@ package pl.edu.agh.to2.webgui.view;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
+import com.vaadin.server.Responsive;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import pl.edu.agh.to2.webgui.presenter.ScorePresenter;
 
 import java.util.ArrayList;
@@ -23,27 +25,47 @@ public class ScoreView extends VerticalLayout
     Table players = new Table();
 
     public ScoreView() {
-        new ScorePresenter(this);
         setSizeFull();
+//        setHeightUndefined();
+        setSpacing(true);
+        setStyleName("score-background");
 
-        Component layout = buildScoreTable();
-        addComponent(layout);
-        setComponentAlignment(layout, Alignment.MIDDLE_CENTER);
-
+        Component scoreTable = buildScoreTable();
+        addComponent(scoreTable);
+        setComponentAlignment(scoreTable, Alignment.MIDDLE_CENTER);
     }
 
     private Component buildScoreTable() {
-        GridLayout layout = new GridLayout(1, 2);
+        VerticalLayout layout = new VerticalLayout();
+        layout.setSizeUndefined();
+        layout.addStyleName("well");
+        layout.setSpacing(true);
+        layout.setMargin(true);
+
+        //build header
+        Label header = new Label("Results");
+        header.setStyleName("huge bold");
+        header.setSizeUndefined();
+        layout.addComponent(header);
+        layout.setComponentAlignment(header, Alignment.TOP_CENTER);
+
+        //build table
+        players.setSelectable(false);
+        players.setSortEnabled(false);
+        players.setImmediate(true);
         players.addContainerProperty("Player", String.class, null);
         players.addContainerProperty("Score", Integer.class, null);
-        players.setPageLength(players.size());
-        players.setColumnWidth("Player", 100);
-        players.setColumnWidth("Score", 50);
-        players.addItem(new Object[]{"Y",2},1);
-        layout.addComponent(players, 0, 0);
+        players.setColumnWidth("Score", 80);
+        players.setRowHeaderMode(Table.RowHeaderMode.INDEX);
+        layout.addComponent(players);
+        layout.setComponentAlignment(players, Alignment.MIDDLE_CENTER);
 
+        //build button
         final Button exit = new Button(EXIT_TEXT, this);
-        layout.addComponent(exit, 0, 1);
+        exit.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        exit.setSizeUndefined();
+        layout.addComponent(exit);
+        layout.setComponentAlignment(exit, Alignment.BOTTOM_CENTER);
 
         return layout;
     }
@@ -61,9 +83,11 @@ public class ScoreView extends VerticalLayout
     }
 
     @Override
-    public void showNotification(String message) {
+    public void showNotification(String message, String style) {
         Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);
+        notification.setStyleName(style);
+        notification.setDelayMsec(1000);
         notification.show(Page.getCurrent());
     }
 
@@ -78,5 +102,7 @@ public class ScoreView extends VerticalLayout
             players.addItem(updatedPlayer, null);
         }
         players.sort(new Object[] {"Score"}, new boolean[]{false});
+        if(players.size() > 10) players.setPageLength(10);
+        else players.setPageLength(players.size());
     }
 }

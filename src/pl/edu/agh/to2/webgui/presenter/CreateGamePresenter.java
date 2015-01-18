@@ -22,34 +22,35 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
     private CreateGameView view;
     private LocalConnectionProxy lcp;
 
-    public CreateGamePresenter(CreateGameView view) {
+    public CreateGamePresenter(CreateGameView view, LocalConnectionProxy lcp) {
         this.view = view;
         this.view.addListener(this);
-//        this.lcp = WebGUI.lcp;
-        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
+        this.lcp = lcp;
     }
 
     @Override
     public void buttonClick(String operation) {
         if(operation != null) {
             if (operation.equals(CreateGameView.CREATE_TEXT)) {
-                Response response = null;
-                GameSettings gs = null;
+                GameSettings gs;
                 try {
                     gs = buildGameSettings();
                 } catch (NumberFormatException | NullPointerException e) {
-                    view.showNotification("Please put valid settings");
+                    view.showNotification("Please put valid settings", "failure");
                     return;
                 }
-                response = lcp.createRoom(gs);
+                Response response = lcp.createRoom(gs);
                 if (response.isSuccess()) {
+                    view.getUI().getSession().setAttribute("gameName", gs.getName());
+                    view.getUI().getSession().setAttribute("state", LobbyView.NAME);
                     view.getUI().getNavigator().navigateTo(LobbyView.NAME);
                 }
                 else {
-                    view.showNotification(response.message);
+                    view.showNotification(response.message, "failure");
                 }
             }
             else if (operation.equals(CreateGameView.CANCEL_TEXT)) {
+                view.getUI().getSession().setAttribute("state", MainView.NAME);
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
             }
         }
@@ -58,11 +59,29 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
     @Override
     public void menuSelected(String operation) {
         if(operation != null) {
-            if (operation.equals(CreateGameView.LOGOUT_TEXT)) {
-                VaadinSession.getCurrent().setAttribute("user", null);
-                view.getUI().getNavigator().navigateTo(LoginView.NAME);
-            } else if (operation.equals(CreateGameView.CANCEL_TEXT)) {
-                view.getUI().getNavigator().navigateTo(MainView.NAME);
+            switch (operation) {
+                case CreateGameView.LOGOUT_TEXT:
+                    try {
+                        Response response = lcp.logout((String) VaadinSession.getCurrent().getAttribute("user"));
+                        if(response.isSuccess()) {
+                            VaadinSession.getCurrent().setAttribute("user", null);
+                            view.showNotification("You have successfully logged out", "success");
+                            view.getUI().getSession().setAttribute("state", LoginView.NAME);
+                            view.getUI().getNavigator().navigateTo(LoginView.NAME);
+                        }
+                        else {
+                            view.showNotification(response.message, "failure");
+                        }
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    }
+                case CreateGameView.CANCEL_TEXT:
+                    view.getUI().getSession().setAttribute("state", MainView.NAME);
+                    view.getUI().getNavigator().navigateTo(MainView.NAME);
+                    break;
+                case CreateGameView.RANDOM_TEXT:
+                    view.setRandom();
+                    break;
             }
         }
     }

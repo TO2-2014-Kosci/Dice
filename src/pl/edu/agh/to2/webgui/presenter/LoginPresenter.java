@@ -20,9 +20,9 @@ public class LoginPresenter implements ILoginView.LoginViewListener {
     private LocalConnectionProxy lcp;
 
 
-    public LoginPresenter(LoginView view) {
+    public LoginPresenter(LoginView view, LocalConnectionProxy lcp) {
         this.view = view;
-        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
+        this.lcp = lcp;
         view.addListener(this);
     }
 
@@ -33,6 +33,7 @@ public class LoginPresenter implements ILoginView.LoginViewListener {
             if (response.isSuccess()) {
                 System.out.println("User logged in: " + username);
                 VaadinSession.getCurrent().setAttribute("user", username);
+                view.getUI().getSession().setAttribute("state", MainView.NAME);
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
             }
             else {
@@ -40,7 +41,7 @@ public class LoginPresenter implements ILoginView.LoginViewListener {
             }
         }
         else {
-            view.showNotification("Enter valid username!");
+            view.showNotification("Login can't be empty");
         }
 
     }

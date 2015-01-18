@@ -18,13 +18,14 @@ import java.util.List;
  */
 public class ScorePresenter implements IScoreView.ScoreViewListener {
     private ScoreView view;
-//    private LocalConnectionProxy lcp;
+    private LocalConnectionProxy lcp;
 
-    public ScorePresenter(ScoreView scoreView) {
+    public ScorePresenter(ScoreView scoreView, LocalConnectionProxy lcp) {
         this.view = scoreView;
         scoreView.addListener(this);
+        this.lcp = lcp;
 //        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
-        ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setScorePresenter(this);
+//        ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setScorePresenter(this);
     }
 
     @Override
@@ -32,13 +33,13 @@ public class ScorePresenter implements IScoreView.ScoreViewListener {
         if(operation.equals(ScoreView.EXIT_TEXT)) {
 //            Response response = lcp.leaveRoom();
 //            if(response.isSuccess()) {
+                view.getUI().getSession().setAttribute("state", MainView.NAME);
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
 //            }
 //            else {
-//                view.showNotification(response.message);
+//                view.showNotification(response.message, "failure");
 //            }
         }
-
     }
 
     public void updateGameState(GameState gameState) {
