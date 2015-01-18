@@ -31,6 +31,7 @@ public class GameView extends VerticalLayout
     Table players = new Table();
     Panel generalPanel = new Panel();
     Panel dicesPanel = new Panel("Your dices");
+    Panel headers = new Panel();
     private List<CheckBox> checkBoxes = new ArrayList<CheckBox>();
     private Button standUp;
     private Button reroll;
@@ -43,6 +44,7 @@ public class GameView extends VerticalLayout
     public GameView() {
 //        new GamePresenter(this);
         prepareView();
+
 
     }
 
@@ -67,11 +69,9 @@ public class GameView extends VerticalLayout
 
         createDicesPanel();
         populateTable();
-        header = new Label("Poker game");
-        header.addStyleName("h1 align-center");
-        addAndSetComponent(this, header, Alignment.TOP_CENTER);
         generalPanel.setContent(createGeneralLayout());
         addAndSetComponent(this, generalPanel, Alignment.MIDDLE_CENTER);
+        generalPanel.setSizeFull();
 
     }
 
@@ -110,17 +110,9 @@ public class GameView extends VerticalLayout
 
         VerticalLayout generalPanelLayout = new VerticalLayout();
 
-        roundInfo.addStyleName("h2 align-center");
-        addAndSetComponent(generalPanelLayout, roundInfo, Alignment.TOP_CENTER);
-
-        info.addStyleName("h2 align-center");
-        addAndSetComponent(generalPanelLayout, info, Alignment.TOP_CENTER);
-
-//      TODO ProgressBar debug - delete in final version
-//        countDown.addStyleName("align-center");
-//        addAndSetComponent(generalPanelLayout, countDown, Alignment.TOP_CENTER);
-
-        addAndSetComponent(generalPanelLayout, progressBar, Alignment.TOP_CENTER);
+        headers.setContent(createHeaders());
+        headers.setWidth("350");
+        addAndSetComponent(generalPanelLayout, headers, Alignment.TOP_CENTER);
 
         addAndSetComponent(generalPanelLayout, players, Alignment.TOP_CENTER);
         addAndSetComponent(generalPanelLayout, dicesPanel, Alignment.MIDDLE_CENTER);
@@ -142,8 +134,35 @@ public class GameView extends VerticalLayout
 
         generalPanelLayout.setMargin(true);
         generalPanelLayout.setSpacing(true);
+        generalPanelLayout.addStyleName("game-background");
+        generalPanelLayout.setSizeFull();
 
         return generalPanelLayout;
+    }
+
+    private VerticalLayout createHeaders() {
+        VerticalLayout headersVerticalLayout = new VerticalLayout();
+
+        header = new Label("Poker game");
+        header.addStyleName("h1 align-center");
+        addAndSetComponent(headersVerticalLayout, header, Alignment.TOP_CENTER);
+
+        roundInfo.addStyleName("h2 align-center");
+        addAndSetComponent(headersVerticalLayout, roundInfo, Alignment.TOP_CENTER);
+
+        info.addStyleName("h2 align-center");
+        addAndSetComponent(headersVerticalLayout, info, Alignment.TOP_CENTER);
+
+//      TODO ProgressBar debug - delete in final version
+//        countDown.addStyleName("align-center");
+//        addAndSetComponent(generalPanelLayout, countDown, Alignment.TOP_CENTER);
+
+        addAndSetComponent(headersVerticalLayout, progressBar, Alignment.TOP_CENTER);
+
+        headersVerticalLayout.setMargin(true);
+        headersVerticalLayout.setSpacing(true);
+
+        return headersVerticalLayout;
     }
 
     private void populateTable(){
