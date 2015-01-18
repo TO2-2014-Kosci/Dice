@@ -7,29 +7,35 @@
 .login-background { //ok 3 v 5 v 6
   background: url(img/dices3.jpg) no-repeat;
   background-size: cover;
+  overflow-y: auto ! important;
 }
 
 .main-background { //ok 2
   background: url(img/dices2.jpg) no-repeat;
   background-size: cover;
+  overflow-y: auto ! important;
 }
 
 .create-background { //ok 1
   background: url(img/dices.jpg) no-repeat;
   background-size: cover;
+  overflow-y: auto ! important;
 }
 
 .lobby-background { //ok 4 malo widoczny napis
   background: url(img/dices4.jpg) no-repeat;
   background-size: cover;
+  overflow-y: auto ! important;
 }
 
 .game-background {
   background: url(img/dices6.jpg) no-repeat;
   background-size: cover;
+  overflow-y: auto ! important;
 }
 
 .score-background { //5 v 6
   background: url(img/dices5.jpg) no-repeat;
   background-size: cover;
+  overflow-y: auto ! important;
 }

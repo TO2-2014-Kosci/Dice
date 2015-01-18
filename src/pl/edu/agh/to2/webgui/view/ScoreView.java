@@ -56,6 +56,7 @@ public class ScoreView extends VerticalLayout
         players.addContainerProperty("Player", String.class, null);
         players.addContainerProperty("Score", Integer.class, null);
         players.setColumnWidth("Score", 80);
+        players.setRowHeaderMode(Table.RowHeaderMode.INDEX);
         layout.addComponent(players);
         layout.setComponentAlignment(players, Alignment.MIDDLE_CENTER);
 
@@ -101,7 +102,7 @@ public class ScoreView extends VerticalLayout
             players.addItem(updatedPlayer, null);
         }
         players.sort(new Object[] {"Score"}, new boolean[]{false});
-        if(players.size() > 5) players.setPageLength(5);
+        if(players.size() > 10) players.setPageLength(10);
         else players.setPageLength(players.size());
     }
 }
