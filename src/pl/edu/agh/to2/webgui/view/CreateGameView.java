@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * Created by Maciej on 2014-12-02.
  */
-public class CreateGameView extends VerticalLayout
+public class CreateGameView extends CustomComponent
         implements ICreateGameView, View, Button.ClickListener, MenuBar.Command {
     public static final String NAME = "create";
     public static final String CANCEL_TEXT = "List of games";
@@ -39,15 +39,20 @@ public class CreateGameView extends VerticalLayout
 
     public CreateGameView() {
         setSizeFull();
-        setHeightUndefined();
+//        setHeightUndefined();
+        setStyleName("create-background");
 
-        addComponent(buildMenu());
+        VerticalLayout panel = new VerticalLayout();
+        panel.setHeightUndefined();
+        panel.addComponent(buildMenu());
         menu.setHeightUndefined();
-        setComponentAlignment(menu, Alignment.TOP_CENTER);
+        panel.setComponentAlignment(menu, Alignment.TOP_CENTER);
 
         Component gameForm = buildGameForm();
-        addComponent(gameForm);
-        setComponentAlignment(gameForm, Alignment.MIDDLE_CENTER);
+        panel.addComponent(gameForm);
+        panel.setComponentAlignment(gameForm, Alignment.MIDDLE_CENTER);
+
+        setCompositionRoot(panel);
     }
 
     private Component buildMenu() {
@@ -112,9 +117,10 @@ public class CreateGameView extends VerticalLayout
     }
 
     @Override
-    public void showNotification(String message) {
-        Notification notification = new Notification(message, Notification.TYPE_ERROR_MESSAGE);
+    public void showNotification(String message, String style) {
+        Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);
+        notification.setStyleName(style);
         notification.setDelayMsec(1000);
         notification.show(Page.getCurrent());
     }

@@ -9,5 +9,5 @@ public interface IScoreView {
     }
 
     public void addListener(ScoreViewListener listener);
-    public void showNotification(String message);
+    public void showNotification(String message, String style);
 }

@@ -27,6 +27,7 @@ public class MessageListener implements ServerMessageListener {
     private GamePresenter gamePresenter;
     private LobbyPresenter lobbyPresenter;
     private ScorePresenter scorePresenter;
+    private boolean finished = false;
 
     public MessageListener(WebGUI ui) {
         this.ui = ui;
@@ -34,12 +35,6 @@ public class MessageListener implements ServerMessageListener {
 
     @Override
     public void onGameStateChange(GameState gameState) {
-//        System.out.println("Incomming message to:\t" + this.toString());
-//        System.out.println(ui.getNavigator().getState());
-//        System.out.println(gameState.getClass().toString());
-//        System.out.println(gameState.getPlayersNumber());
-//        String state = ui.getNavigator().getState();
-
         ui.access(new GameStateFeeder(gameState));
     }
 
@@ -61,12 +56,14 @@ public class MessageListener implements ServerMessageListener {
             }
             else if(gameState.isGameStarted() && ui.getNavigator().getState().equals(GameView.NAME)) { // jestesmy w grze, gra trwa i aktualizujemy widok
                 gamePresenter.updateGameState(gameState);
+                finished = false;
             }
             else if(!gameState.isGameStarted() && ui.getNavigator().getState().equals(GameView.NAME)) { // jestesmy w grze, gra sie konczy
                 gamePresenter.endGame();
             }
-            if(!gameState.isGameStarted() && ui.getNavigator().getState().equals(ScoreView.NAME)) {
+            if(!gameState.isGameStarted() && ui.getNavigator().getState().equals(ScoreView.NAME) && !finished) {
                 scorePresenter.updateGameState(gameState);
+                finished = true;
             }
         }
     }

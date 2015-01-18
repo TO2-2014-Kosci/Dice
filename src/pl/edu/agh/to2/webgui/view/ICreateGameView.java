@@ -10,5 +10,5 @@ public interface ICreateGameView {
     }
 
     public void addListener(CreateGameViewListener listener);
-    public void showNotification(String message);
+    public void showNotification(String message, String style);
 }

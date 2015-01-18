@@ -24,7 +24,7 @@ import java.util.List;
  * Created by Maciej on 2014-11-28.
  */
 
-@Theme("valo")
+@Theme("mytheme")
 @Push
 @PreserveOnRefresh
 public class WebGUI extends UI {
@@ -66,7 +66,7 @@ public class WebGUI extends UI {
         getNavigator().addView(LobbyView.NAME, lobbyView);
 
         ScoreView scoreView = new ScoreView();
-        listener.setScorePresenter(new ScorePresenter(scoreView));
+        listener.setScorePresenter(new ScorePresenter(scoreView, lcp));
         getNavigator().addView(ScoreView.NAME, scoreView);
         
         getNavigator().addViewChangeListener(new ViewChangeListener() {

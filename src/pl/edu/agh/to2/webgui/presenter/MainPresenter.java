@@ -34,14 +34,14 @@ public class MainPresenter implements IMainView.MainViewListener {
         Response response = lcp.joinRoom(gameName);
         if (response.isSuccess()) {
             view.getUI().getSession().setAttribute("gameName", gameName);
-            if(isStarted) { //TODO chyba mozna wywalic
-                view.getUI().getSession().setAttribute("state", GameView.NAME);
-                view.getUI().getNavigator().navigateTo(GameView.NAME);
-            }
-            else {
+//            if(isStarted) {
+//                view.getUI().getSession().setAttribute("state", GameView.NAME);
+//                view.getUI().getNavigator().navigateTo(GameView.NAME);
+//            }
+//            else {
                 view.getUI().getSession().setAttribute("state", LobbyView.NAME);
                 view.getUI().getNavigator().navigateTo(LobbyView.NAME);
-            }
+//            }
         }
         else {
             view.showNotification(response.message, "failure");
@@ -51,22 +51,36 @@ public class MainPresenter implements IMainView.MainViewListener {
     @Override
     public void menuSelected(String command) {
         if(command != null) {
-            if (command.equals(MainView.LOGOUT_TEXT)) {
-//                Response response = lcp.l TODO dodac logout
-                VaadinSession.getCurrent().setAttribute("user", null);
-                view.getUI().getSession().setAttribute("state", LoginView.NAME);
-                view.getUI().getNavigator().navigateTo(LoginView.NAME);
-            } else if (command.equals(MainView.CREATE_TEXT)) {
-                view.getUI().getSession().setAttribute("state", CreateGameView.NAME);
-                view.getUI().getNavigator().navigateTo(CreateGameView.NAME);
-            } else if (command.equals(MainView.REFRESH_TEXT)) {
-                List<GameInfo> gamesList = lcp.getRoomList();
-                List<Object[]> games = new ArrayList<Object[]>();
-                for (GameInfo gi : gamesList) {
-                    games.add(new Object[] {gi.getSettings().getName(), gi.getPlayersNumber() + "/" + gi.getSettings().getMaxPlayers(), gi.getSettings().getGameType().toString(), gi.isGameStarted(), gi.getSettings().getRoundsToWin()});
-                }
-                view.refreshGamesList(games);
-                view.showNotification("Games list refreshed", "success");
+            switch (command) {
+                case MainView.LOGOUT_TEXT:
+                    try {
+                        Response response = lcp.logout((String) VaadinSession.getCurrent().getAttribute("user"));
+                        if (response.isSuccess()) {
+                            VaadinSession.getCurrent().setAttribute("user", null);
+                            view.showNotification("You have successfully logged out", "success");
+                            view.getUI().getSession().setAttribute("state", LoginView.NAME);
+                            view.getUI().getNavigator().navigateTo(LoginView.NAME);
+                        } else {
+                            view.showNotification(response.message, "failure");
+                        }
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
+                case MainView.CREATE_TEXT:
+                    view.getUI().getSession().setAttribute("state", CreateGameView.NAME);
+                    view.getUI().getNavigator().navigateTo(CreateGameView.NAME);
+                    break;
+                case MainView.REFRESH_TEXT:
+                    List<GameInfo> gamesList = lcp.getRoomList();
+                    List<Object[]> games = new ArrayList<Object[]>();
+                    for (GameInfo gi : gamesList) {
+                        games.add(new Object[]{gi.getSettings().getName(), gi.getPlayersNumber() + "/" + gi.getSettings().getMaxPlayers(), gi.getSettings().getGameType().toString(), gi.isGameStarted(), gi.getSettings().getRoundsToWin()});
+                    }
+                    view.refreshGamesList(games);
+                    view.showNotification("Games list refreshed", "success");
+                    break;
             }
         }
     }
