@@ -29,49 +29,24 @@ public class GameView extends VerticalLayout
 
     List<GameViewListener> listeners = new ArrayList<GameViewListener>();
     Table players = new Table();
-    Panel generalPanel = new Panel();
     Panel dicesPanel = new Panel("Your dices");
-    Panel headers = new Panel();
     private List<CheckBox> checkBoxes = new ArrayList<CheckBox>();
     private Button standUp;
     private Button reroll;
-    private Button leave;
     private Label header;
     private Label info = new Label();
     private Label roundInfo = new Label();
     private Label countDown = new Label("Time left: ");
     private ProgressBar progressBar = new ProgressBar(0.0f);
+
     public GameView() {
-//        new GamePresenter(this);
-        prepareView();
-
-
-    }
-
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
-    }
-
-    @Override
-    public void buttonClick(Button.ClickEvent clickEvent) {
-        for(GameViewListener gameViewListener : listeners){
-            gameViewListener.buttonClick(clickEvent.getButton().getCaption());
-        }
-    }
-
-    @Override
-    public void addListener(GameViewListener listener) {
-        listeners.add(listener);
-    }
-
-    private void prepareView() {
+        setSizeFull();
 
         createDicesPanel();
         populateTable();
-        generalPanel.setContent(createGeneralLayout());
-        addAndSetComponent(this, generalPanel, Alignment.MIDDLE_CENTER);
-        generalPanel.setSizeFull();
+
+        addAndSetComponent(this, createGeneralLayout(), Alignment.MIDDLE_CENTER);
+        addStyleName("game-background");
 
     }
 
@@ -109,11 +84,11 @@ public class GameView extends VerticalLayout
     private VerticalLayout createGeneralLayout() {
 
         VerticalLayout generalPanelLayout = new VerticalLayout();
+        generalPanelLayout.setSizeFull();
 
-        headers.setContent(createHeaders());
-        headers.setWidth("350");
-        addAndSetComponent(generalPanelLayout, headers, Alignment.TOP_CENTER);
+        addAndSetComponent(generalPanelLayout, createHeaders(), Alignment.TOP_CENTER);
 
+        players.setSizeFull();
         addAndSetComponent(generalPanelLayout, players, Alignment.TOP_CENTER);
         addAndSetComponent(generalPanelLayout, dicesPanel, Alignment.MIDDLE_CENTER);
 
@@ -123,34 +98,39 @@ public class GameView extends VerticalLayout
         reroll.setVisible(false);
         addAndSetComponent(generalPanelLayout, reroll, Alignment.BOTTOM_CENTER);
 
+        HorizontalLayout buttons = new HorizontalLayout();
         standUp = new Button(STAND_UP_TEXT, this);
         standUp.addStyleName(ValoTheme.BUTTON_SMALL);
-        addAndSetComponent(generalPanelLayout, standUp, Alignment.BOTTOM_LEFT);
         standUp.setVisible(false);
+        Button leave = new Button(LEAVE_TEXT, this);
+        leave.setStyleName(ValoTheme.BUTTON_SMALL);
+        buttons.addComponent(standUp);
+        buttons.addComponent(leave);
+        buttons.setSpacing(true);
 
-        leave = new Button(LEAVE_TEXT, this);
-        leave.addStyleName(ValoTheme.BUTTON_SMALL);
-        addAndSetComponent(generalPanelLayout, leave, Alignment.BOTTOM_LEFT);
+        addAndSetComponent(generalPanelLayout, buttons, Alignment.BOTTOM_CENTER);
 
         generalPanelLayout.setMargin(true);
         generalPanelLayout.setSpacing(true);
-        generalPanelLayout.addStyleName("game-background");
-        generalPanelLayout.setSizeFull();
+        generalPanelLayout.setSizeUndefined();
 
         return generalPanelLayout;
     }
 
     private VerticalLayout createHeaders() {
         VerticalLayout headersVerticalLayout = new VerticalLayout();
+        headersVerticalLayout.setSizeFull();
+        headersVerticalLayout.setMargin(true);
+        headersVerticalLayout.setStyleName("well");
 
         header = new Label("Poker game");
-        header.addStyleName("h1 align-center");
+        header.addStyleName("h1 bold align-center");
         addAndSetComponent(headersVerticalLayout, header, Alignment.TOP_CENTER);
 
-        roundInfo.addStyleName("h2 align-center");
+        roundInfo.addStyleName("huge align-center");
         addAndSetComponent(headersVerticalLayout, roundInfo, Alignment.TOP_CENTER);
 
-        info.addStyleName("h2 align-center");
+        info.addStyleName("huge align-center padding ");
         addAndSetComponent(headersVerticalLayout, info, Alignment.TOP_CENTER);
 
 //      TODO ProgressBar debug - delete in final version
@@ -159,9 +139,6 @@ public class GameView extends VerticalLayout
 
         addAndSetComponent(headersVerticalLayout, progressBar, Alignment.TOP_CENTER);
 
-        headersVerticalLayout.setMargin(true);
-        headersVerticalLayout.setSpacing(true);
-
         return headersVerticalLayout;
     }
 
@@ -169,9 +146,25 @@ public class GameView extends VerticalLayout
         players.addContainerProperty("Player", String.class, null);
         players.addContainerProperty("Score", Integer.class, null);
         players.addContainerProperty("Dices", String.class, null);
-        players.setColumnWidth("Dices", 100);
+    }
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
 
     }
+
+    @Override
+    public void buttonClick(Button.ClickEvent clickEvent) {
+        for(GameViewListener gameViewListener : listeners){
+            gameViewListener.buttonClick(clickEvent.getButton().getCaption());
+        }
+    }
+
+    @Override
+    public void addListener(GameViewListener listener) {
+        listeners.add(listener);
+    }
+
 
     @Override
     public void showNotification(String message, String style, Position position) {
