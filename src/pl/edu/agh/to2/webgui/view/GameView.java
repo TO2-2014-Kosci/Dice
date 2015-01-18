@@ -2,16 +2,19 @@ package pl.edu.agh.to2.webgui.view;
 
 import com.google.gwt.layout.client.*;
 import com.google.gwt.layout.client.Layout;
+import com.google.gwt.user.client.Timer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.commons.lang3.time.StopWatch;
 import pl.edu.agh.to2.webgui.presenter.GamePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by lukasz on 01.12.14.
@@ -35,10 +38,12 @@ public class GameView extends VerticalLayout
     private Label header;
     private Label info = new Label();
     private Label roundInfo = new Label();
-
+    private Label countDown = new Label("Time left: ");
+    private ProgressBar progressBar = new ProgressBar(0.0f);
     public GameView() {
 //        new GamePresenter(this);
         prepareView();
+
     }
 
     @Override
@@ -110,6 +115,12 @@ public class GameView extends VerticalLayout
 
         info.addStyleName("h2 align-center");
         addAndSetComponent(generalPanelLayout, info, Alignment.TOP_CENTER);
+
+//      TODO ProgressBar debug - delete in final version
+//        countDown.addStyleName("align-center");
+//        addAndSetComponent(generalPanelLayout, countDown, Alignment.TOP_CENTER);
+
+        addAndSetComponent(generalPanelLayout, progressBar, Alignment.TOP_CENTER);
 
         addAndSetComponent(generalPanelLayout, players, Alignment.TOP_CENTER);
         addAndSetComponent(generalPanelLayout, dicesPanel, Alignment.MIDDLE_CENTER);
@@ -191,6 +202,7 @@ public class GameView extends VerticalLayout
         roundInfo.setValue(message);
     }
 
+
     public void enablePlayerUI(boolean enable) {
         reroll.setVisible(enable);
         dicesPanel.setVisible(enable);
@@ -199,4 +211,19 @@ public class GameView extends VerticalLayout
     public void enableReroll(boolean enabled) {
         reroll.setEnabled(enabled);
     }
+
+    public void updateCountDown(String message) {
+        countDown.setValue(message);
+
+    }
+
+    public void updateProgressBar(float progress) {
+        progressBar.setValue(progress);
+    }
+
+    public void resetProgressBar() {
+        progressBar.setValue(0.0f);
+    }
+
+
 }
