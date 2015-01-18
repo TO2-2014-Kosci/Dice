@@ -117,9 +117,10 @@ public class CreateGameView extends CustomComponent
     }
 
     @Override
-    public void showNotification(String message) {
-        Notification notification = new Notification(message, Notification.TYPE_ERROR_MESSAGE);
+    public void showNotification(String message, String style) {
+        Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);
+        notification.setStyleName(style);
         notification.setDelayMsec(1000);
         notification.show(Page.getCurrent());
     }

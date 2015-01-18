@@ -38,7 +38,7 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
                 try {
                     gs = buildGameSettings();
                 } catch (NumberFormatException | NullPointerException e) {
-                    view.showNotification("Please put valid settings");
+                    view.showNotification("Please put valid settings", "failure");
                     return;
                 }
                 System.out.println(lcp.toString());
@@ -49,7 +49,7 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
                     view.getUI().getNavigator().navigateTo(LobbyView.NAME);
                 }
                 else {
-                    view.showNotification(response.message);
+                    view.showNotification(response.message, "failure");
                 }
             }
             else if (operation.equals(CreateGameView.CANCEL_TEXT)) {
@@ -64,10 +64,20 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
         if(operation != null) {
             switch (operation) {
                 case CreateGameView.LOGOUT_TEXT:
-                    VaadinSession.getCurrent().setAttribute("user", null);
-                    view.getUI().getSession().setAttribute("state", LoginView.NAME);
-                    view.getUI().getNavigator().navigateTo(LoginView.NAME);
-                    break;
+                    try {
+                        Response response = lcp.logout((String) VaadinSession.getCurrent().getAttribute("user")); //TODO dodac logout
+                        if(response.isSuccess()) {
+                            VaadinSession.getCurrent().setAttribute("user", null);
+                            view.showNotification("You have successfully logged out", "success");
+                            view.getUI().getSession().setAttribute("state", LoginView.NAME);
+                            view.getUI().getNavigator().navigateTo(LoginView.NAME);
+                        }
+                        else {
+                            view.showNotification(response.message, "failure");
+                        }
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    }
                 case CreateGameView.CANCEL_TEXT:
                     view.getUI().getSession().setAttribute("state", MainView.NAME);
                     view.getUI().getNavigator().navigateTo(MainView.NAME);
