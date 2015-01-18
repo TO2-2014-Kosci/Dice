@@ -54,6 +54,7 @@ public class GamePresenter implements IGameView.GameViewListener {
         if (operation.equalsIgnoreCase(GameView.LEAVE_TEXT)) {
             Response response = lcp.leaveRoom();
             if (response.isSuccess()) {
+                gotGameInfo = false;
                 view.showNotification("You left game", "success", Position.BOTTOM_CENTER);
                 view.getUI().getSession().setAttribute("state", MainView.NAME);
                 view.getUI().getNavigator().navigateTo(MainView.NAME);
