@@ -110,7 +110,7 @@ public class LobbyView extends VerticalLayout
         for(String playerName : playersList) {
             users.addItem(new Object[] {playerName}, null);
         }
-        if(users.size() > 10) users.setPageLength(10);
+        if(users.size() > 15) users.setPageLength(15);
         else users.setPageLength(users.size());
     }
 
