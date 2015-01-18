@@ -66,7 +66,7 @@ public class WebGUI extends UI {
         getNavigator().addView(LobbyView.NAME, lobbyView);
 
         ScoreView scoreView = new ScoreView();
-        listener.setScorePresenter(new ScorePresenter(scoreView));
+        listener.setScorePresenter(new ScorePresenter(scoreView, lcp));
         getNavigator().addView(ScoreView.NAME, scoreView);
         
         getNavigator().addViewChangeListener(new ViewChangeListener() {

@@ -82,9 +82,11 @@ public class ScoreView extends VerticalLayout
     }
 
     @Override
-    public void showNotification(String message) {
+    public void showNotification(String message, String style) {
         Notification notification = new Notification(message);
         notification.setPosition(Position.BOTTOM_CENTER);
+        notification.setStyleName(style);
+        notification.setDelayMsec(1000);
         notification.show(Page.getCurrent());
     }
 
