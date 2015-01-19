@@ -45,9 +45,6 @@ public class GamePresenter implements IGameView.GameViewListener {
         gameView.addListener(this);
         this.lcp = lcp;
 
-//        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
-//        this.username = (String) VaadinSession.getCurrent().getAttribute("user");
-//        ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setGamePresenter(this);
     }
 
     public void buttonClick(String operation) {
@@ -82,6 +79,8 @@ public class GamePresenter implements IGameView.GameViewListener {
     }
 
     public void updateGameState(GameState gameState) {
+        boolean exists;
+
         view.resetProgressBar();
         if (updateThread != null) {
             updateThread.interrupt();
@@ -95,9 +94,15 @@ public class GamePresenter implements IGameView.GameViewListener {
         if (gameState.getClass().equals(NGameState.class)) {
             view.setHeader("NGame: " + ((NGameState) gameState).getWinningNumber());
         }
-        view.setInfo("Current player: " + gameState.getCurrentPlayer().getName());
+        if (gameState.getCurrentPlayer() != null) {
+            view.setInfo("Current player: " + gameState.getCurrentPlayer().getName());
+        }
+        else {
+            view.showNotification("End of round", "dark", Position.MIDDLE_CENTER);
+        }
         List<Player> players = gameState.getPlayers();
         List<Object[]> updatedPlayersList = new ArrayList<Object[]>();
+        exists = false;
         for (Player p : players) {
             String playerName = p.getName();
             Integer playerScore = p.getScore();
@@ -106,15 +111,24 @@ public class GamePresenter implements IGameView.GameViewListener {
             if (playerName.equals(VaadinSession.getCurrent().getAttribute("user"))) {
                 view.enablePlayerUI(true);
                 view.setDices(playerDices);
+                exists = true;
             }
+        }
+        if(!exists) {
+//            view.showNotification("You've been kicked for prolonged inactivity", "system failure", Position.TOP_CENTER);
+            view.enablePlayerUI(false);
+//            isPlayer = false;
         }
         view.updatePlayersList(updatedPlayersList);
 
         this.username = (String) VaadinSession.getCurrent().getAttribute("user");
 
-        if (gameState.getCurrentPlayer().getName().equals(username)) {
+        if (gameState.getCurrentPlayer() != null && gameState.getCurrentPlayer().getName().equals(username)) {
             view.enableReroll(true);
             view.showNotification("Your turn", "dark", Position.MIDDLE_CENTER);
+        }
+        else {
+            view.enableReroll(false);
         }
 
         view.setRoundInfo("Round " + gameState.getCurrentRound() + " of " + roundsCount + " rounds ");

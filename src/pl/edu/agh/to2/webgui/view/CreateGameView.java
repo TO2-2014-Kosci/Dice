@@ -199,7 +199,7 @@ public class CreateGameView extends CustomComponent
         gameType.setValue(GameType.values()[random.nextInt(3)]);
         playersNumber.setValue(((Integer) random.nextInt(5)).toString());
         timeForMove.setValue(((Integer)(random.nextInt(1000) + 10)).toString());
-        maxInactiveTurns.setValue(((Integer)random.nextInt(7)).toString());
+        maxInactiveTurns.setValue(((Integer)(random.nextInt(7)+1)).toString());
         roundsToWin.setValue(((Integer)(random.nextInt(9) + 1)).toString());
         easyBots.setValue(((Integer)(random.nextInt(9) + 1)).toString());
         hardBots.setValue(((Integer)(random.nextInt(9) + 1)).toString());

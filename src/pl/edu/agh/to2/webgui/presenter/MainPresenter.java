@@ -54,7 +54,7 @@ public class MainPresenter implements IMainView.MainViewListener {
             switch (command) {
                 case MainView.LOGOUT_TEXT:
                     try {
-                        Response response = lcp.logout((String) VaadinSession.getCurrent().getAttribute("user"));
+                        Response response = lcp.logout();
                         if (response.isSuccess()) {
                             VaadinSession.getCurrent().setAttribute("user", null);
                             view.showNotification("You have successfully logged out", "success");
