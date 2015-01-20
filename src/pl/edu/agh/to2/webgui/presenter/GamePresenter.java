@@ -49,14 +49,13 @@ public class GamePresenter implements IGameView.GameViewListener {
     public void buttonClick(String operation) {
         if (operation.equalsIgnoreCase(GameView.LEAVE_TEXT)) {
             Response response = lcp.leaveRoom();
-            if (response.isSuccess()) {
-                gotGameInfo = false;
-                view.showNotification("You left game", "success", Position.BOTTOM_CENTER);
-                view.getUI().getSession().setAttribute("state", MainView.NAME);
-                view.getUI().getNavigator().navigateTo(MainView.NAME);
-            } else {
+            if (!response.isSuccess()) {
                 view.showNotification(response.message, "failure", Position.BOTTOM_CENTER);
             }
+            gotGameInfo = false;
+            view.showNotification("You left game", "success", Position.BOTTOM_CENTER);
+            view.getUI().getSession().setAttribute("state", MainView.NAME);
+            view.getUI().getNavigator().navigateTo(MainView.NAME);
         } else if (operation.equalsIgnoreCase(GameView.REROLL_TEXT)) {
             boolean[] dicesToReroll = view.getDices();
             Response response = null;
