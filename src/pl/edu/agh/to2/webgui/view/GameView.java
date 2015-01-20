@@ -27,6 +27,7 @@ public class GameView extends VerticalLayout
     public static final String REROLL_TEXT = "Reroll";
     public static final String STAND_UP_TEXT = "Stand up";
 
+    private boolean notificationFlag;
     List<GameViewListener> listeners = new ArrayList<GameViewListener>();
     Table players = new Table();
     Panel dicesPanel = new Panel("Your dices");
@@ -150,7 +151,7 @@ public class GameView extends VerticalLayout
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
+        notificationFlag = true;
     }
 
     @Override
@@ -237,5 +238,11 @@ public class GameView extends VerticalLayout
         progressBar.setValue(0.0f);
     }
 
+    public void setNotificationFlag(boolean b) {
+        notificationFlag = b;
+    }
 
+    public boolean getNotificationFlag() {
+        return notificationFlag;
+    }
 }

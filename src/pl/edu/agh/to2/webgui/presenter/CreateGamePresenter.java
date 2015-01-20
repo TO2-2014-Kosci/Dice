@@ -75,6 +75,7 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
                     } catch (TimeoutException e) {
                         e.printStackTrace();
                     }
+                    break;
                 case CreateGameView.CANCEL_TEXT:
                     view.getUI().getSession().setAttribute("state", MainView.NAME);
                     view.getUI().getNavigator().navigateTo(MainView.NAME);

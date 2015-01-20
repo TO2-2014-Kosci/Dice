@@ -39,6 +39,7 @@ public class GamePresenter implements IGameView.GameViewListener {
     private boolean gotGameInfo = false;
     private java.util.Timer timer = new java.util.Timer();
     private UpdateThread updateThread;
+    private boolean left = false;
 
     public GamePresenter(GameView gameView, LocalConnectionProxy lcp) {
         this.view = gameView;
@@ -71,6 +72,7 @@ public class GamePresenter implements IGameView.GameViewListener {
         } else if (operation.equalsIgnoreCase(GameView.STAND_UP_TEXT)) {
             Response response = lcp.standUp();
             if (response.isSuccess()) {
+                left = true;
                 view.showNotification("You stood up", "success", Position.BOTTOM_CENTER);
                 view.enablePlayerUI(false);
             }
@@ -85,9 +87,12 @@ public class GamePresenter implements IGameView.GameViewListener {
         if (updateThread != null) {
             updateThread.interrupt();
         }
-        updateThread = new UpdateThread();
-        updateThread.start();
-        if (gotGameInfo == false) {
+        if(gameState.getCurrentPlayer() != null) {
+            updateThread = new UpdateThread();
+            updateThread.start();
+        }
+
+        if (!gotGameInfo) {
             buildInfo();
             gotGameInfo = true;
         }
@@ -98,7 +103,7 @@ public class GamePresenter implements IGameView.GameViewListener {
             view.setInfo("Current player: " + gameState.getCurrentPlayer().getName());
         }
         else {
-            view.showNotification("End of round", "dark", Position.MIDDLE_CENTER);
+            view.setInfo("End of round");
         }
         List<Player> players = gameState.getPlayers();
         List<Object[]> updatedPlayersList = new ArrayList<Object[]>();
@@ -112,9 +117,18 @@ public class GamePresenter implements IGameView.GameViewListener {
                 view.enablePlayerUI(true);
                 view.setDices(playerDices);
                 exists = true;
+                view.setNotificationFlag(false);
             }
         }
         if(!exists) {
+            if(left) {
+                left = false;
+                view.setNotificationFlag(true);
+            }
+            else if(!view.getNotificationFlag()) {
+                view.showNotification("You've been kicked for prolonged inactivity", "system failure", Position.TOP_CENTER);
+                view.setNotificationFlag(true);
+            }
 //            view.showNotification("You've been kicked for prolonged inactivity", "system failure", Position.TOP_CENTER);
             view.enablePlayerUI(false);
 //            isPlayer = false;
@@ -131,8 +145,6 @@ public class GamePresenter implements IGameView.GameViewListener {
             view.enableReroll(false);
         }
 
-        view.setRoundInfo("Round " + gameState.getCurrentRound() + " of " + roundsCount + " rounds ");
-
 
 
     }
@@ -146,12 +158,13 @@ public class GamePresenter implements IGameView.GameViewListener {
     private void buildInfo() {
 
         List<GameInfo> gameInfoList = lcp.getRoomList();
-        if (gameInfoList != null) {
-            System.out.println("not null");
-        }
+//        if (gameInfoList != null) {
+//            System.out.println("not null");
+//        }
         for (GameInfo gi : gameInfoList) {
             if (gi.getSettings().getName().equals(view.getUI().getSession().getAttribute("gameName"))) {
                 roundsCount = gi.getSettings().getRoundsToWin();
+                view.setRoundInfo(roundsCount + " rounds to win ");
                 moveTime = gi.getSettings().getTimeForMove();
                 return;
             }
