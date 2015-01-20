@@ -134,10 +134,6 @@ public class GameView extends VerticalLayout
         info.addStyleName("huge align-center padding ");
         addAndSetComponent(headersVerticalLayout, info, Alignment.TOP_CENTER);
 
-//      TODO ProgressBar debug - delete in final version
-//        countDown.addStyleName("align-center");
-//        addAndSetComponent(generalPanelLayout, countDown, Alignment.TOP_CENTER);
-
         addAndSetComponent(headersVerticalLayout, progressBar, Alignment.TOP_CENTER);
 
         return headersVerticalLayout;
@@ -177,7 +173,7 @@ public class GameView extends VerticalLayout
     }
 
     public boolean[] getDices() {
-        boolean[] dices = new boolean[5]; //TODO ustawic jakis ludzki rozmiar
+        boolean[] dices = new boolean[5];
         for(int i = 0; i < 5; i++) {
             dices[i] = checkBoxes.get(i).getValue();
             checkBoxes.get(i).setValue(false);
@@ -223,11 +219,6 @@ public class GameView extends VerticalLayout
     }
     public void enableReroll(boolean enabled) {
         reroll.setEnabled(enabled);
-    }
-
-    public void updateCountDown(String message) {
-        countDown.setValue(message);
-
     }
 
     public void updateProgressBar(float progress) {

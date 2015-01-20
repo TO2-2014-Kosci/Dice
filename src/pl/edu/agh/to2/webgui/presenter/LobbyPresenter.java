@@ -85,7 +85,7 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
         view.getUI().getNavigator().navigateTo(GameView.NAME);
     }
 
-    public void buildInfo() {
+    private void buildInfo() {
         List<GameInfo> gameInfoList = lcp.getRoomList();
         for(GameInfo gi : gameInfoList) {
             if(gi.getSettings().getName().equals(view.getUI().getSession().getAttribute("gameName"))) {

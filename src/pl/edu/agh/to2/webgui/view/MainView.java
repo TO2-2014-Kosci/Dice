@@ -39,14 +39,9 @@ public class MainView extends VerticalLayout
 
     public MainView() {
         setSizeFull();
-//        setHeightUndefined();
         setStyleName("main-background");
 
         buildMenu();
-
-//        addComponent(buildMenu());
-//        menu.setHeightUndefined();
-//        setComponentAlignment(menu, Alignment.TOP_CENTER);
 
         Component gamesList = buildGamesList();
         addComponent(gamesList);
@@ -83,7 +78,6 @@ public class MainView extends VerticalLayout
         content.setComponentAlignment(join, Alignment.BOTTOM_CENTER);
 
         content.setSpacing(true);
-//        content.setMargin(true);
         return content;
     }
 
@@ -136,9 +130,8 @@ public class MainView extends VerticalLayout
         Object rowID = valueChangeEvent.getProperty().getValue();
         if(rowID != null) {
             String gameName = (String) servers.getContainerProperty(rowID, "Game name").getValue();
-            Boolean isStarted = (Boolean) servers.getContainerProperty(rowID, "Is started").getValue();
             for (MainViewListener listener : listeners) {
-                listener.valueChange(gameName, isStarted);
+                listener.valueChange(gameName);
             }
         }
     }

@@ -39,7 +39,7 @@ public class CreateGameView extends CustomComponent
 
     public CreateGameView() {
         setSizeFull();
-//        setHeightUndefined();
+
         setStyleName("create-background");
 
         VerticalLayout panel = new VerticalLayout();
@@ -84,12 +84,9 @@ public class CreateGameView extends CustomComponent
         hardBots = new TextField("Number of hard bots");
         setValidation();
 
-//        HorizontalLayout buttons = new HorizontalLayout();
-//        buttons.setSpacing(true);
         final Button createGame = new Button(CREATE_TEXT, this);
         createGame.setStyleName(ValoTheme.BUTTON_PRIMARY);
         final Button cancel = new Button(CANCEL_TEXT, this);
-//        buttons.addComponents(createGame, cancel);
 
         fields.addComponents(gameName, gameType, playersNumber, timeForMove, maxInactiveTurns, roundsToWin, easyBots, hardBots, createGame, cancel);
         fields.setMargin(true);
@@ -167,7 +164,7 @@ public class CreateGameView extends CustomComponent
 
     public int getDiceNumber() {
 //        return Integer.parseInt(diceNumber.getValue());
-        return 5; //TODO ilosc kosci
+        return 5;
     }
 
     public int getPlayersNumber() {

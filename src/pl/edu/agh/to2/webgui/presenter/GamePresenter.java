@@ -33,8 +33,6 @@ import java.util.concurrent.TimeoutException;
 public class GamePresenter implements IGameView.GameViewListener {
     private GameView view;
     private LocalConnectionProxy lcp;
-    private String username;
-    private int roundsCount;
     private int moveTime;
     private boolean gotGameInfo = false;
     private java.util.Timer timer = new java.util.Timer();
@@ -129,13 +127,11 @@ public class GamePresenter implements IGameView.GameViewListener {
                 view.showNotification("You've been kicked for prolonged inactivity", "system failure", Position.TOP_CENTER);
                 view.setNotificationFlag(true);
             }
-//            view.showNotification("You've been kicked for prolonged inactivity", "system failure", Position.TOP_CENTER);
             view.enablePlayerUI(false);
-//            isPlayer = false;
         }
         view.updatePlayersList(updatedPlayersList);
 
-        this.username = (String) VaadinSession.getCurrent().getAttribute("user");
+        String username = (String) VaadinSession.getCurrent().getAttribute("user");
 
         if (gameState.getCurrentPlayer() != null && gameState.getCurrentPlayer().getName().equals(username)) {
             view.enableReroll(true);
@@ -158,12 +154,10 @@ public class GamePresenter implements IGameView.GameViewListener {
     private void buildInfo() {
 
         List<GameInfo> gameInfoList = lcp.getRoomList();
-//        if (gameInfoList != null) {
-//            System.out.println("not null");
-//        }
+
         for (GameInfo gi : gameInfoList) {
             if (gi.getSettings().getName().equals(view.getUI().getSession().getAttribute("gameName"))) {
-                roundsCount = gi.getSettings().getRoundsToWin();
+                int roundsCount = gi.getSettings().getRoundsToWin();
                 view.setRoundInfo(roundsCount + " rounds to win ");
                 moveTime = gi.getSettings().getTimeForMove();
                 return;
@@ -188,7 +182,7 @@ public class GamePresenter implements IGameView.GameViewListener {
                             public void run() {
                                 float progress = (float) (count + 1) / (float) moveTime;
                                 view.updateProgressBar(progress);
-//                                view.updateCountDown("Time left: " + (moveTime - count - 1)); TODO Delete in final version (debug only)
+
                                 count++;
                             }
 
