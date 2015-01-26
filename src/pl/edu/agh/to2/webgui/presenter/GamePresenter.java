@@ -33,34 +33,29 @@ import java.util.concurrent.TimeoutException;
 public class GamePresenter implements IGameView.GameViewListener {
     private GameView view;
     private LocalConnectionProxy lcp;
-    private String username;
-    private int roundsCount;
     private int moveTime;
     private boolean gotGameInfo = false;
     private java.util.Timer timer = new java.util.Timer();
     private UpdateThread updateThread;
+    private boolean left = false;
 
     public GamePresenter(GameView gameView, LocalConnectionProxy lcp) {
         this.view = gameView;
         gameView.addListener(this);
         this.lcp = lcp;
 
-//        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
-//        this.username = (String) VaadinSession.getCurrent().getAttribute("user");
-//        ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setGamePresenter(this);
     }
 
     public void buttonClick(String operation) {
         if (operation.equalsIgnoreCase(GameView.LEAVE_TEXT)) {
             Response response = lcp.leaveRoom();
-            if (response.isSuccess()) {
-                gotGameInfo = false;
-                view.showNotification("You left game", "success", Position.BOTTOM_CENTER);
-                view.getUI().getSession().setAttribute("state", MainView.NAME);
-                view.getUI().getNavigator().navigateTo(MainView.NAME);
-            } else {
+            if (!response.isSuccess()) {
                 view.showNotification(response.message, "failure", Position.BOTTOM_CENTER);
             }
+            gotGameInfo = false;
+            view.showNotification("You left game", "success", Position.BOTTOM_CENTER);
+            view.getUI().getSession().setAttribute("state", MainView.NAME);
+            view.getUI().getNavigator().navigateTo(MainView.NAME);
         } else if (operation.equalsIgnoreCase(GameView.REROLL_TEXT)) {
             boolean[] dicesToReroll = view.getDices();
             Response response = null;
@@ -74,6 +69,7 @@ public class GamePresenter implements IGameView.GameViewListener {
         } else if (operation.equalsIgnoreCase(GameView.STAND_UP_TEXT)) {
             Response response = lcp.standUp();
             if (response.isSuccess()) {
+                left = true;
                 view.showNotification("You stood up", "success", Position.BOTTOM_CENTER);
                 view.enablePlayerUI(false);
             }
@@ -82,22 +78,33 @@ public class GamePresenter implements IGameView.GameViewListener {
     }
 
     public void updateGameState(GameState gameState) {
+        boolean exists;
+
         view.resetProgressBar();
         if (updateThread != null) {
             updateThread.interrupt();
         }
-        updateThread = new UpdateThread();
-        updateThread.start();
-        if (gotGameInfo == false) {
+        if(gameState.getCurrentPlayer() != null) {
+            updateThread = new UpdateThread();
+            updateThread.start();
+        }
+
+        if (!gotGameInfo) {
             buildInfo();
             gotGameInfo = true;
         }
         if (gameState.getClass().equals(NGameState.class)) {
             view.setHeader("NGame: " + ((NGameState) gameState).getWinningNumber());
         }
-        view.setInfo("Current player: " + gameState.getCurrentPlayer().getName());
+        if (gameState.getCurrentPlayer() != null) {
+            view.setInfo("Current player: " + gameState.getCurrentPlayer().getName());
+        }
+        else {
+            view.setInfo("End of round");
+        }
         List<Player> players = gameState.getPlayers();
         List<Object[]> updatedPlayersList = new ArrayList<Object[]>();
+        exists = false;
         for (Player p : players) {
             String playerName = p.getName();
             Integer playerScore = p.getScore();
@@ -106,18 +113,32 @@ public class GamePresenter implements IGameView.GameViewListener {
             if (playerName.equals(VaadinSession.getCurrent().getAttribute("user"))) {
                 view.enablePlayerUI(true);
                 view.setDices(playerDices);
+                exists = true;
+                view.setNotificationFlag(false);
             }
+        }
+        if(!exists) {
+            if(left) {
+                left = false;
+                view.setNotificationFlag(true);
+            }
+            else if(!view.getNotificationFlag()) {
+                view.showNotification("You've been kicked for prolonged inactivity", "system failure", Position.TOP_CENTER);
+                view.setNotificationFlag(true);
+            }
+            view.enablePlayerUI(false);
         }
         view.updatePlayersList(updatedPlayersList);
 
-        this.username = (String) VaadinSession.getCurrent().getAttribute("user");
+        String username = (String) VaadinSession.getCurrent().getAttribute("user");
 
-        if (gameState.getCurrentPlayer().getName().equals(username)) {
+        if (gameState.getCurrentPlayer() != null && gameState.getCurrentPlayer().getName().equals(username)) {
             view.enableReroll(true);
             view.showNotification("Your turn", "dark", Position.MIDDLE_CENTER);
         }
-
-        view.setRoundInfo("Round " + gameState.getCurrentRound() + " of " + roundsCount + " rounds ");
+        else {
+            view.enableReroll(false);
+        }
 
 
 
@@ -132,12 +153,11 @@ public class GamePresenter implements IGameView.GameViewListener {
     private void buildInfo() {
 
         List<GameInfo> gameInfoList = lcp.getRoomList();
-        if (gameInfoList != null) {
-            System.out.println("not null");
-        }
+
         for (GameInfo gi : gameInfoList) {
             if (gi.getSettings().getName().equals(view.getUI().getSession().getAttribute("gameName"))) {
-                roundsCount = gi.getSettings().getRoundsToWin();
+                int roundsCount = gi.getSettings().getRoundsToWin();
+                view.setRoundInfo(roundsCount + " rounds to win ");
                 moveTime = gi.getSettings().getTimeForMove();
                 return;
             }
@@ -161,7 +181,7 @@ public class GamePresenter implements IGameView.GameViewListener {
                             public void run() {
                                 float progress = (float) (count + 1) / (float) moveTime;
                                 view.updateProgressBar(progress);
-//                                view.updateCountDown("Time left: " + (moveTime - count - 1)); TODO Delete in final version (debug only)
+
                                 count++;
                             }
 

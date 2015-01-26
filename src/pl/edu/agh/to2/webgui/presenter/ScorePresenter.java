@@ -24,8 +24,6 @@ public class ScorePresenter implements IScoreView.ScoreViewListener {
         this.view = scoreView;
         scoreView.addListener(this);
         this.lcp = lcp;
-//        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
-//        ((MessageListener) VaadinSession.getCurrent().getAttribute("listener")).setScorePresenter(this);
     }
 
     @Override

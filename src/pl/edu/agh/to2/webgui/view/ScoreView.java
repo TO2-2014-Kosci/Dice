@@ -26,7 +26,7 @@ public class ScoreView extends VerticalLayout
 
     public ScoreView() {
         setSizeFull();
-//        setHeightUndefined();
+
         setSpacing(true);
         setStyleName("score-background");
 

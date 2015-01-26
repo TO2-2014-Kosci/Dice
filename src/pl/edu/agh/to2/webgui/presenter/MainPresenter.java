@@ -21,13 +21,11 @@ public class MainPresenter implements IMainView.MainViewListener {
     private MainView view;
     private LocalConnectionProxy lcp;
     private String gameName;
-    private Boolean isStarted;
 
     public MainPresenter(MainView view, LocalConnectionProxy lcp) {
         this.view = view;
         view.addListener(this);
         this.lcp = lcp;
-//        this.lcp = (LocalConnectionProxy) VaadinSession.getCurrent().getAttribute("lcp");
     }
     @Override
     public void buttonClick(String username) {
@@ -54,7 +52,7 @@ public class MainPresenter implements IMainView.MainViewListener {
             switch (command) {
                 case MainView.LOGOUT_TEXT:
                     try {
-                        Response response = lcp.logout((String) VaadinSession.getCurrent().getAttribute("user"));
+                        Response response = lcp.logout();
                         if (response.isSuccess()) {
                             VaadinSession.getCurrent().setAttribute("user", null);
                             view.showNotification("You have successfully logged out", "success");
@@ -86,9 +84,8 @@ public class MainPresenter implements IMainView.MainViewListener {
     }
 
     @Override
-    public void valueChange(String gameName, Boolean isStarted) {
+    public void valueChange(String gameName) {
         this.gameName = gameName;
-        this.isStarted = isStarted;
         view.join.setEnabled(true);
     }
 }

@@ -35,16 +35,15 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
         if(operation.equalsIgnoreCase(LobbyView.LEAVE_TEXT)) {
             Response response = null;
             response = lcp.leaveRoom();
-            if (response.isSuccess()) {
-                view.getUI().getSession().setAttribute("state", MainView.NAME);
-                view.getUI().getNavigator().navigateTo(MainView.NAME);
-            } else {
+            lcp.leaveRoom();
+            if (!response.isSuccess()) {
                 view.showNotification(response.message, "failure");
             }
+            view.getUI().getSession().setAttribute("state", MainView.NAME);
+            view.getUI().getNavigator().navigateTo(MainView.NAME);
         }
         else if(operation.equalsIgnoreCase(LobbyView.SIT_DOWN_TEXT)){
-            Response response = null;
-            response = lcp.sitDown();
+            Response response = lcp.sitDown();
             if(response.isSuccess()) {
                 view.showNotification("You've sat down", "success");
                 view.sitDown();
@@ -85,7 +84,7 @@ public class LobbyPresenter implements ILobbyView.LobbyViewListener {
         view.getUI().getNavigator().navigateTo(GameView.NAME);
     }
 
-    public void buildInfo() {
+    private void buildInfo() {
         List<GameInfo> gameInfoList = lcp.getRoomList();
         for(GameInfo gi : gameInfoList) {
             if(gi.getSettings().getName().equals(view.getUI().getSession().getAttribute("gameName"))) {

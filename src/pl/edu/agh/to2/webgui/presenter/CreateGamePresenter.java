@@ -62,7 +62,7 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
             switch (operation) {
                 case CreateGameView.LOGOUT_TEXT:
                     try {
-                        Response response = lcp.logout((String) VaadinSession.getCurrent().getAttribute("user"));
+                        Response response = lcp.logout();
                         if(response.isSuccess()) {
                             VaadinSession.getCurrent().setAttribute("user", null);
                             view.showNotification("You have successfully logged out", "success");
@@ -75,6 +75,7 @@ public class CreateGamePresenter implements ICreateGameView.CreateGameViewListen
                     } catch (TimeoutException e) {
                         e.printStackTrace();
                     }
+                    break;
                 case CreateGameView.CANCEL_TEXT:
                     view.getUI().getSession().setAttribute("state", MainView.NAME);
                     view.getUI().getNavigator().navigateTo(MainView.NAME);
