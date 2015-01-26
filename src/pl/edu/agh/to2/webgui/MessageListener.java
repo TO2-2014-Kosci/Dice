@@ -27,7 +27,7 @@ public class MessageListener implements ServerMessageListener {
     private GamePresenter gamePresenter;
     private LobbyPresenter lobbyPresenter;
     private ScorePresenter scorePresenter;
-    private boolean finished = false;
+//    private boolean finished = false;
 
     public MessageListener(WebGUI ui) {
         this.ui = ui;
@@ -56,15 +56,16 @@ public class MessageListener implements ServerMessageListener {
             }
             else if(gameState.isGameStarted() && ui.getNavigator().getState().equals(GameView.NAME)) { // jestesmy w grze, gra trwa i aktualizujemy widok
                 gamePresenter.updateGameState(gameState);
-                finished = false;
+//                finished = false;
             }
             else if(!gameState.isGameStarted() && ui.getNavigator().getState().equals(GameView.NAME)) { // jestesmy w grze, gra sie konczy
                 gamePresenter.endGame();
-            }
-            if(!gameState.isGameStarted() && ui.getNavigator().getState().equals(ScoreView.NAME) && !finished) {
                 scorePresenter.updateGameState(gameState);
-                finished = true;
             }
+//            if(!gameState.isGameStarted() && ui.getNavigator().getState().equals(ScoreView.NAME) && !finished) {
+//                scorePresenter.updateGameState(gameState);
+//                finished = true;
+//            }
         }
     }
 
