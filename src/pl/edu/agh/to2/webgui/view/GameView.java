@@ -148,6 +148,7 @@ public class GameView extends VerticalLayout
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         notificationFlag = true;
+        setHeader("Poker game");
     }
 
     @Override

@@ -38,6 +38,7 @@ public class GamePresenter implements IGameView.GameViewListener {
     private java.util.Timer timer = new java.util.Timer();
     private UpdateThread updateThread;
     private boolean left = false;
+    private String gameType;
 
     public GamePresenter(GameView gameView, LocalConnectionProxy lcp) {
         this.view = gameView;
@@ -94,7 +95,7 @@ public class GamePresenter implements IGameView.GameViewListener {
             gotGameInfo = true;
         }
         if (gameState.getClass().equals(NGameState.class)) {
-            view.setHeader("NGame: " + ((NGameState) gameState).getWinningNumber());
+            view.setHeader(gameType + ": " + ((NGameState) gameState).getWinningNumber());
         }
         if (gameState.getCurrentPlayer() != null) {
             view.setInfo("Current player: " + gameState.getCurrentPlayer().getName());
@@ -156,6 +157,7 @@ public class GamePresenter implements IGameView.GameViewListener {
 
         for (GameInfo gi : gameInfoList) {
             if (gi.getSettings().getName().equals(view.getUI().getSession().getAttribute("gameName"))) {
+                gameType = gi.getSettings().getGameType().toString();
                 int roundsCount = gi.getSettings().getRoundsToWin();
                 view.setRoundInfo(roundsCount + " rounds to win ");
                 moveTime = gi.getSettings().getTimeForMove();
