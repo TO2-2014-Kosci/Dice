@@ -126,7 +126,7 @@ public class LobbyView extends VerticalLayout
         gameName.setValue("Game: " + gi.getSettings().getName());
         players.setValue("Players: " + gi.getPlayersNumber() + "/" + gi.getSettings().getMaxPlayers());
         rounds.setValue("Rounds to win: " + gi.getSettings().getRoundsToWin());
-        turns.setValue("Max inactive turrns: " + gi.getSettings().getMaxInactiveTurns());
+        turns.setValue("Max inactive turns: " + gi.getSettings().getMaxInactiveTurns());
         time.setValue("Time for move: " + gi.getSettings().getTimeForMove());
     }
 
